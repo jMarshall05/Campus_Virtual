@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace Abstracciones.Modelos.ModelosDto
 {
@@ -43,7 +44,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public virtual GruposDto Grupo { get; set; }
 
         [NotMapped]
-        public HttpPostedFileBase Archivo { get; set; }
+        public IFormFile Archivo { get; set; }
 
         [NotMapped]
         [DisplayName("Grupo Asignado")]
