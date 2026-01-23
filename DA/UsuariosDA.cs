@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abstracciones.DA;
+using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDA;
 using Abstracciones.Modelos.ModelosDto;
 using Microsoft.EntityFrameworkCore;
@@ -33,14 +34,49 @@ namespace DA
             }
         }
 
-        public Task<int> EditarUsuario(string id, UsuariosAD usuario)
+        public async Task<int> EditarUsuario(string id, UsuariosAD usuario)
         {
-            throw new NotImplementedException();
+            UsuariosAD usuarioExistente = _elContexto.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
+            if (usuarioExistente != null)
+            {
+                usuarioExistente.Nombre = usuario.Nombre;
+                usuarioExistente.Apellido = usuario.Apellido;
+                usuarioExistente.FechaDeModificacion = DateTime.Now;
+
+                EntityState estado = _elContexto.Entry(usuarioExistente).State = EntityState.Modified;
+                int resultado = await _elContexto.SaveChangesAsync();
+                return resultado;
+            }
+            else
+            {
+                throw new BusinessException("El usuario no existe o no se pudo encontrar en la base de datos.");
+            }
         }
 
-        public Task<int> EditarUsuarioAdmin(string id, UsuariosAD usuario)
+        public async Task<int> EditarUsuarioAdmin(string id, UsuariosAD usuario)
         {
-            throw new NotImplementedException();
+
+            UsuariosAD usuarioExistente = _elContexto.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
+            if (usuarioExistente != null)
+            {
+                usuarioExistente.Nombre = usuario.Nombre;
+                usuarioExistente.Apellido = usuario.Apellido;
+                usuarioExistente.Email = usuario.Email;
+                usuarioExistente.FechaDeNacimiento = usuario.FechaDeNacimiento;
+                usuarioExistente.FechaDeModificacion = DateTime.Now;
+                usuarioExistente.Rol = usuario.Rol;
+                usuarioExistente.Identificacion = usuario.Identificacion;
+                usuarioExistente.Estado = usuario.Estado;
+                usuarioExistente.TipoIdentificacion = usuario.TipoIdentificacion;
+
+                EntityState estado = _elContexto.Entry(usuarioExistente).State = EntityState.Modified;
+                int resultado = await _elContexto.SaveChangesAsync();
+                return resultado;
+            }
+            else
+            {
+                throw new Exception("El usuario no existe o no se pudo encontrar en la base de datos.");
+            }
         }
 
         public async Task<bool> ExisteIdentificacion(string identificacion)

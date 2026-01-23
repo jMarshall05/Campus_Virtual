@@ -8,13 +8,13 @@ namespace Abstracciones.Modelos.ModelosDA
     {
         [Key]
         [Column("Id")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [Column("Id_Usuario")]
         public string IdUsuario { get; set; }
         [Column("Codigo_area")]
         public int Codigo { get; set; }
         [Column("Telefono")]
-        public int Telefono { get; set; }
+        public long Telefono { get; set; }
         [Column("Tipo")]
         public string Tipo { get; set; }
         [Column("Estado")]

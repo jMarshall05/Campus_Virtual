@@ -42,6 +42,12 @@ namespace Servicios
             var identificacionExiste = await _usuariosDA.ExisteIdentificacion(request.Identificacion);
             UsuarioReglas.ValidarIdentificacionUnica(identificacionExiste);
 
+            foreach (var telefono in request.Telefonos ?? new List<TelefonoDto>())
+            {
+                var telefonoExiste = await _telefonosDA.ExisteTelefono(telefono.Codigo, telefono.Telefono);
+                UsuarioReglas.ValidarTelefonoUnico(telefonoExiste, telefono);
+
+            }
 
             ApplicationUser user = CrearUsuario(request);
             var resultado = await _userManager.CreateAsync(user, request.Password);
@@ -68,19 +74,55 @@ namespace Servicios
             return new ApplicationUser
             {
                 UserName = (register.Nombre.ToUpper().First() + register.Apellido.Trim() + numeroRamdon).Normalize(NormalizationForm.FormD)
-        .Where(c => Char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-        .Aggregate("", (s, c) => s + c),
+                .Where(c => Char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .Aggregate("", (s, c) => s + c),
                 Email = register.Email,
                 FechaDeRegistro = DateTime.UtcNow
             };
         }
 
-        public Task<int> EditarUsuario(string id, UsuariosDto usuario)
+        public async Task<bool> EditarUsuario(string id, EditarUsuarioRequest request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var usuarioExiste = await _userManager.FindByIdAsync(id);
+                if (usuarioExiste == null)
+                {
+                    throw new BusinessException("El usuario no existe");
+                }
+                var usuarioAD = new UsuariosAD
+                {
+                    Nombre = request.Nombre,
+                    Apellido = request.Apellido,
+                };
+                var result = await _usuariosDA.EditarUsuario(id, usuarioAD);
+                if (request.Telefonos != null)
+                {
+                    var telefonosValidos = request.Telefonos
+                                   .Where(t => t.Telefono > 0 && !string.IsNullOrWhiteSpace(t.Tipo))
+                                   .ToList();
+
+                    var telefonosExistentes =  ConvertirTelefonosAD(telefonosValidos.Where(t => t.Id > 0).ToList());
+
+                    if (telefonosExistentes.Any())
+                    {
+                        var resultado = await _telefonosDA.EditarTelefono(telefonosExistentes);
+
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
+
         }
 
-        public Task<int> EditarUsuarioAdmin(string id, UsuariosDto usuario)
+        public Task<bool> EditarUsuarioAdmin(string id, UsuariosDto usuario)
         {
             throw new NotImplementedException();
         }
@@ -101,6 +143,7 @@ namespace Servicios
             {
                 var telefonoAD = new TelefonoAD
                 {
+                    Id = telefono.Id,
                     IdUsuario = telefono.IdUsuario,
                     Codigo = telefono.Codigo,
                     Telefono = telefono.Telefono,
@@ -110,6 +153,24 @@ namespace Servicios
                 telefonosAD.Add(telefonoAD);
             }
             return telefonosAD;
+        }
+        private static List<TelefonoDto> ConvertirTelefonosDto(List<TelefonoAD> telefonosAD)
+        {
+            var telefonosDto = new List<TelefonoDto>();
+            foreach (var telefonoAD in telefonosAD)
+            {
+                var telefonoDto = new TelefonoDto
+                {
+                    Id = telefonoAD.Id,
+                    IdUsuario = telefonoAD.IdUsuario,
+                    Codigo = telefonoAD.Codigo,
+                    Telefono = telefonoAD.Telefono,
+                    Tipo = telefonoAD.Tipo,
+                    Estado = telefonoAD.Estado
+                };
+                telefonosDto.Add(telefonoDto);
+            }
+            return telefonosDto;
         }
         private async Task<UsuariosAD> CrearUsuarioAD(Abstracciones.Modelos.Requests.RegisterRequest register, ApplicationUser user)
         {

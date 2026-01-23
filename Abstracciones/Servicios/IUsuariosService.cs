@@ -11,8 +11,8 @@ namespace Abstracciones.Servicios
     public interface IUsuariosService
     {
         Task<string> AgregarUsuario(RegisterRequest request);
-        Task<int> EditarUsuarioAdmin(string id, UsuariosDto usuario);
-        Task<int> EditarUsuario(string id, UsuariosDto usuario);
+        Task<bool> EditarUsuarioAdmin(string id, UsuariosDto usuario);
+        Task<bool> EditarUsuario(string id, EditarUsuarioRequest request);
         Task<List<UsuariosDto>> ListarUsuarios();
         Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario);
     }

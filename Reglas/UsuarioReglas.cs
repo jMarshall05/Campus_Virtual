@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abstracciones.Excepciones;
+using Abstracciones.Modelos.ModelosDto;
 
 namespace Reglas
 {
@@ -14,10 +15,12 @@ namespace Reglas
             if (existe)
                 throw new BusinessException("La identificación ya está registrada.");
         }
-        public static void ValidarEmailUnico(bool existe)
+
+        public static void ValidarTelefonoUnico(bool existe, TelefonoDto telefono)
         {
             if (existe)
-                throw new BusinessException("El correo electrónico ya está registrado.");
+                throw new BusinessException($"El número de teléfono: +{telefono.Codigo} {telefono.Telefono} ya está registrado.");
         }
+
     }
 }
