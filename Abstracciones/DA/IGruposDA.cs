@@ -12,7 +12,7 @@ namespace Abstracciones.DA
     {
         Task<int> AgregarGrupo(GruposAD grupo);
         Task<bool> EditarGrupo(int id, GruposAD grupo);
-        Task<List<GruposDto>> ListarGrupos();
+        Task<IEnumerable<GruposDto>> ListarGrupos();
         Task<GruposDto> BuscarGruposPorId(int idGrupo);
     }
 }

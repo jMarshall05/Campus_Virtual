@@ -10,8 +10,8 @@ namespace Abstracciones.DA
 {
     public interface ITelefonosDA
     {
-        Task<bool> AgregarTelefono(List<TelefonoAD> telefono);
-        Task<bool> EditarTelefono(List<TelefonoAD> telefonos);
+        Task<bool> AgregarTelefono(IEnumerable<TelefonoAD> telefono);
+        Task<bool> EditarTelefono(IEnumerable<TelefonoAD> telefonos);
         Task<IEnumerable<TelefonoDto>> ListarTelefonos();
         Task<bool> ExisteTelefono(int codigo, long telefono);
 

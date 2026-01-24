@@ -22,11 +22,11 @@ namespace DA
         public async Task<string> AgregarUsuario(UsuariosAD usuario)
         {
 
-            await _elContexto.Usuarios.AddAsync(usuario);
+            var entidad = await _elContexto.Usuarios.AddAsync(usuario);
             int Resultado = await _elContexto.SaveChangesAsync();
             if (Resultado > 0)
             {
-                return usuario.IdUsuario;
+                return entidad.Entity.IdUsuario;
             }
             else
             {
@@ -36,7 +36,7 @@ namespace DA
 
         public async Task<int> EditarUsuario(string id, UsuariosAD usuario)
         {
-            var usuarioExistente =await _elContexto.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == id);
+            var usuarioExistente = await _elContexto.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == id);
             if (usuarioExistente != null)
             {
                 usuarioExistente.Nombre = usuario.Nombre;
@@ -81,7 +81,7 @@ namespace DA
             return existe;
         }
 
-        public async Task<List<UsuariosDto>> ListarUsuarios()
+        public async Task<IEnumerable<UsuariosDto>> ListarUsuarios()
         {
             var usuariosDto = await _elContexto.Usuarios
                 .Select(u => new UsuariosDto
@@ -114,7 +114,7 @@ namespace DA
         {
             var usuario = await _elContexto.Usuarios
                 .Include(u => u.Telefonos)
-                .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario); 
+                .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
             if (usuario == null)
                 return null;
             var usuarioDto = new UsuariosDto

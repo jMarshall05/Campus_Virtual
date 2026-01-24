@@ -187,7 +187,7 @@ namespace Servicios
             return false;
         }
 
-        public async Task<List<UsuariosDto>> ListarUsuarios()
+        public async Task<IEnumerable<UsuariosDto>> ListarUsuarios()
         {
             var usuarios = await _usuariosDA.ListarUsuarios();
             return usuarios ?? new List <UsuariosDto>();
@@ -197,7 +197,7 @@ namespace Servicios
             var usuario =await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
             return usuario;
         }
-        private static List<TelefonoAD> ConvertirTelefonosAD(List<TelefonoDto> telefonos)
+        private static IEnumerable<TelefonoAD> ConvertirTelefonosAD(IEnumerable<TelefonoDto> telefonos)
         {
             var telefonosAD = new List<TelefonoAD>();
             foreach (var telefono in telefonos)
@@ -215,7 +215,7 @@ namespace Servicios
             }
             return telefonosAD;
         }
-        private static List<TelefonoDto> ConvertirTelefonosDto(List<TelefonoAD> telefonosAD)
+        private static IEnumerable<TelefonoDto> ConvertirTelefonosDto(IEnumerable<TelefonoAD> telefonosAD)
         {
             var telefonosDto = new List<TelefonoDto>();
             foreach (var telefonoAD in telefonosAD)

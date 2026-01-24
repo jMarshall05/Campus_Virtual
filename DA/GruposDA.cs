@@ -19,10 +19,10 @@ namespace DA
         }
         public async Task<int> AgregarGrupo(GruposAD grupo)
         {
-            await _elContexto.Grupos.AddAsync(grupo);
+            var entidad = await _elContexto.Grupos.AddAsync(grupo);
             int resultado = await _elContexto.SaveChangesAsync();
             if (resultado > 0)
-                return grupo.id_grupo;
+                return entidad.Entity.id_grupo;
             return 0;
         }
 
@@ -59,7 +59,7 @@ namespace DA
             return resultado > 0;
         }
 
-        public async Task<List<GruposDto>> ListarGrupos()
+        public async Task<IEnumerable<GruposDto>> ListarGrupos()
         {
             var grupos = await _elContexto.Grupos.Select(grupo => new GruposDto
             {

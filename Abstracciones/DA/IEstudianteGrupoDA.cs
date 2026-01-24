@@ -13,10 +13,10 @@ namespace Abstracciones.DA
         Task<int> AgregarEstudianteGrupo(EstudianteGrupoAD estudianteGrupoDto);
         Task<bool> ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante);
         Task<EstudianteGrupoDto> BuscarEstudianteGrupoPorEstudianteId(string idEstudiante);
-        Task<List<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo);
-        Task<List<EstudianteGrupoDto>> ListarEstudiantesGrupos();
-        Task<List<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo);
-        Task<List<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario);
+        Task<IEnumerable<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo);
+        Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesGrupos();
+        Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo);
+        Task<IEnumerable<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario);
 
     }
 }

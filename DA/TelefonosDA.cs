@@ -17,7 +17,7 @@ namespace DA
         {
             _elContexto = elContexto;
         }
-        public async Task<bool> AgregarTelefono(List<TelefonoAD> telefono)
+        public async Task<bool> AgregarTelefono(IEnumerable<TelefonoAD> telefono)
         {
             foreach (var tel in telefono)
             {
@@ -32,7 +32,7 @@ namespace DA
             return false;
         }
 
-        public async Task<bool> EditarTelefono(List<TelefonoAD> telefonos)
+        public async Task<bool> EditarTelefono(IEnumerable<TelefonoAD> telefonos)
         {
             foreach (var telefono in telefonos)
             {

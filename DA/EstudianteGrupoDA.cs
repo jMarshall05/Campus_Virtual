@@ -31,11 +31,11 @@ namespace DA
 
         public async Task<int> AgregarEstudianteGrupo(EstudianteGrupoAD estudianteGrupo)
         {
-            await _elContexto.EstudianteGrupos.AddAsync(estudianteGrupo);
+            var entidad = await _elContexto.EstudianteGrupos.AddAsync(estudianteGrupo);
             int resultado = await _elContexto.SaveChangesAsync();
             if (resultado > 0)
             {
-                return estudianteGrupo.IdEstudianteGrupo;
+                return entidad.Entity.IdEstudianteGrupo;
             }
             return 0;
         }
@@ -51,7 +51,7 @@ namespace DA
             return estudianteGrupo;
         }
 
-        public async Task<List<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo)
+        public async Task<IEnumerable<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo)
         {
             var estudianteGrupo = await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
             {
@@ -62,7 +62,7 @@ namespace DA
             return estudianteGrupo;
         }
 
-        public async Task<List<EstudianteGrupoDto>> ListarEstudiantesGrupos()
+        public async Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesGrupos()
         {
             var lista =await _elContexto.EstudianteGrupos.Select(eg => new EstudianteGrupoDto
             {
@@ -73,7 +73,7 @@ namespace DA
             return lista;
         }
 
-        public async Task<List<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo)
+        public async Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo)
         {
             var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
             {
@@ -84,7 +84,7 @@ namespace DA
             return lista;
         }
 
-        public async Task<List<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario)
+        public async Task<IEnumerable<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario)
         {
             var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.EstudianteId == idUsuario).Select(eg => new EstudianteGrupoDto
             {
