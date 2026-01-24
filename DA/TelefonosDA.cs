@@ -22,7 +22,7 @@ namespace DA
             foreach (var tel in telefono)
             {
 
-               await _elContexto.Telefonos.AddAsync(tel);
+                await _elContexto.Telefonos.AddAsync(tel);
             }
             var cambios = await _elContexto.SaveChangesAsync();
             if (cambios > 0)
@@ -68,9 +68,19 @@ namespace DA
             return existe;
         }
 
-        public IEnumerable<TelefonoDto> ListarTelefonos()
+        public async Task<IEnumerable<TelefonoDto>> ListarTelefonos()
         {
-            throw new NotImplementedException();
+            var telefonosDto = await _elContexto.Telefonos
+                .Select(t => new TelefonoDto
+                {
+                    Id = t.Id,
+                    IdUsuario = t.IdUsuario,
+                    Codigo = t.Codigo,
+                    Telefono = t.Telefono,
+                    Tipo = t.Tipo,
+                    Estado = t.Estado
+                }).ToListAsync();
+            return telefonosDto;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Abstracciones.DA;
 using Abstracciones.Modelos.ModelosDA;
 using Abstracciones.Modelos.ModelosDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DA
 {
@@ -44,14 +45,34 @@ namespace DA
             return grupoDto;
         }
 
-        public Task<bool> EditarGrupo(int id, GruposAD grupo)
+        public async Task<bool> EditarGrupo(int id, GruposAD grupo)
         {
-            throw new NotImplementedException();
+            var grupoExistente = await _elContexto.Grupos.FindAsync(id);
+            if (grupoExistente == null)
+                return false;
+            grupoExistente.nombre_grupo = grupo.nombre_grupo;
+            grupoExistente.descripcion = grupo.descripcion;
+            grupoExistente.modificado_por = grupo.modificado_por;
+            grupoExistente.FechaDeModificacion = DateTime.Now;
+            grupoExistente.estado = grupo.estado;
+            int resultado = await _elContexto.SaveChangesAsync();
+            return resultado > 0;
         }
 
-        public Task<List<GruposDto>> ListarGrupos()
+        public async Task<List<GruposDto>> ListarGrupos()
         {
-            throw new NotImplementedException();
+            var grupos = await _elContexto.Grupos.Select(grupo => new GruposDto
+            {
+                id_grupo = grupo.id_grupo,
+                nombre_grupo = grupo.nombre_grupo,
+                descripcion = grupo.descripcion,
+                creado_por = grupo.creado_por,
+                estado = grupo.estado,
+                FechaDeCreacion = grupo.FechaDeCreacion,
+                FechaDeModificacion = grupo.FechaDeModificacion,
+                modificado_por = grupo.modificado_por
+            }).ToListAsync();
+            return grupos;
         }
     }
 }

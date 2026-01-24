@@ -17,9 +17,16 @@ namespace DA
         {
             _elContexto = contexto;
         }
-        public Task<int> ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
+        public async Task<bool> ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
         {
-            throw new NotImplementedException();
+            EstudianteGrupoAD EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FirstOrDefaultAsync(x => x.EstudianteId == estudiante.EstudianteId);
+            if (EstudianteGrupoEnBase == null)
+            {
+                return false;
+            }
+            EstudianteGrupoEnBase.GrupoId = (int)estudiante.GrupoId;
+            int resultado = await _elContexto.SaveChangesAsync();
+            return resultado > 0;
         }
 
         public async Task<int> AgregarEstudianteGrupo(EstudianteGrupoAD estudianteGrupo)
@@ -30,9 +37,8 @@ namespace DA
             {
                 return estudianteGrupo.IdEstudianteGrupo;
             }
-            return resultado;
+            return 0;
         }
-
 
         public async Task<EstudianteGrupoDto> BuscarEstudianteGrupoPorEstudianteId(string idEstudiante)
         {
@@ -45,24 +51,48 @@ namespace DA
             return estudianteGrupo;
         }
 
-        public Task<List<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo)
+        public async Task<List<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo)
         {
-            throw new NotImplementedException();
+            var estudianteGrupo = await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
+            {
+                IdEstudianteGrupo = eg.IdEstudianteGrupo,
+                EstudianteId = eg.EstudianteId,
+                GrupoId = eg.GrupoId
+            }).ToListAsync();
+            return estudianteGrupo;
         }
 
-        public Task<List<EstudianteGrupoDto>> ListarEstudiantesGrupos()
+        public async Task<List<EstudianteGrupoDto>> ListarEstudiantesGrupos()
         {
-            throw new NotImplementedException();
+            var lista =await _elContexto.EstudianteGrupos.Select(eg => new EstudianteGrupoDto
+            {
+                IdEstudianteGrupo = eg.IdEstudianteGrupo,
+                EstudianteId = eg.EstudianteId,
+                GrupoId = eg.GrupoId
+            }).ToListAsync();
+            return lista;
         }
 
-        public Task<List<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo)
+        public async Task<List<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo)
         {
-            throw new NotImplementedException();
+            var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
+            {
+                IdEstudianteGrupo = eg.IdEstudianteGrupo,
+                EstudianteId = eg.EstudianteId,
+                GrupoId = eg.GrupoId
+            }).ToListAsync();
+            return lista;
         }
 
-        public Task<List<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario)
+        public async Task<List<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario)
         {
-            throw new NotImplementedException();
+            var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.EstudianteId == idUsuario).Select(eg => new EstudianteGrupoDto
+            {
+                IdEstudianteGrupo = eg.IdEstudianteGrupo,
+                EstudianteId = eg.EstudianteId,
+                GrupoId = eg.GrupoId
+            }).ToListAsync();
+            return lista;
         }
     }
 }

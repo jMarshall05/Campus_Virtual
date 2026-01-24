@@ -31,5 +31,7 @@ namespace Abstracciones.Modelos.ModelosDA
         [Column("TipoIdentificacion")]
         public string TipoIdentificacion { get; set; }
 
+        public virtual List<TelefonoAD> Telefonos { get; set; }
+
     }
 }

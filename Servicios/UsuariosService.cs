@@ -187,13 +187,15 @@ namespace Servicios
             return false;
         }
 
-        public Task<List<UsuariosDto>> ListarUsuarios()
+        public async Task<List<UsuariosDto>> ListarUsuarios()
         {
-            throw new NotImplementedException();
+            var usuarios = await _usuariosDA.ListarUsuarios();
+            return usuarios ?? new List <UsuariosDto>();
         }
-        public Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
+        public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
-            throw new NotImplementedException();
+            var usuario =await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
+            return usuario;
         }
         private static List<TelefonoAD> ConvertirTelefonosAD(List<TelefonoDto> telefonos)
         {

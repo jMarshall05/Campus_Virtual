@@ -13,8 +13,8 @@ namespace Abstracciones.DA
         Task<string> AgregarUsuario(UsuariosAD usuario);
         Task<int> EditarUsuarioAdmin(string id, UsuariosAD usuario);
         Task<int> EditarUsuario(string id, UsuariosAD usuario);
-        Task<List<UsuariosAD>> ListarUsuarios();
-        Task<UsuariosAD> ObtenerUsuarioPorId(string idUsuario);
+        Task<List<UsuariosDto>> ListarUsuarios();
+        Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario);
         Task<bool> ExisteIdentificacion(string identificacion);
 
     }

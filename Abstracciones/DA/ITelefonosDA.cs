@@ -12,7 +12,7 @@ namespace Abstracciones.DA
     {
         Task<bool> AgregarTelefono(List<TelefonoAD> telefono);
         Task<bool> EditarTelefono(List<TelefonoAD> telefonos);
-        IEnumerable<TelefonoDto> ListarTelefonos();
+        Task<IEnumerable<TelefonoDto>> ListarTelefonos();
         Task<bool> ExisteTelefono(int codigo, long telefono);
 
     }

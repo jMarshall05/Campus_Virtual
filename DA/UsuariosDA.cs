@@ -36,7 +36,7 @@ namespace DA
 
         public async Task<int> EditarUsuario(string id, UsuariosAD usuario)
         {
-            UsuariosAD usuarioExistente = _elContexto.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
+            var usuarioExistente =await _elContexto.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == id);
             if (usuarioExistente != null)
             {
                 usuarioExistente.Nombre = usuario.Nombre;
@@ -81,17 +81,65 @@ namespace DA
             return existe;
         }
 
-        public Task<List<UsuariosAD>> ListarUsuarios()
+        public async Task<List<UsuariosDto>> ListarUsuarios()
         {
-            throw new NotImplementedException();
+            var usuariosDto = await _elContexto.Usuarios
+                .Select(u => new UsuariosDto
+                {
+                    IdUsuario = u.IdUsuario,
+                    Nombre = u.Nombre,
+                    Apellido = u.Apellido,
+                    Email = u.Email,
+                    Telefonos = u.Telefonos.Select(t => new TelefonoDto
+                    {
+                        Id = t.Id,
+                        IdUsuario = t.IdUsuario,
+                        Codigo = t.Codigo,
+                        Telefono = t.Telefono,
+                        Tipo = t.Tipo,
+                        Estado = t.Estado
+                    }).ToList(),
+                    FechaDeNacimiento = u.FechaDeNacimiento,
+                    Identificacion = u.Identificacion,
+                    FechaDeRegistro = u.FechaDeRegistro,
+                    FechaDeModificacion = u.FechaDeModificacion,
+                    Rol = u.Rol,
+                    Estado = u.Estado
+                })
+                .ToListAsync();
+            return usuariosDto;
         }
 
-        public Task<UsuariosAD> ObtenerUsuarioPorId(string idUsuario)
+        public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
-            throw new NotImplementedException();
+            var usuario = await _elContexto.Usuarios
+                .Include(u => u.Telefonos)
+                .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario); 
+            if (usuario == null)
+                return null;
+            var usuarioDto = new UsuariosDto
+            {
+                IdUsuario = usuario.IdUsuario,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Telefonos = usuario.Telefonos.Select(t => new TelefonoDto
+                {
+                    Id = t.Id,
+                    IdUsuario = t.IdUsuario,
+                    Codigo = t.Codigo,
+                    Telefono = t.Telefono,
+                    Tipo = t.Tipo,
+                    Estado = t.Estado
+                }).ToList(),
+                FechaDeNacimiento = usuario.FechaDeNacimiento,
+                Identificacion = usuario.Identificacion,
+                FechaDeRegistro = usuario.FechaDeRegistro,
+                FechaDeModificacion = usuario.FechaDeModificacion,
+                Rol = usuario.Rol,
+                Estado = usuario.Estado
+            };
+            return usuarioDto;
         }
-
-
     }
-
 }

@@ -27,6 +27,12 @@ namespace DA
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<TelefonoAD>().
+                HasOne(t => t.Usuario).
+                WithMany(t => t.Telefonos).
+                HasForeignKey(t => t.IdUsuario);
+
+
             builder.Entity<ApplicationUser>().ToTable("AspNetUsers_Core");
             builder.Entity<IdentityRole<string>>().ToTable("AspNetRoles_Core");
             builder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles_Core");

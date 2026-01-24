@@ -21,7 +21,7 @@ namespace Api.Controllers
         {
             var resultado = await _usuario.EditarUsuario(id, request);
 
-            if(resultado)
+            if (resultado)
                 return Accepted($"Se ha editado el usuario con ID : {id}");
             return StatusCode(500, "Error interno del servidor");
         }
@@ -35,14 +35,21 @@ namespace Api.Controllers
             return StatusCode(500, "Error interno del servidor");
         }
         [HttpGet("List")]
-        public Task<IActionResult> ListarUsuarios()
+        public async Task<IActionResult> ListarUsuarios()
         {
-            throw new NotImplementedException();
+            var usuarios = await _usuario.ListarUsuarios();
+            if (usuarios != null)
+                return Ok(usuarios);
+            return NoContent();
+
         }
         [HttpGet("GetByID")]
-        public Task<IActionResult> ObtenerUsuarioPorId(string idUsuario)
+        public async Task<IActionResult> ObtenerUsuarioPorId(string idUsuario)
         {
-            throw new NotImplementedException();
+            var usuario = await _usuario.ObtenerUsuarioPorId(idUsuario);
+            if (usuario != null)
+                return Ok(usuario);
+            return NotFound($"No se encontró el usuario de ID: {idUsuario}");
         }
     }
 }
