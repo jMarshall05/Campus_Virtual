@@ -22,7 +22,7 @@ namespace DA
         public async Task<string> AgregarUsuario(UsuariosAD usuario)
         {
 
-            _elContexto.Usuarios.Add(usuario);
+            await _elContexto.Usuarios.AddAsync(usuario);
             int Resultado = await _elContexto.SaveChangesAsync();
             if (Resultado > 0)
             {
@@ -42,8 +42,6 @@ namespace DA
                 usuarioExistente.Nombre = usuario.Nombre;
                 usuarioExistente.Apellido = usuario.Apellido;
                 usuarioExistente.FechaDeModificacion = DateTime.Now;
-
-                EntityState estado = _elContexto.Entry(usuarioExistente).State = EntityState.Modified;
                 int resultado = await _elContexto.SaveChangesAsync();
                 return resultado;
             }
@@ -68,8 +66,6 @@ namespace DA
                 usuarioExistente.Identificacion = usuario.Identificacion;
                 usuarioExistente.Estado = usuario.Estado;
                 usuarioExistente.TipoIdentificacion = usuario.TipoIdentificacion;
-
-                EntityState estado = _elContexto.Entry(usuarioExistente).State = EntityState.Modified;
                 int resultado = await _elContexto.SaveChangesAsync();
                 return resultado;
             }

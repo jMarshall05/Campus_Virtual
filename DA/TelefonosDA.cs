@@ -22,7 +22,7 @@ namespace DA
             foreach (var tel in telefono)
             {
 
-                _elContexto.Telefonos.Add(tel);
+               await _elContexto.Telefonos.AddAsync(tel);
             }
             var cambios = await _elContexto.SaveChangesAsync();
             if (cambios > 0)
@@ -51,8 +51,6 @@ namespace DA
                     telefonoExistente.Telefono = telefono.Telefono;
                     telefonoExistente.Tipo = telefono.Tipo;
                     telefonoExistente.Estado = telefono.Estado;
-                    _elContexto.Entry(telefonoExistente).State = EntityState.Modified;
-
                 }
             }
 

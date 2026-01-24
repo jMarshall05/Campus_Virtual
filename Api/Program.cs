@@ -63,7 +63,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //DA
 builder.Services.AddScoped<IUsuariosDA, UsuariosDA>();
 builder.Services.AddScoped<ITelefonosDA, TelefonosDA>();
-
+builder.Services.AddScoped<IEstudianteGrupoDA, EstudianteGrupoDA>();
+builder.Services.AddScoped<IGruposDA, GruposDA>();
 //Servicios
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();

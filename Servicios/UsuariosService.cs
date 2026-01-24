@@ -24,12 +24,16 @@ namespace Servicios
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUsuariosDA _usuariosDA;
         private readonly ITelefonosDA _telefonosDA;
+        private readonly IEstudianteGrupoDA _estudianteGrupo;
+        private readonly IGruposDA _grupos;
 
-        public UsuariosService(UserManager<ApplicationUser> userManager, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA)
+        public UsuariosService(UserManager<ApplicationUser> userManager, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
         {
             _userManager = userManager;
             _usuariosDA = usuariosDA;
             _telefonosDA = telefonosDA;
+            _estudianteGrupo = estudianteGrupo;
+            _grupos = grupos;
         }
         public async Task<string> AgregarUsuario(RegisterRequest request)
         {
@@ -102,7 +106,7 @@ namespace Servicios
                                    .Where(t => t.Telefono > 0 && !string.IsNullOrWhiteSpace(t.Tipo))
                                    .ToList();
 
-                    var telefonosExistentes =  ConvertirTelefonosAD(telefonosValidos.Where(t => t.Id > 0).ToList());
+                    var telefonosExistentes = ConvertirTelefonosAD(telefonosValidos.Where(t => t.Id > 0).ToList());
 
                     if (telefonosExistentes.Any())
                     {
@@ -122,16 +126,71 @@ namespace Servicios
 
         }
 
-        public Task<bool> EditarUsuarioAdmin(string id, UsuariosDto usuario)
+        public async Task<bool> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? Idgrupo)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(id) ?? throw new BusinessException("El usuario no existe");
+            var Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+
+            if (Idgrupo != null)
+            {
+                var existe = await _grupos.BuscarGruposPorId((int)Idgrupo) != null;
+                EstudianteGrupoReglas.ExisteGrupo(existe);
+            }
+
+            if (user.Email != usuario.Email)
+            {
+                var userEmail = (await _userManager.FindByEmailAsync(usuario.Email));
+                if (userEmail != null && userEmail.Id != id)
+                {
+                    throw new BusinessException("El email ya está en uso por otro usuario");
+                }
+                await _userManager.SetEmailAsync(user, usuario.Email);
+            }
+            if (usuario.Rol != Rol)
+            {
+                if (Rol != null)
+                    await _userManager.RemoveFromRoleAsync(user, Rol);
+                await _userManager.AddToRoleAsync(user, usuario.Rol);
+            }
+            var telefonosValidos = usuario.Telefonos
+                        .Where(t => !string.IsNullOrWhiteSpace(t.Telefono.ToString()) && !string.IsNullOrWhiteSpace(t.Tipo))
+                        .ToList();
+            var telefonosExistentes = telefonosValidos.Where(t => t.Id > 0).ToList();
+            if (telefonosExistentes.Any())
+            {
+                await _telefonosDA.EditarTelefono(ConvertirTelefonosAD(telefonosExistentes));
+            }
+            var telefonosNuevos = telefonosValidos.Where(t => t.Id == 0).ToList();
+            if (telefonosNuevos.Any())
+            {
+                telefonosNuevos.ForEach(t => t.IdUsuario = id);
+                await _telefonosDA.AgregarTelefono(ConvertirTelefonosAD(telefonosNuevos));
+            }
+            if (Idgrupo != null)
+            {
+                var estudianteGrupo = await _estudianteGrupo.BuscarEstudianteGrupoPorEstudianteId(id);
+                var estudiante = new EstudianteGrupoAD { EstudianteId = id, GrupoId = Idgrupo.Value };
+
+                if (estudianteGrupo == null)
+                {
+                    await _estudianteGrupo.AgregarEstudianteGrupo(estudiante);
+                }
+                else
+                {
+                    await _estudianteGrupo.ActualizarEstudianteGrupo(estudiante);
+                }
+            }
+            var usuarioAD = ConvertirUsuarioAD(usuario);
+            var resultado = await _usuariosDA.EditarUsuarioAdmin(id, usuarioAD);
+            if (resultado > 0)
+                return true;
+            return false;
         }
 
         public Task<List<UsuariosDto>> ListarUsuarios()
         {
             throw new NotImplementedException();
         }
-
         public Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
             throw new NotImplementedException();
@@ -190,6 +249,25 @@ namespace Servicios
 
             };
             return usuario;
+        }
+
+        private static UsuariosAD ConvertirUsuarioAD(UsuariosDto usuario)
+        {
+            return new UsuariosAD
+            {
+                IdUsuario = usuario.IdUsuario,
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                FechaDeNacimiento = usuario.FechaDeNacimiento,
+                Identificacion = usuario.Identificacion,
+                TipoIdentificacion = usuario.TipoIdentificacion,
+                FechaDeRegistro = usuario.FechaDeRegistro,
+                FechaDeModificacion = DateTime.Now,
+                Rol = usuario.Rol,
+                Estado = usuario.Estado
+
+            };
         }
 
     }

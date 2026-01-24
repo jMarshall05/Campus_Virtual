@@ -2,6 +2,7 @@
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -15,19 +16,23 @@ namespace Api.Controllers
         {
             _usuario = usuario;
         }
-        [HttpPatch("edit")]
+        [HttpPatch("Edit")]
         public async Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request)
         {
             var resultado = await _usuario.EditarUsuario(id, request);
 
             if(resultado)
-                return Accepted();
+                return Accepted($"Se ha editado el usuario con ID : {id}");
             return StatusCode(500, "Error interno del servidor");
         }
         [HttpPut("AdminEdit")]
-        public Task<IActionResult> EditarUsuarioAdmin(string id, UsuariosDto usuario)
+        public async Task<IActionResult> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? idGrupo)
         {
-            throw new NotImplementedException();
+            var resultado = await _usuario.EditarUsuarioAdmin(id, usuario, idGrupo);
+
+            if (resultado)
+                return Accepted($"Se ha editado el usuario con ID : {id}");
+            return StatusCode(500, "Error interno del servidor");
         }
         [HttpGet("List")]
         public Task<IActionResult> ListarUsuarios()

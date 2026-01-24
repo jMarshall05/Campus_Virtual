@@ -7,6 +7,7 @@ using Abstracciones.Modelos.ModelosDA;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace DA
 {
@@ -19,6 +20,8 @@ namespace DA
 
         public DbSet<UsuariosAD> Usuarios { get; set; }
         public DbSet<TelefonoAD> Telefonos { get; set; }
+        public DbSet<EstudianteGrupoAD> EstudianteGrupos { get; set; }
+        public DbSet<GruposAD> Grupos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
