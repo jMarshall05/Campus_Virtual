@@ -11,8 +11,8 @@ namespace Abstracciones.DA
     public interface ICalificacionesAD
     {
         Task<int> AgregarCalificacion(CalificacionesAD calificacion);
-        Task<int> EditarCalificacion(int id, CalificacionesAD calificacion);
-        Task<int> EliminarCalificacion(int id_calificacion);
+        Task EditarCalificacion( CalificacionesAD calificacion);
+        Task EliminarCalificacion(int id_calificacion);
         Task<IEnumerable<CalificacionesDto>> ListarCalificaciones();
         Task<IEnumerable<CalificacionesDto>> ListarCalificacionesPorGrupo(int idGrupo);
         Task<IEnumerable<CalificacionesDto>> ListarCalificacionesPorEstudiante(string idEstudiante);

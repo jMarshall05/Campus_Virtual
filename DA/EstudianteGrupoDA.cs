@@ -17,27 +17,18 @@ namespace DA
         {
             _elContexto = contexto;
         }
-        public async Task<bool> ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
+        public async Task ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
         {
-            EstudianteGrupoAD EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FirstOrDefaultAsync(x => x.EstudianteId == estudiante.EstudianteId);
-            if (EstudianteGrupoEnBase == null)
-            {
-                return false;
-            }
+            var EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FindAsync(estudiante);
             EstudianteGrupoEnBase.GrupoId = (int)estudiante.GrupoId;
-            int resultado = await _elContexto.SaveChangesAsync();
-            return resultado > 0;
+            await _elContexto.SaveChangesAsync();
         }
 
         public async Task<int> AgregarEstudianteGrupo(EstudianteGrupoAD estudianteGrupo)
         {
             var entidad = await _elContexto.EstudianteGrupos.AddAsync(estudianteGrupo);
-            int resultado = await _elContexto.SaveChangesAsync();
-            if (resultado > 0)
-            {
-                return entidad.Entity.IdEstudianteGrupo;
-            }
-            return 0;
+            await _elContexto.SaveChangesAsync();
+            return entidad.Entity.IdEstudianteGrupo;
         }
 
         public async Task<EstudianteGrupoDto> BuscarEstudianteGrupoPorEstudianteId(string idEstudiante)
@@ -64,7 +55,7 @@ namespace DA
 
         public async Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesGrupos()
         {
-            var lista =await _elContexto.EstudianteGrupos.Select(eg => new EstudianteGrupoDto
+            var lista = await _elContexto.EstudianteGrupos.Select(eg => new EstudianteGrupoDto
             {
                 IdEstudianteGrupo = eg.IdEstudianteGrupo,
                 EstudianteId = eg.EstudianteId,
@@ -75,7 +66,7 @@ namespace DA
 
         public async Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesPorIdGrupo(int idGrupo)
         {
-            var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
+            var lista = await _elContexto.EstudianteGrupos.Where(eg => eg.GrupoId == idGrupo).Select(eg => new EstudianteGrupoDto
             {
                 IdEstudianteGrupo = eg.IdEstudianteGrupo,
                 EstudianteId = eg.EstudianteId,
@@ -86,13 +77,15 @@ namespace DA
 
         public async Task<IEnumerable<EstudianteGrupoDto>> ListarGruposPorIdEstudiante(string idUsuario)
         {
-            var lista =await _elContexto.EstudianteGrupos.Where(eg => eg.EstudianteId == idUsuario).Select(eg => new EstudianteGrupoDto
-            {
-                IdEstudianteGrupo = eg.IdEstudianteGrupo,
-                EstudianteId = eg.EstudianteId,
-                GrupoId = eg.GrupoId
-            }).ToListAsync();
+            var lista = await _elContexto.EstudianteGrupos.Where(eg => eg.EstudianteId == idUsuario)
+                .Select(eg => new EstudianteGrupoDto
+                {
+                    IdEstudianteGrupo = eg.IdEstudianteGrupo,
+                    EstudianteId = eg.EstudianteId,
+                    GrupoId = eg.GrupoId
+                }).ToListAsync();
             return lista;
         }
+
     }
 }

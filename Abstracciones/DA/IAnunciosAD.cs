@@ -11,8 +11,8 @@ namespace Abstracciones.DA
     public interface IAnunciosAD
     {
         Task<int> AgregarAnuncio(AnunciosAD anuncio);
-        Task<bool> EditarAnuncio(AnunciosAD anuncio);
-        Task<bool> CambiarEstadoAnuncio(int anuncioId);
+        Task EditarAnuncio(AnunciosAD anuncio);
+        Task CambiarEstadoAnuncio(int anuncioId);
         Task<List<AnuncioDto>> ListarAnuncios();
         Task<AnuncioDto> ObtenerAnuncioPorId(int id);
     }

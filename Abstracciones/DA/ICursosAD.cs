@@ -13,7 +13,7 @@ namespace Abstracciones.DA
         Task<int> AgregarCurso(CursosAD curso);
         Task<IEnumerable<CursoDto>> ListarCursos();
         Task<CursoDto> ObtenerPorId(int idCurso);
-        Task<bool> ModificarEstadoCurso(int idCurso, bool estado);
+        Task ModificarEstadoCurso(int idCurso);
 
     }
 }

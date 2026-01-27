@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Abstracciones.DA;
 using Abstracciones.Modelos.ModelosDA;
 using Abstracciones.Modelos.ModelosDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace DA
 {
@@ -19,32 +20,44 @@ namespace DA
         public async Task<int> AgregarMateria(MateriasAD materia)
         {
             var entidad = await _elContexto.Materias.AddAsync(materia);
-            var resultado = await _elContexto.SaveChangesAsync();
-            if (resultado <= 0)
-            {
-                throw new Exception("No se pudo agregar la materia");
-            }
+            await _elContexto.SaveChangesAsync();
             return entidad.Entity.IdMateria;
         }
 
-        public Task<bool> CambiarEstadoMateria(int materiaId, bool estado)
+        public async Task CambiarEstadoMateria(int materiaId)
         {
-            throw new NotImplementedException();
+            var materiaExistente = await _elContexto.Materias.FindAsync(materiaId);
+            materiaExistente.Estado = !materiaExistente.Estado;
+            await _elContexto.SaveChangesAsync();
         }
 
-        public Task<bool> EditarMateria(MateriasAD materia)
+        public async Task EditarMateria(MateriasAD materia)
         {
-            throw new NotImplementedException();
+            var materiaExistente = await _elContexto.Materias.FindAsync(materia);
+            materiaExistente.Nombre = materia.Nombre;
+            await _elContexto.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<MateriaDto>> ListarMaterias()
+        public async Task<IEnumerable<MateriaDto>> ListarMaterias()
         {
-            throw new NotImplementedException();
+            var materias = await _elContexto.Materias.Select(m => new MateriaDto
+            {
+                Id_Materia = m.IdMateria,
+                Nombre = m.Nombre,
+                Estado = m.Estado
+            }).ToListAsync();
+            return materias;
         }
 
         public Task<MateriaDto> ObtenerMateriaPorId(int id)
         {
-            throw new NotImplementedException();
+            var materia = _elContexto.Materias.Where(t => t.IdMateria == id).Select(t => new MateriaDto
+            {
+                Id_Materia = t.IdMateria,
+                Nombre = t.Nombre,
+                Estado = t.Estado
+            }).FirstOrDefaultAsync();
+            return materia;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Servicios
         {
             _telefonos = telefonos;
         }
-        public Task<bool> AgregarTelefono(List<TelefonoDto> telefono)
+        public async Task AgregarTelefono(List<TelefonoDto> telefono)
         {
             var telefonosDA = telefono.Select(t => new TelefonoAD
             {
@@ -28,17 +28,32 @@ namespace Servicios
                 Tipo = t.Tipo,
                 Estado = t.Estado
             }).ToList();
-            return _telefonos.AgregarTelefono(telefonosDA);
+            await _telefonos.AgregarTelefono(telefonosDA);
         }
 
-        public Task<bool> EditarTelefono(List<TelefonoDto> telefonos)
+        public async Task EditarTelefono(List<TelefonoDto> telefonos)
         {
-            throw new NotImplementedException();
+            var telefonosAD = telefonos.Select(ConvertirAD).ToList();
+            await _telefonos.EditarTelefono(telefonosAD);
         }
 
-        public IEnumerable<TelefonoDto> ListarTelefonos()
+        public async Task<IEnumerable<TelefonoDto>> ListarTelefonos()
         {
-            throw new NotImplementedException();
+            var telefonos = await _telefonos.ListarTelefonos();
+            return telefonos;
+        }
+
+        private static TelefonoAD ConvertirAD(TelefonoDto telefono)
+        {
+            return new TelefonoAD
+            {
+                Id = telefono.Id,
+                IdUsuario = telefono.IdUsuario,
+                Codigo = telefono.Codigo,
+                Telefono = telefono.Telefono,
+                Tipo = telefono.Tipo,
+                Estado = telefono.Estado
+            };
         }
     }
 }

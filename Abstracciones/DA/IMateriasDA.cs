@@ -11,8 +11,8 @@ namespace Abstracciones.DA
     public interface IMateriasDA
     {
         Task<int> AgregarMateria(MateriasAD materia);
-        Task<bool> EditarMateria(MateriasAD materia);
-        Task<bool> CambiarEstadoMateria(int materiaId,bool estado);
+        Task EditarMateria(MateriasAD materia);
+        Task CambiarEstadoMateria(int materiaId);
         Task<IEnumerable<MateriaDto>> ListarMaterias();
         Task<MateriaDto> ObtenerMateriaPorId(int id);
 

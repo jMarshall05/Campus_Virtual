@@ -17,27 +17,17 @@ namespace DA
         {
             _elContexto = elContexto;
         }
-        public async Task<bool> AgregarTelefono(IEnumerable<TelefonoAD> telefono)
+        public async Task AgregarTelefono(IEnumerable<TelefonoAD> telefono)
         {
-            foreach (var tel in telefono)
-            {
-
-                await _elContexto.Telefonos.AddAsync(tel);
-            }
-            var cambios = await _elContexto.SaveChangesAsync();
-            if (cambios > 0)
-            {
-                return true;
-            }
-            return false;
+            await _elContexto.Telefonos.AddRangeAsync(telefono);
+            await _elContexto.SaveChangesAsync();
         }
 
-        public async Task<bool> EditarTelefono(IEnumerable<TelefonoAD> telefonos)
+        public async Task EditarTelefono(IEnumerable<TelefonoAD> telefonos)
         {
             foreach (var telefono in telefonos)
             {
-                var telefonoExistente = await _elContexto.Telefonos
-                    .FirstOrDefaultAsync(t => t.Id == telefono.Id);
+                var telefonoExistente = await _elContexto.Telefonos.FindAsync(telefono);
                 if (telefonoExistente != null &&
                       telefonoExistente.Codigo == telefono.Codigo &&
                       telefonoExistente.Telefono == telefono.Telefono &&
@@ -53,14 +43,10 @@ namespace DA
                     telefonoExistente.Estado = telefono.Estado;
                 }
             }
-
-            var cambios = await _elContexto.SaveChangesAsync();
-            if (cambios > 0)
-            {
-                return true;
-            }
-            return false;
+            await _elContexto.SaveChangesAsync();
         }
+
+
 
         public async Task<bool> ExisteTelefono(int codigo, long telefono)
         {

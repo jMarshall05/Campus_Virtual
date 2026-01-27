@@ -20,43 +20,36 @@ namespace DA
         public async Task<int> AgregarGrupo(GruposAD grupo)
         {
             var entidad = await _elContexto.Grupos.AddAsync(grupo);
-            int resultado = await _elContexto.SaveChangesAsync();
-            if (resultado > 0)
-                return entidad.Entity.id_grupo;
-            return 0;
+            await _elContexto.SaveChangesAsync();
+            return entidad.Entity.id_grupo;
         }
 
         public async Task<GruposDto> BuscarGruposPorId(int idGrupo)
         {
-            var grupo = await _elContexto.Grupos.FindAsync(idGrupo);
-            if (grupo == null)
-                return null;
-            var grupoDto = new GruposDto
-            {
-                id_grupo = grupo.id_grupo,
-                nombre_grupo = grupo.nombre_grupo,
-                descripcion = grupo.descripcion,
-                creado_por = grupo.creado_por,
-                estado = grupo.estado,
-                FechaDeCreacion = grupo.FechaDeCreacion,
-                FechaDeModificacion = grupo.FechaDeModificacion,
-                modificado_por = grupo.modificado_por
-            };
-            return grupoDto;
+            var grupo = await _elContexto.Grupos.Where(g=>g.id_grupo == idGrupo)
+                .Select(grupo => new GruposDto
+                {
+                    id_grupo = grupo.id_grupo,
+                    nombre_grupo = grupo.nombre_grupo,
+                    descripcion = grupo.descripcion,
+                    creado_por = grupo.creado_por,
+                    estado = grupo.estado,
+                    FechaDeCreacion = grupo.FechaDeCreacion,
+                    FechaDeModificacion = grupo.FechaDeModificacion,
+                    modificado_por = grupo.modificado_por
+                }).FirstOrDefaultAsync();
+            return grupo;
         }
 
-        public async Task<bool> EditarGrupo(int id, GruposAD grupo)
+        public async Task EditarGrupo(int id, GruposAD grupo)
         {
             var grupoExistente = await _elContexto.Grupos.FindAsync(id);
-            if (grupoExistente == null)
-                return false;
             grupoExistente.nombre_grupo = grupo.nombre_grupo;
             grupoExistente.descripcion = grupo.descripcion;
             grupoExistente.modificado_por = grupo.modificado_por;
             grupoExistente.FechaDeModificacion = DateTime.Now;
             grupoExistente.estado = grupo.estado;
-            int resultado = await _elContexto.SaveChangesAsync();
-            return resultado > 0;
+            await _elContexto.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<GruposDto>> ListarGrupos()

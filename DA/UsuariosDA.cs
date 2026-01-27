@@ -23,56 +23,36 @@ namespace DA
         {
 
             var entidad = await _elContexto.Usuarios.AddAsync(usuario);
-            int Resultado = await _elContexto.SaveChangesAsync();
-            if (Resultado > 0)
-            {
-                return entidad.Entity.IdUsuario;
-            }
-            else
-            {
-                return String.Empty;
-            }
+            await _elContexto.SaveChangesAsync();
+            return entidad.Entity.IdUsuario;
         }
 
-        public async Task<int> EditarUsuario(string id, UsuariosAD usuario)
+        public async Task EditarUsuario(string id, UsuariosAD usuario)
         {
-            var usuarioExistente = await _elContexto.Usuarios.FirstOrDefaultAsync(u => u.IdUsuario == id);
-            if (usuarioExistente != null)
-            {
-                usuarioExistente.Nombre = usuario.Nombre;
-                usuarioExistente.Apellido = usuario.Apellido;
-                usuarioExistente.FechaDeModificacion = DateTime.Now;
-                int resultado = await _elContexto.SaveChangesAsync();
-                return resultado;
-            }
-            else
-            {
-                throw new BusinessException("El usuario no existe o no se pudo encontrar en la base de datos.");
-            }
+            var usuarioExistente = await _elContexto.Usuarios.FindAsync(usuario);
+            usuarioExistente.Nombre = usuario.Nombre;
+            usuarioExistente.Apellido = usuario.Apellido;
+            usuarioExistente.FechaDeModificacion = DateTime.Now;
+            await _elContexto.SaveChangesAsync();
+
         }
 
-        public async Task<int> EditarUsuarioAdmin(string id, UsuariosAD usuario)
+        public async Task EditarUsuarioAdmin(string id, UsuariosAD usuario)
         {
 
-            UsuariosAD usuarioExistente = _elContexto.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
-            if (usuarioExistente != null)
-            {
-                usuarioExistente.Nombre = usuario.Nombre;
-                usuarioExistente.Apellido = usuario.Apellido;
-                usuarioExistente.Email = usuario.Email;
-                usuarioExistente.FechaDeNacimiento = usuario.FechaDeNacimiento;
-                usuarioExistente.FechaDeModificacion = DateTime.Now;
-                usuarioExistente.Rol = usuario.Rol;
-                usuarioExistente.Identificacion = usuario.Identificacion;
-                usuarioExistente.Estado = usuario.Estado;
-                usuarioExistente.TipoIdentificacion = usuario.TipoIdentificacion;
-                int resultado = await _elContexto.SaveChangesAsync();
-                return resultado;
-            }
-            else
-            {
-                throw new Exception("El usuario no existe o no se pudo encontrar en la base de datos.");
-            }
+            var usuarioExistente = await _elContexto.Usuarios.FindAsync(usuario);
+            usuarioExistente.Nombre = usuario.Nombre;
+            usuarioExistente.Apellido = usuario.Apellido;
+            usuarioExistente.Email = usuario.Email;
+            usuarioExistente.FechaDeNacimiento = usuario.FechaDeNacimiento;
+            usuarioExistente.FechaDeModificacion = DateTime.Now;
+            usuarioExistente.Rol = usuario.Rol;
+            usuarioExistente.Identificacion = usuario.Identificacion;
+            usuarioExistente.Estado = usuario.Estado;
+            usuarioExistente.TipoIdentificacion = usuario.TipoIdentificacion;
+            await _elContexto.SaveChangesAsync();
+            
+
         }
 
         public async Task<bool> ExisteIdentificacion(string identificacion)

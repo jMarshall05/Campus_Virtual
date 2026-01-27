@@ -19,20 +19,31 @@ namespace Api.Controllers
         [HttpPatch("Edit")]
         public async Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request)
         {
-            var resultado = await _usuario.EditarUsuario(id, request);
-
-            if (resultado)
+            try
+            {
+                await _usuario.EditarUsuario(id, request);
                 return Accepted($"Se ha editado el usuario con ID : {id}");
-            return StatusCode(500, "Error interno del servidor");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+
+            }
         }
         [HttpPut("AdminEdit")]
         public async Task<IActionResult> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? idGrupo)
         {
-            var resultado = await _usuario.EditarUsuarioAdmin(id, usuario, idGrupo);
-
-            if (resultado)
+            try
+            {
+                await _usuario.EditarUsuarioAdmin(id, usuario, idGrupo);
                 return Accepted($"Se ha editado el usuario con ID : {id}");
-            return StatusCode(500, "Error interno del servidor");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message );
+            }
         }
         [HttpGet("List")]
         public async Task<IActionResult> ListarUsuarios()

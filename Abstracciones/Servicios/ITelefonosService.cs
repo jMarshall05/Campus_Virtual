@@ -10,8 +10,8 @@ namespace Abstracciones.Servicios
     public interface ITelefonosService
     {
 
-        Task<bool> AgregarTelefono(List<TelefonoDto> telefono);
-        Task<bool> EditarTelefono(List<TelefonoDto> telefonos);
-        IEnumerable<TelefonoDto> ListarTelefonos();
+        Task AgregarTelefono(List<TelefonoDto> telefono);
+        Task EditarTelefono(List<TelefonoDto> telefonos);
+        Task<IEnumerable<TelefonoDto>> ListarTelefonos();
     }
 }

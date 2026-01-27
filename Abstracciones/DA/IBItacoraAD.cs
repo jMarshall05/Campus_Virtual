@@ -9,7 +9,7 @@ namespace Abstracciones.DA
 {
     public interface IBItacoraAD
     {
-        Task<bool> RegistrarBitacora(BitacoraAD Bitacora);
+        Task RegistrarBitacora(BitacoraAD Bitacora);
 
     }
 }

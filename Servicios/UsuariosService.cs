@@ -85,21 +85,15 @@ namespace Servicios
             };
         }
 
-        public async Task<bool> EditarUsuario(string id, EditarUsuarioRequest request)
+        public async Task EditarUsuario(string id, EditarUsuarioRequest request)
         {
-            try
-            {
-                var usuarioExiste = await _userManager.FindByIdAsync(id);
-                if (usuarioExiste == null)
-                {
-                    throw new BusinessException("El usuario no existe");
-                }
-                var usuarioAD = new UsuariosAD
+            var usuarioExiste = await _userManager.FindByIdAsync(id) ?? throw new BusinessException("El usuario no existe");
+            var usuarioAD = new UsuariosAD
                 {
                     Nombre = request.Nombre,
                     Apellido = request.Apellido,
                 };
-                var result = await _usuariosDA.EditarUsuario(id, usuarioAD);
+                await _usuariosDA.EditarUsuario(id, usuarioAD);
                 if (request.Telefonos != null)
                 {
                     var telefonosValidos = request.Telefonos
@@ -110,23 +104,13 @@ namespace Servicios
 
                     if (telefonosExistentes.Any())
                     {
-                        var resultado = await _telefonosDA.EditarTelefono(telefonosExistentes);
+                        await _telefonosDA.EditarTelefono(telefonosExistentes);
 
                     }
                 }
-                return true;
-            }
-            catch (Exception)
-            {
-
-                return false;
             }
 
-
-
-        }
-
-        public async Task<bool> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? Idgrupo)
+        public async Task EditarUsuarioAdmin(string id, UsuariosDto usuario, int? Idgrupo)
         {
             var user = await _userManager.FindByIdAsync(id) ?? throw new BusinessException("El usuario no existe");
             var Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
@@ -156,7 +140,7 @@ namespace Servicios
                         .Where(t => !string.IsNullOrWhiteSpace(t.Telefono.ToString()) && !string.IsNullOrWhiteSpace(t.Tipo))
                         .ToList();
             var telefonosExistentes = telefonosValidos.Where(t => t.Id > 0).ToList();
-            if (telefonosExistentes.Any())
+            if (telefonosExistentes.Count != 0)
             {
                 await _telefonosDA.EditarTelefono(ConvertirTelefonosAD(telefonosExistentes));
             }
@@ -181,20 +165,18 @@ namespace Servicios
                 }
             }
             var usuarioAD = ConvertirUsuarioAD(usuario);
-            var resultado = await _usuariosDA.EditarUsuarioAdmin(id, usuarioAD);
-            if (resultado > 0)
-                return true;
-            return false;
+            await _usuariosDA.EditarUsuarioAdmin(id, usuarioAD);
+          
         }
 
         public async Task<IEnumerable<UsuariosDto>> ListarUsuarios()
         {
             var usuarios = await _usuariosDA.ListarUsuarios();
-            return usuarios ?? new List <UsuariosDto>();
+            return usuarios ?? [];
         }
         public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
-            var usuario =await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
+            var usuario = await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
             return usuario;
         }
         private static IEnumerable<TelefonoAD> ConvertirTelefonosAD(IEnumerable<TelefonoDto> telefonos)

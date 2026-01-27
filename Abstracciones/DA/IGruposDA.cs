@@ -11,7 +11,7 @@ namespace Abstracciones.DA
     public interface IGruposDA
     {
         Task<int> AgregarGrupo(GruposAD grupo);
-        Task<bool> EditarGrupo(int id, GruposAD grupo);
+        Task EditarGrupo(int id, GruposAD grupo);
         Task<IEnumerable<GruposDto>> ListarGrupos();
         Task<GruposDto> BuscarGruposPorId(int idGrupo);
     }

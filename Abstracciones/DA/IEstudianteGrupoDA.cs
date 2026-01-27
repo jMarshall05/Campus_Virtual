@@ -11,7 +11,7 @@ namespace Abstracciones.DA
     public interface IEstudianteGrupoDA
     {
         Task<int> AgregarEstudianteGrupo(EstudianteGrupoAD estudianteGrupoDto);
-        Task<bool> ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante);
+        Task ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante);
         Task<EstudianteGrupoDto> BuscarEstudianteGrupoPorEstudianteId(string idEstudiante);
         Task<IEnumerable<EstudianteGrupoDto>> BuscarEstudianteGrupoPorGrupoId(int idGrupo);
         Task<IEnumerable<EstudianteGrupoDto>> ListarEstudiantesGrupos();

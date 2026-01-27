@@ -15,6 +15,9 @@ namespace Abstracciones.Modelos.ModelosDA
         [Required]
         public int id_materia { get; set; }
 
+        [ForeignKey(nameof(id_materia))]
+        public virtual MateriasAD Materia {  get; set; }
+
         [Column("titulo")]
         [Required]
         [StringLength(150)]
@@ -36,14 +39,17 @@ namespace Abstracciones.Modelos.ModelosDA
 
         [Column("FechaPublicacion")]
         public DateTime FechaPublicacion { get; set; }
-
+        [Column("IdGrupo")]
         public int IdGrupo { get; set; }
 
-        [ForeignKey("IdGrupo")]
+        [ForeignKey(nameof(IdGrupo))]
         public virtual GruposAD Grupo { get; set; }
 
         [Column("asignado_por")]
         public string asignado_por { get; set; }
+
+        [ForeignKey(nameof(asignado_por))]
+        public virtual UsuariosAD Usuario { get; set; }
         [Column("estado")]
         public bool Estado { get; set; }
 

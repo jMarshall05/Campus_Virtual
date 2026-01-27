@@ -30,7 +30,8 @@ namespace DA
         public DbSet<CalificacionesAD> Calificaciones { get; set; }
         public DbSet<DocumentosAD> Documentos { get; set; }
         public DbSet<AnunciosAD> Anuncios { get; set; }
-
+        public DbSet<CursosAD> Cursos { get; set; }
+        public DbSet<BitacoraAD> Bitacora { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -39,7 +40,6 @@ namespace DA
                 HasOne(t => t.Usuario).
                 WithMany(t => t.Telefonos).
                 HasForeignKey(t => t.IdUsuario);
-
 
             builder.Entity<ApplicationUser>().ToTable("AspNetUsers_Core");
             builder.Entity<IdentityRole<string>>().ToTable("AspNetRoles_Core");

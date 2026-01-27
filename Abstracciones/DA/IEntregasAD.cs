@@ -11,8 +11,8 @@ namespace Abstracciones.DA
     public interface IEntregasAD
     {
         Task<int> AgregarEntrega(EntregasAD entrega);
-        Task<int> EditarEntrega(EntregasAD entrega);
-        Task<int> EliminarEntrega(int id_entrega);
+        Task EditarEntrega(EntregasAD entrega);
+        Task EliminarEntrega(int id_entrega);
         Task<IEnumerable<EntregasDto>> ListarEntregas();
         Task<IEnumerable<EntregasDto>> ListarEntregasPorGrupo(int idGrupo);
         Task<IEnumerable<EntregasDto>> ListarEntregasPorEstudiante(string idEstudiante);
