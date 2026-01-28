@@ -1,4 +1,5 @@
 ﻿using Abstracciones.Api;
+using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
@@ -12,9 +13,11 @@ namespace Api.Controllers
     public class UsuariosController : ControllerBase, IUsuariosController
     {
         private readonly IUsuariosService _usuario;
-        public UsuariosController(IUsuariosService usuario)
+        private readonly ILogger<TareasController> _logger;
+        public UsuariosController(IUsuariosService usuario, ILogger<TareasController> logger)
         {
             _usuario = usuario;
+            _logger = logger;
         }
         [HttpPatch("Edit")]
         public async Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request)
@@ -25,9 +28,14 @@ namespace Api.Controllers
                 return Accepted($"Se ha editado el usuario con ID : {id}");
 
             }
+            catch (BusinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", id);
+                return StatusCode(500, "Algo inesperado a sucedido");
 
             }
         }
@@ -40,9 +48,15 @@ namespace Api.Controllers
                 return Accepted($"Se ha editado el usuario con ID : {id}");
 
             }
+            catch (BusinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message );
+                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", id);
+                return StatusCode(500, "Algo inesperado a sucedido");
+
             }
         }
         [HttpGet("List")]

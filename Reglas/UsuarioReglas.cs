@@ -26,6 +26,11 @@ namespace Reglas
             if (existe)
                 throw new BusinessException("El correo electrónico ya está registrado.");
         }
+        public static void ValidarProfesor(bool existe)
+        {
+            if (existe)
+                throw new BusinessException("El usuario no existe o no es profesor.");
+        }
 
     }
 }

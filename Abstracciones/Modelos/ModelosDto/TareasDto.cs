@@ -28,7 +28,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public int IdMateria { get; set; }
 
         [DisplayName("Archivo Adjunto")]
-        public string ArchivoAdjunto { get; set; }
+        public string? ArchivoAdjunto { get; set; }
 
         [DisplayName("Fecha de Modificación")]
         public DateTime? FechaModificacion { get; set; }
@@ -44,7 +44,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public virtual GruposDto Grupo { get; set; }
 
         [NotMapped]
-        public IFormFile Archivo { get; set; }
+        public virtual IFormFile Archivo { get; set; }
 
         [NotMapped]
         [DisplayName("Grupo Asignado")]

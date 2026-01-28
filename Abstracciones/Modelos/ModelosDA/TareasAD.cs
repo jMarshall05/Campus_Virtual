@@ -32,7 +32,7 @@ namespace Abstracciones.Modelos.ModelosDA
         public DateTime FechaEntrega { get; set; }
 
         [Column("archivo_adjunto")]
-        public string ArchivoAdjunto { get; set; }
+        public string? ArchivoAdjunto { get; set; }
 
         [Column("fecha_modificacion")]
         public DateTime? FechaModificacion { get; set; }

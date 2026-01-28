@@ -1,6 +1,7 @@
 using System.Text;
 using Abstracciones.DA;
 using Abstracciones.Excepciones;
+using Abstracciones.Modelos.ModelosDA;
 using Abstracciones.Servicios;
 using DA;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,15 +10,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Servicios;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// Swagger - NECESARIO para que Scalar funcione (genera el documento OpenAPI)
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 
@@ -36,8 +41,6 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-
-
 // JWT
 var jwt = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwt["Key"]!);
@@ -51,7 +54,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -59,17 +61,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
 //DA
 builder.Services.AddScoped<IUsuariosDA, UsuariosDA>();
 builder.Services.AddScoped<ITelefonosDA, TelefonosDA>();
 builder.Services.AddScoped<IEstudianteGrupoDA, EstudianteGrupoDA>();
 builder.Services.AddScoped<IGruposDA, GruposDA>();
+builder.Services.AddScoped<IEntregasAD, EntregasDA>();
+builder.Services.AddScoped<ICalificacionesAD, CalificacionesDA>();
+builder.Services.AddScoped<IDocumentosAD, DocumentosDA>();
+builder.Services.AddScoped<IAnunciosAD, AnunciosDA>();
+builder.Services.AddScoped<ICursosAD, CursosDA>();
+builder.Services.AddScoped<IBItacoraAD, BitacoraDA>();
+builder.Services.AddScoped<IMateriasDA, MateriasDA>();
+builder.Services.AddScoped<IEventosDA, EventosDA>();
+builder.Services.AddScoped<IEstudianteGrupoDA, EstudianteGrupoDA>();
+builder.Services.AddScoped<ITareasAD, TareasDA>();
+
 //Servicios
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<ITelefonosService, TelefonosService>();
-
+builder.Services.AddScoped<ITareasService, TareasService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
@@ -81,7 +93,6 @@ app.UseExceptionHandler(appError =>
     appError.Run(async context =>
     {
         var error = context.Features.Get<IExceptionHandlerFeature>()?.Error;
-
         if (error is BusinessException)
         {
             context.Response.StatusCode = 400;
@@ -93,19 +104,25 @@ app.UseExceptionHandler(appError =>
     });
 });
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Swagger - NECESARIO para generar el documento OpenAPI que Scalar usa
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    // SwaggerUI (comentado - usamos Scalar en su lugar)
+    //app.UseSwaggerUI();
+
+    // Scalar - Configurado para leer el documento de Swagger
+    app.MapScalarApiReference(options =>
+    {
+        options.WithOpenApiRoutePattern("/swagger/{documentName}/swagger.json");
+    });
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
