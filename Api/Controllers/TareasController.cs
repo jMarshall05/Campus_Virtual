@@ -1,9 +1,10 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
-using Abstracciones.Modelos.ModelosDA;
 using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Mvc;
+using static Abstracciones.Modelos.Requests.TareasRequests;
 
 namespace Api.Controllers
 {
@@ -18,8 +19,8 @@ namespace Api.Controllers
             _tareas = tareas;
             _logger = logger;
         }
-        [HttpPost("Agregar")]
-        public async Task<IActionResult> AgregarTarea(TareasAD tarea)
+        [HttpPost("Add")]
+        public async Task<IActionResult> AgregarTarea(AgregarTareaRequest tarea)
         {
             try
             {
@@ -37,7 +38,7 @@ namespace Api.Controllers
             }
 
         }
-        [HttpPatch("CambiarEstado/{idTarea}")]
+        [HttpPatch("EditState/{idTarea}")]
         public async Task<IActionResult> CambiarEstadoTarea(int idTarea)
         {
             try
@@ -55,8 +56,8 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpPut("Editar/{idTarea}")]
-        public async Task<IActionResult> EditarTarea(int idTarea, TareasAD tarea)
+        [HttpPut("Edit/{idTarea}")]
+        public async Task<IActionResult> EditarTarea(int idTarea, EditarTareaRequest tarea)
         {
             try
             {
@@ -73,11 +74,12 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpGet("Listar")]
+        [HttpGet("List")]
         public async Task<IActionResult> ListarTareas()
         {
             try
             {
+                var headers = HttpContext.Request.Headers;
                 var lista = await _tareas.ListarTareas();
                 return Ok(lista);
             }
@@ -91,7 +93,7 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpPost("ListarPorEstudiante")]
+        [HttpPost("ListByStudent")]
         public async Task<IActionResult> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
         {
             try
@@ -111,7 +113,7 @@ namespace Api.Controllers
 
             }
         }
-        [HttpGet("ObtenerPorId/{idTarea}")]
+        [HttpGet("GetById/{idTarea}")]
         public async Task<IActionResult> ObtenerPorId(int idTarea)
         {
             try

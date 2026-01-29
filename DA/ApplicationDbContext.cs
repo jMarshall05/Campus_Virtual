@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDA;
+using DA.Entidades;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +40,12 @@ namespace DA
                 HasOne(t => t.Usuario).
                 WithMany(t => t.Telefonos).
                 HasForeignKey(t => t.IdUsuario);
+
+            builder.Entity<EstudianteGrupoAD>().
+                HasOne(u=> u.Estudiante).
+                WithOne(e=> e.EstudianteGrupo).
+                HasForeignKey<EstudianteGrupoAD>(eg => eg.EstudianteId);
+
 
             builder.Entity<ApplicationUser>().ToTable("AspNetUsers_Core");
             builder.Entity<IdentityRole<string>>().ToTable("AspNetRoles_Core");

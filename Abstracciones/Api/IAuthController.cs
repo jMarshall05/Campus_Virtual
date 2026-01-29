@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using Microsoft.AspNetCore.Mvc;
+using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
 namespace Abstracciones.Api
 {

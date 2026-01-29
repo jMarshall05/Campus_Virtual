@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Abstracciones.DA;
-using Abstracciones.Modelos.ModelosDA;
+using DA.Entidades;
+using DA.Interfaces;
 
 namespace Servicios.Helpers
 {

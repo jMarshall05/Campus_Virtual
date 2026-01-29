@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
+using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
 namespace Abstracciones.Servicios
 {

@@ -20,6 +20,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public string TipoIdentificacion { get; set; }
         public bool Estado { get; set; }
 
+        public virtual GruposDto? Grupo { get; set; }
 
     }
 }

@@ -43,7 +43,7 @@ public class AuthController : ControllerBase, IAuthController
         return Ok(new { token });
     }
     [HttpPost("Register")]
-    public async Task<IActionResult> Register([FromBody] Abstracciones.Modelos.Requests.RegisterRequest register)
+    public async Task<IActionResult> Register([FromBody] Abstracciones.Modelos.Requests.UsuariosRequests.RegisterRequest register)
     {
         if (ModelState.IsValid == false)
         {

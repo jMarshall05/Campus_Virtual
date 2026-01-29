@@ -5,6 +5,7 @@ using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
 namespace Api.Controllers
 {

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DA.Entidades;
 using Abstracciones.Modelos.ModelosDto;
-using Abstracciones.Modelos.Requests;
-using static Abstracciones.Modelos.Requests.TareasRequests;
 
-namespace Abstracciones.Servicios
+namespace DA.Interfaces
 {
-    public interface ITareasService
+    public interface ITareasAD
     {
-        Task<int> AgregarTarea(AgregarTareaRequest tarea);
-        Task EditarTarea(int id, EditarTareaRequest tarea);
+        Task<int> AgregarTarea(TareasAD tarea);
+        Task EditarTarea(int id, TareasAD tarea);
         Task CambiarEstadoTarea(int idTarea);
         Task<IEnumerable<TareaDto>> ListarTareas();
         Task<TareaDto> ObtenerPorId(int idTarea);
         Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo);
+
     }
 }

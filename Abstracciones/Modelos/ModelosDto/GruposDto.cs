@@ -15,7 +15,7 @@ namespace Abstracciones.Modelos.ModelosDto
         [Required(ErrorMessage = "La descripción del grupo es obligatoria.")]
         public string descripcion { get; set; }
         [Display(Name = "Creador")]
-        public string creado_por { get; set; }
+        public string? creado_por { get; set; }
         [Display(Name = "Estado")]
         public bool estado { get; set; }
         [Display(Name = "Fecha de Creación")]
@@ -25,7 +25,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public DateTime? FechaDeModificacion { get; set; }
 
         [Display(Name = "Modificado por")]
-        public string modificado_por { get; set; }
+        public string? modificado_por { get; set; }
 
     }
 }
