@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Abstracciones.Modelos.ModelosDto
+﻿namespace Abstracciones.Modelos.ModelosDto
 {
     public class UsuariosGruposDto
     {

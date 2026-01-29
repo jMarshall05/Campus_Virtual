@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DA.Entidades
@@ -16,7 +15,7 @@ namespace DA.Entidades
         public int id_materia { get; set; }
 
         [ForeignKey(nameof(id_materia))]
-        public virtual MateriasAD Materia {  get; set; }
+        public virtual MateriasAD Materia { get; set; }
 
         [Column("titulo")]
         [Required]

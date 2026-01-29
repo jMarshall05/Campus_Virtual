@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 
 namespace DA.Interfaces
@@ -12,7 +7,7 @@ namespace DA.Interfaces
     {
         Task<int> AgregarDocumento(DocumentosAD documento);
         Task BorrarDocumento(int idDocumento);
-        Task EditarDocumento( DocumentosAD documento);
+        Task EditarDocumento(DocumentosAD documento);
         Task<IEnumerable<DocumentosDto>> ListarDocumentos();
     }
 }

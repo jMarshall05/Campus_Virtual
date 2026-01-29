@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DA.Entidades;
+﻿using DA.Entidades;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace DA
 {
@@ -42,9 +36,13 @@ namespace DA
                 HasForeignKey(t => t.IdUsuario);
 
             builder.Entity<EstudianteGrupoAD>().
-                HasOne(u=> u.Estudiante).
-                WithOne(e=> e.EstudianteGrupo).
+                HasOne(u => u.Estudiante).
+                WithOne(e => e.EstudianteGrupo).
                 HasForeignKey<EstudianteGrupoAD>(eg => eg.EstudianteId);
+
+            builder.Entity<CalificacionesAD>()
+               .Property(c => c.Calificacion)
+               .HasPrecision(5, 2);
 
 
             builder.Entity<ApplicationUser>().ToTable("AspNetUsers_Core");

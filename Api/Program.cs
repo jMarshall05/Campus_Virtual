@@ -1,21 +1,19 @@
 using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
-using AutoMapper;
 using DA;
-using DA.Entidades;
 using DA.Implementaciones;
 using DA.Interfaces;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
-using Servicios.Profiles;
 using Servicios.Servicios;
-using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,13 +29,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 
-builder.Services.AddAutoMapper(cfg => { },
-    typeof(UsuariosProfile).Assembly);
+var config = TypeAdapterConfig.GlobalSettings;
+config.Scan(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddSingleton(config);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 //Contexto Indentity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BD"))
-);;
+); ;
 
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole<string>>(options =>

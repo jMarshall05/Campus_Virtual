@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Abstracciones.Modelos.ModelosDto
+﻿namespace Abstracciones.Modelos.ModelosDto
 {
     public class TelefonoDto
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +72,7 @@ namespace DA.Implementaciones
         public async Task<IEnumerable<EntregasDto>> ListarEntregasPorGrupo(int idGrupo)
         {
             var entregas = await _elContexto.Entregas
-                .Where(e =>  _elContexto.Tareas
+                .Where(e => _elContexto.Tareas
                 .Any(t => t.IdGrupo == idGrupo && t.IdTarea == e.IdTarea))
                 .Select(e => new EntregasDto
                 {

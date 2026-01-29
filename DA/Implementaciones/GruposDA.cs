@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +21,7 @@ namespace DA.Implementaciones
 
         public async Task<GruposDto> BuscarGruposPorId(int idGrupo)
         {
-            var grupo = await _elContexto.Grupos.Where(g=>g.id_grupo == idGrupo)
+            var grupo = await _elContexto.Grupos.Where(g => g.id_grupo == idGrupo)
                 .Select(grupo => new GruposDto
                 {
                     id_grupo = grupo.id_grupo,

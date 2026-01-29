@@ -2,15 +2,15 @@
 using System.Globalization;
 using System.Text;
 using Abstracciones.Excepciones;
-using DA.Entidades;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
+using AutoMapper;
 using DA;
+using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Reglas;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
-using AutoMapper;
 
 namespace Servicios.Servicios
 {
@@ -59,7 +59,7 @@ namespace Servicios.Servicios
 
             await _userManager.AddToRoleAsync(user, request.Rol);
 
-            var usuarioAD = await CrearUsuarioAD(request, user);
+            var usuarioAD = CrearUsuario(request, user);
             await _usuariosDA.AgregarUsuario(usuarioAD);
 
             request.Telefonos?.ForEach(t => t.IdUsuario = usuarioAD.IdUsuario);
@@ -136,13 +136,13 @@ namespace Servicios.Servicios
             var telefonosExistentes = telefonosValidos.Where(t => t.Id > 0).ToList();
             if (telefonosExistentes.Count != 0)
             {
-                await _telefonosDA.EditarTelefono(ConvertirTelefonosAD(telefonosExistentes));
+                await _telefonosDA.EditarTelefono(_mapper.Map<IEnumerable<TelefonoAD>>(telefonosExistentes));
             }
             var telefonosNuevos = telefonosValidos.Where(t => t.Id == 0).ToList();
-            if (telefonosNuevos.Any())
+            if (telefonosNuevos.Count > 0)
             {
                 telefonosNuevos.ForEach(t => t.IdUsuario = id);
-                await _telefonosDA.AgregarTelefono(ConvertirTelefonosAD(telefonosNuevos));
+                await _telefonosDA.AgregarTelefono(_mapper.Map<IEnumerable<TelefonoAD>>(telefonosNuevos));
             }
             if (Idgrupo != null)
             {
@@ -173,26 +173,8 @@ namespace Servicios.Servicios
             var usuario = await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
             return usuario;
         }
-        private static IEnumerable<TelefonoAD> ConvertirTelefonosAD(IEnumerable<TelefonoDto> telefonos)
-        {
-            var telefonosAD = new List<TelefonoAD>();
-            foreach (var telefono in telefonos)
-            {
-                var telefonoAD = new TelefonoAD
-                {
-                    Id = telefono.Id,
-                    IdUsuario = telefono.IdUsuario,
-                    Codigo = telefono.Codigo,
-                    Telefono = telefono.Telefono,
-                    Tipo = telefono.Tipo,
-                    Estado = telefono.Estado
-                };
-                telefonosAD.Add(telefonoAD);
-            }
-            return telefonosAD;
-        }
 
-        private async Task<UsuariosAD> CrearUsuarioAD(RegisterRequest register, ApplicationUser user)
+        private UsuariosAD CrearUsuario(RegisterRequest register, ApplicationUser user)
         {
             var usuario = _mapper.Map<UsuariosAD>(register);
             usuario.IdUsuario = user.Id;

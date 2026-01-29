@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
-using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.TareasRequests;
@@ -44,7 +43,7 @@ namespace Api.Controllers
             try
             {
                 await _tareas.CambiarEstadoTarea(idTarea);
-                return Accepted($"Se ha cambiado el estado de la tarea con ID : {idTarea}");
+                return Ok($"Se ha cambiado el estado de la tarea con ID : {idTarea}");
             }
             catch (BusinessException ex)
             {
@@ -119,7 +118,9 @@ namespace Api.Controllers
             try
             {
                 var tarea = await _tareas.ObtenerPorId(idTarea);
-                return Ok(tarea);
+                if (tarea != null)
+                    return Ok(tarea);
+                return NotFound($"No existe tarea con id : {idTarea}");
             }
             catch (BusinessException ex)
             {

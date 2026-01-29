@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +44,7 @@ namespace DA.Implementaciones
         {
             var cursoExistente = await _elContexto.Cursos.FindAsync(idCurso);
             cursoExistente.Estado = !cursoExistente.Estado;
+            await _elContexto.SaveChangesAsync();
 
         }
 

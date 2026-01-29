@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Abstracciones.Modelos.ModelosDto;
 
 namespace DA.Entidades
 {

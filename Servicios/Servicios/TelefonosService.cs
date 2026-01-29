@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using AutoMapper;
-using DA;
 using DA.Entidades;
 using DA.Interfaces;
 
@@ -16,7 +10,7 @@ namespace Servicios.Servicios
     {
         private readonly ITelefonosDA _telefonos;
         private readonly IMapper _mapper;
-        public TelefonosService(IMapper mapper,ITelefonosDA telefonos)
+        public TelefonosService(IMapper mapper, ITelefonosDA telefonos)
         {
             _telefonos = telefonos;
             _mapper = mapper;
@@ -29,7 +23,7 @@ namespace Servicios.Servicios
 
         public async Task EditarTelefono(List<TelefonoDto> telefonos)
         {
-            var telefonosAD =_mapper.Map<IEnumerable<TelefonoAD>>(telefonos);
+            var telefonosAD = _mapper.Map<IEnumerable<TelefonoAD>>(telefonos);
             await _telefonos.EditarTelefono(telefonosAD);
         }
 
@@ -39,17 +33,5 @@ namespace Servicios.Servicios
             return telefonos;
         }
 
-        private static TelefonoAD ConvertirAD(TelefonoDto telefono)
-        {
-            return new TelefonoAD
-            {
-                Id = telefono.Id,
-                IdUsuario = telefono.IdUsuario,
-                Codigo = telefono.Codigo,
-                Telefono = telefono.Telefono,
-                Tipo = telefono.Tipo,
-                Estado = telefono.Estado
-            };
-        }
     }
 }

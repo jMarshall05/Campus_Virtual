@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Excepciones;
+﻿using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
-using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using AutoMapper;
 using DA;
@@ -37,24 +31,28 @@ namespace Servicios.Servicios
         }
         public async Task<int> AgregarTarea(AgregarTareaRequest tarea)
         {
-            var existeMateria =await _materias.ObtenerMateriaPorId(tarea.IdMateria) != null;
-            TareaReglas.ExisteMateria(existeMateria);
-            var existeGrupo =await _grupo.BuscarGruposPorId(tarea.IdGrupo) != null;
+            var existeMateria = await _materias.ObtenerMateriaPorId(tarea.IdMateria) != null;
+            MateriaReglas.ExisteMateria(existeMateria);
+            var existeGrupo = await _grupo.BuscarGruposPorId(tarea.IdGrupo) != null;
             if (!existeGrupo)
             {
                 throw new BusinessException("El grupo asignado no existe.");
             }
-            var resultado =await _tareas.AgregarTarea(_mapper.Map<TareasAD>(tarea));
+            var resultado = await _tareas.AgregarTarea(_mapper.Map<TareasAD>(tarea));
             return resultado;
         }
 
         public async Task CambiarEstadoTarea(int idTarea)
         {
+            var existe = await ObtenerPorId(idTarea) != null;
+            TareaReglas.ExisteTarea(existe);
             await _tareas.CambiarEstadoTarea(idTarea);
         }
 
         public async Task EditarTarea(int id, EditarTareaRequest tarea)
         {
+            var existe = await ObtenerPorId(id) != null;
+            TareaReglas.ExisteTarea(existe);
             await _tareas.EditarTarea(id, _mapper.Map<TareasAD>(tarea));
         }
 
@@ -66,7 +64,7 @@ namespace Servicios.Servicios
 
         public async Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
         {
-            var existeEstudiante =await _userManager.FindByIdAsync(estudianteGrupo.EstudianteId) != null;
+            var existeEstudiante = await _userManager.FindByIdAsync(estudianteGrupo.EstudianteId) != null;
             if (!existeEstudiante)
             {
                 throw new BusinessException("El estudiante no existe.");
@@ -76,26 +74,15 @@ namespace Servicios.Servicios
             {
                 throw new BusinessException("El grupo no existe.");
             }
-            var resultado =await _tareas.ListarTareasPorEstudiante(estudianteGrupo);
+            var resultado = await _tareas.ListarTareasPorEstudiante(estudianteGrupo);
             return resultado;
         }
 
         public async Task<TareaDto> ObtenerPorId(int idTarea)
         {
-            var resultado =await _tareas.ObtenerPorId(idTarea);
+            var resultado = await _tareas.ObtenerPorId(idTarea);
             return resultado;
         }
 
-        private static TareasAD ConvertirEditarAD(EditarTareaRequest tarea)
-        {
-            return new TareasAD
-            {
-                Titulo = tarea.Titulo,
-                Descripcion = tarea.Descripcion,
-                FechaEntrega = tarea.FechaEntrega,
-                IdGrupo = tarea.IdGrupo,
-                ArchivoAdjunto = tarea.ArchivoAdjunto
-            };
-        }
     }
 }

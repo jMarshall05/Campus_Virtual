@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Abstracciones.Modelos.ModelosDto
+﻿namespace Abstracciones.Modelos.ModelosDto
 {
     public class BitacoraDto
     {

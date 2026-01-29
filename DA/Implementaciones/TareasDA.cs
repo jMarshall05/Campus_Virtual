@@ -2,11 +2,6 @@
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DA.Implementaciones
 {
@@ -100,7 +95,7 @@ namespace DA.Implementaciones
 
         public async Task<TareaDto> ObtenerPorId(int idTarea)
         {
-            var tarea =await _elContexto.Tareas
+            var tarea = await _elContexto.Tareas
                 .Where(t => t.IdTarea == idTarea)
                 .Include(t => t.Grupo)
                 .Select(t => new TareaDto

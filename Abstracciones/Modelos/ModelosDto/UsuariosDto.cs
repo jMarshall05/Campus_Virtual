@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Abstracciones.Modelos.ModelosDto
+﻿namespace Abstracciones.Modelos.ModelosDto
 {
     public class UsuariosDto
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Excepciones;
+﻿using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 
 namespace Reglas

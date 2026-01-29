@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DA.Entidades;
+﻿using DA.Entidades;
 using DA.Interfaces;
 
 namespace DA.Implementaciones

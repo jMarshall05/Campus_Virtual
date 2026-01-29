@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +37,8 @@ namespace DA.Implementaciones
         public async Task EliminarCalificacion(int id_calificacion)
         {
             var calificacionExistente = await _elContexto.Calificaciones.FindAsync(id_calificacion);
-            calificacionExistente.Estado = !calificacionExistente.Estado;
+            if (calificacionExistente != null)
+                calificacionExistente.Estado = !calificacionExistente.Estado;
             await _elContexto.SaveChangesAsync();
         }
 
