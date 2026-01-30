@@ -1,10 +1,10 @@
 ﻿using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
-using AutoMapper;
 using DA;
 using DA.Entidades;
 using DA.Interfaces;
+using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Reglas;
 using static Abstracciones.Modelos.Requests.TareasRequests;
@@ -18,15 +18,13 @@ namespace Servicios.Servicios
         private readonly IGruposDA _grupo;
         private readonly IUsuariosDA _usuarios;
         private readonly IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TareasService(IMapper mapper, UserManager<ApplicationUser> usermanager, ITareasAD tareas, IMateriasDA materias, IGruposDA grupo, IUsuariosDA usuarios)
+        public TareasService(IMapper mapper, ITareasAD tareas, IMateriasDA materias, IGruposDA grupo, IUsuariosDA usuarios)
         {
             _tareas = tareas;
             _materias = materias;
             _grupo = grupo;
             _usuarios = usuarios;
-            _userManager = usermanager;
             _mapper = mapper;
         }
         public async Task<int> AgregarTarea(AgregarTareaRequest tarea)
@@ -64,11 +62,8 @@ namespace Servicios.Servicios
 
         public async Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
         {
-            var existeEstudiante = await _userManager.FindByIdAsync(estudianteGrupo.EstudianteId) != null;
-            if (!existeEstudiante)
-            {
-                throw new BusinessException("El estudiante no existe.");
-            }
+            var existeEstudiante = await _usuarios.ObtenerUsuarioPorId(estudianteGrupo.EstudianteId) != null;
+            UsuarioReglas.ValidarUsuario(existeEstudiante);
             var existeGrupo = await _grupo.BuscarGruposPorId((int)estudianteGrupo.GrupoId) != null;
             if (!existeGrupo)
             {

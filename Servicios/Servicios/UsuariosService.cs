@@ -4,10 +4,10 @@ using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
-using AutoMapper;
 using DA;
 using DA.Entidades;
 using DA.Interfaces;
+using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Reglas;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
@@ -17,16 +17,14 @@ namespace Servicios.Servicios
 
     public class UsuariosService : IUsuariosService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUsuariosDA _usuariosDA;
         private readonly ITelefonosDA _telefonosDA;
         private readonly IEstudianteGrupoDA _estudianteGrupo;
         private readonly IGruposDA _grupos;
         private readonly IMapper _mapper;
 
-        public UsuariosService(IMapper mapper, UserManager<ApplicationUser> userManager, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
+        public UsuariosService(IMapper mapper, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
         {
-            _userManager = userManager;
             _usuariosDA = usuariosDA;
             _telefonosDA = telefonosDA;
             _estudianteGrupo = estudianteGrupo;
@@ -36,7 +34,7 @@ namespace Servicios.Servicios
         public async Task<string> AgregarUsuario(RegisterRequest request)
         {
 
-            var usuarioExiste = await _userManager.FindByEmailAsync(request.Email);
+            var usuarioExiste = await _usuariosDA.ObtenerUsuarioIdentityPorEmail(request.Email);
             if (usuarioExiste != null)
             {
                 throw new BusinessException("El usuario ya existe");
@@ -50,42 +48,20 @@ namespace Servicios.Servicios
                 UsuarioReglas.ValidarTelefonoUnico(telefonoExiste, telefono);
 
             }
+            var usuarioAD = CrearUsuario(request);
+            var user = await _usuariosDA.AgregarUsuario(usuarioAD, request.Password);
 
-            ApplicationUser user = CrearUsuario(request);
-            var resultado = await _userManager.CreateAsync(user, request.Password);
-
-            if (!resultado.Succeeded)
-                throw new BusinessException(resultado.Errors.First().Description);
-
-            await _userManager.AddToRoleAsync(user, request.Rol);
-
-            var usuarioAD = CrearUsuario(request, user);
-            await _usuariosDA.AgregarUsuario(usuarioAD);
-
-            request.Telefonos?.ForEach(t => t.IdUsuario = usuarioAD.IdUsuario);
+            request.Telefonos?.ForEach(t => t.IdUsuario = user);
             var telefonosAD = _mapper.Map<IEnumerable<TelefonoAD>>(request.Telefonos);
             if (request.Telefonos != null)
                 await _telefonosDA.AgregarTelefono(telefonosAD);
-            return user.Id;
+            return user;
 
-        }
-        private static ApplicationUser CrearUsuario(RegisterRequest register)
-        {
-            string numeroRamdon = Random.Shared.Next(0, 100).ToString("D2");
-
-            return new ApplicationUser
-            {
-                UserName = (register.Nombre.ToUpper().First() + register.Apellido.Trim() + numeroRamdon).Normalize(NormalizationForm.FormD)
-                .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                .Aggregate("", (s, c) => s + c),
-                Email = register.Email,
-                FechaDeRegistro = DateTime.UtcNow
-            };
         }
 
         public async Task EditarUsuario(string id, EditarUsuarioRequest request)
         {
-            var usuarioExiste = await _userManager.FindByIdAsync(id) ?? throw new BusinessException("El usuario no existe");
+            var usuarioExiste = await _usuariosDA.ObtenerUsuarioIdentityPorId(id) ?? throw new BusinessException("El usuario no existe");
             var usuarioAD = _mapper.Map<UsuariosAD>(request);
             await _usuariosDA.EditarUsuario(id, usuarioAD);
             if (request.Telefonos != null)
@@ -106,9 +82,8 @@ namespace Servicios.Servicios
 
         public async Task EditarUsuarioAdmin(string id, UsuariosDto usuario, int? Idgrupo)
         {
-            var user = await _userManager.FindByIdAsync(id) ?? throw new BusinessException("El usuario no existe");
-            var Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-
+            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(id) ?? throw new BusinessException("El usuario no existe");
+          
             if (Idgrupo != null)
             {
                 var existe = await _grupos.BuscarGruposPorId((int)Idgrupo) != null;
@@ -117,18 +92,11 @@ namespace Servicios.Servicios
 
             if (user.Email != usuario.Email)
             {
-                var userEmail = await _userManager.FindByEmailAsync(usuario.Email);
+                var userEmail = await _usuariosDA.ObtenerUsuarioIdentityPorEmail(usuario.Email);
                 if (userEmail != null && userEmail.Id != id)
                 {
                     throw new BusinessException("El email ya está en uso por otro usuario");
                 }
-                await _userManager.SetEmailAsync(user, usuario.Email);
-            }
-            if (usuario.Rol != Rol)
-            {
-                if (Rol != null)
-                    await _userManager.RemoveFromRoleAsync(user, Rol);
-                await _userManager.AddToRoleAsync(user, usuario.Rol);
             }
             var telefonosValidos = usuario.Telefonos
                         .Where(t => !string.IsNullOrWhiteSpace(t.Telefono.ToString()) && !string.IsNullOrWhiteSpace(t.Tipo))
@@ -174,10 +142,9 @@ namespace Servicios.Servicios
             return usuario;
         }
 
-        private UsuariosAD CrearUsuario(RegisterRequest register, ApplicationUser user)
+        private UsuariosAD CrearUsuario(RegisterRequest register)
         {
             var usuario = _mapper.Map<UsuariosAD>(register);
-            usuario.IdUsuario = user.Id;
             usuario.FechaDeRegistro = DateTime.UtcNow;
             usuario.Estado = true;
             return usuario;

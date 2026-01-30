@@ -1,23 +1,39 @@
-﻿using Abstracciones.Modelos.ModelosDto;
+﻿using System.Globalization;
+using System.Text;
+using Abstracciones.Excepciones;
+using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Mapster;
+using MapsterMapper;
 
 namespace DA.Implementaciones
 {
     public class UsuariosDA : IUsuariosDA
     {
         private readonly ApplicationDbContext _elContexto;
-        public UsuariosDA(ApplicationDbContext Contexto)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMapper _mapper;
+        public UsuariosDA(IMapper mapper, ApplicationDbContext Contexto, UserManager<ApplicationUser> userManager)
         {
             _elContexto = Contexto;
+            _userManager = userManager;
+            _mapper = mapper;
         }
 
-        public async Task<string> AgregarUsuario(UsuariosAD usuario)
+        public async Task<string> AgregarUsuario(UsuariosAD usuario, string password)
         {
-
+            var user = CrearUsuario(usuario);
+            var resultado = await _userManager.CreateAsync(user, password);
+            if (!resultado.Succeeded)
+                throw new BusinessException(resultado.Errors.First().Description);
+            await AsignarRol(user.Id, usuario.Rol);
             var entidad = await _elContexto.Usuarios.AddAsync(usuario);
+
             await _elContexto.SaveChangesAsync();
+
             return entidad.Entity.IdUsuario;
         }
 
@@ -31,22 +47,39 @@ namespace DA.Implementaciones
 
         }
 
-        public async Task EditarUsuarioAdmin(string id, UsuariosAD usuario)
+        public async Task EditarUsuarioAdmin(string Id, UsuariosAD usuario)
         {
+            var usuarioExistente = await _elContexto.Usuarios.FindAsync(Id);
 
-            var usuarioExistente = await _elContexto.Usuarios.FindAsync(usuario);
+            if (usuarioExistente == null)
+                throw new BusinessException("Usuario no encontrado");
+
             usuarioExistente.Nombre = usuario.Nombre;
             usuarioExistente.Apellido = usuario.Apellido;
-            usuarioExistente.Email = usuario.Email;
             usuarioExistente.FechaDeNacimiento = usuario.FechaDeNacimiento;
-            usuarioExistente.FechaDeModificacion = DateTime.Now;
-            usuarioExistente.Rol = usuario.Rol;
             usuarioExistente.Identificacion = usuario.Identificacion;
             usuarioExistente.Estado = usuario.Estado;
             usuarioExistente.TipoIdentificacion = usuario.TipoIdentificacion;
+            usuarioExistente.FechaDeModificacion = DateTime.UtcNow;
+
+            if (usuarioExistente.Email != usuario.Email)
+            {
+                usuarioExistente.Email = usuario.Email;
+                await CambiarCorreo(Id, usuario.Email);
+            }
+            if (usuarioExistente.Rol != usuario.Rol)
+            {
+                usuarioExistente.Rol = usuario.Rol;
+                await AsignarRol(Id, usuario.Rol);
+            }
+
             await _elContexto.SaveChangesAsync();
+        }
 
-
+        public async Task CambiarCorreo(string idUsuario, string nuevoCorreo)
+        {
+            var user = await _userManager.FindByIdAsync(idUsuario);
+            await _userManager.SetEmailAsync(user, nuevoCorreo);
         }
 
         public async Task<bool> ExisteIdentificacion(string identificacion)
@@ -124,5 +157,66 @@ namespace DA.Implementaciones
             };
             return usuarioDto;
         }
+        private static ApplicationUser CrearUsuario(UsuariosAD usuario)
+        {
+            string numeroRamdon = Random.Shared.Next(0, 100).ToString("D2");
+
+            return new ApplicationUser
+            {
+                UserName = (usuario.Nombre.ToUpper().First() + usuario.Apellido.Trim() + numeroRamdon).Normalize(NormalizationForm.FormD)
+                .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .Aggregate("", (s, c) => s + c),
+                Email = usuario.Email,
+                FechaDeRegistro = DateTime.UtcNow
+            };
+        }
+
+        public async Task<UsuarioAuth> ObtenerUsuarioIdentityPorId(string Id)
+        {
+            var usuario = await _userManager.FindByIdAsync(Id);
+            if (usuario == null)
+                return null;
+
+            var roles = await _userManager.GetRolesAsync(usuario);
+            var rol = roles.FirstOrDefault();
+
+            var usuarioAuth = usuario.Adapt<UsuarioAuth>();
+            usuarioAuth.Rol = rol;
+
+            return usuarioAuth;
+
+        }
+        public async Task<UsuarioAuth> ObtenerUsuarioIdentityPorEmail(string Email)
+        {
+            var usuario = await _userManager.FindByEmailAsync(Email);
+            if (usuario == null)
+                return null;
+
+            var roles = await _userManager.GetRolesAsync(usuario);
+            var rol = roles.FirstOrDefault();
+
+            var usuarioAuth = usuario.Adapt<UsuarioAuth>();
+            usuarioAuth.Rol = rol;
+
+            return usuarioAuth;
+        }
+
+        public async Task AsignarRol(string userId, string rol)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new InvalidOperationException("Usuario no encontrado");
+
+            var rolesActuales = await _userManager.GetRolesAsync(user);
+
+            if (rolesActuales.Contains(rol))
+                return;
+
+            if (rolesActuales.Any())
+                await _userManager.RemoveFromRolesAsync(user, rolesActuales);
+
+            await _userManager.AddToRoleAsync(user, rol);
+        }
+
     }
 }
