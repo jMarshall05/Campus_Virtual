@@ -15,7 +15,7 @@ namespace DA.Entidades
         [Column("descripcion")]
         public string descripcion { get; set; }
         [Column("creado_por")]
-        public string creado_por { get; set; }
+        public string? creado_por { get; set; }
         [Column("estado")]
         public bool estado { get; set; }
         [Column("FechaDeCreacion")]
@@ -24,7 +24,7 @@ namespace DA.Entidades
         public DateTime? FechaDeModificacion { get; set; }
 
         [Column("modificado_por")]
-        public string modificado_por { get; set; }
+        public string? modificado_por { get; set; }
 
     }
 }

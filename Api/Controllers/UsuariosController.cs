@@ -18,13 +18,13 @@ namespace Api.Controllers
             _usuario = usuario;
             _logger = logger;
         }
-        [HttpPatch("Edit")]
-        public async Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request)
+        [HttpPatch("{IdUsuario}")]
+        public async Task<IActionResult> EditarUsuario(string IdUsuario, EditarUsuarioRequest request)
         {
             try
             {
-                await _usuario.EditarUsuario(id, request);
-                return Accepted($"Se ha editado el usuario con ID : {id}");
+                await _usuario.EditarUsuario(IdUsuario, request);
+                return Ok($"Se ha editado el usuario con ID : {IdUsuario}");
 
             }
             catch (BusinessException ex)
@@ -33,18 +33,18 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", id);
+                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", IdUsuario);
                 return StatusCode(500, "Algo inesperado a sucedido");
 
             }
         }
-        [HttpPut("AdminEdit")]
-        public async Task<IActionResult> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? idGrupo)
+        [HttpPut("{IdUsuario}/admin")]
+        public async Task<IActionResult> EditarUsuarioAdmin(string IdUsuario, EditarUsuarioAdminRequest usuario, int? idGrupo)
         {
             try
             {
-                await _usuario.EditarUsuarioAdmin(id, usuario, idGrupo);
-                return Accepted($"Se ha editado el usuario con ID : {id}");
+                await _usuario.EditarUsuarioAdmin(IdUsuario, usuario, idGrupo);
+                return Ok($"Se ha editado el usuario con ID : {IdUsuario}");
 
             }
             catch (BusinessException ex)
@@ -53,12 +53,12 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", id);
+                _logger.LogError(ex, "Error al editar el usuario con ID: {UserId}", IdUsuario);
                 return StatusCode(500, "Algo inesperado a sucedido");
 
             }
         }
-        [HttpGet("List")]
+        [HttpGet]
         public async Task<IActionResult> ListarUsuarios()
         {
             var usuarios = await _usuario.ListarUsuarios();
@@ -67,7 +67,7 @@ namespace Api.Controllers
             return NoContent();
 
         }
-        [HttpGet("GetByID")]
+        [HttpGet("{IdUsuario}")]
         public async Task<IActionResult> ObtenerUsuarioPorId(string idUsuario)
         {
             var usuario = await _usuario.ObtenerUsuarioPorId(idUsuario);

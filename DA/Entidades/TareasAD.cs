@@ -12,9 +12,9 @@ namespace DA.Entidades
 
         [Column("id_materia")]
         [Required]
-        public int id_materia { get; set; }
+        public int IdMateria { get; set; }
 
-        [ForeignKey(nameof(id_materia))]
+        [ForeignKey(nameof(IdMateria))]
         public virtual MateriasAD Materia { get; set; }
 
         [Column("titulo")]
@@ -24,7 +24,7 @@ namespace DA.Entidades
 
         [Column("descripcion")]
         [Required]
-        public string Descripcion { get; set; }
+        public string? Descripcion { get; set; }
 
         [Column("fecha_entrega")]
         [Required]

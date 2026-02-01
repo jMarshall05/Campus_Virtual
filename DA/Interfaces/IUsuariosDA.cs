@@ -1,5 +1,7 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Modelos.Requests;
 using DA.Entidades;
+using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace DA.Interfaces
 {
@@ -14,6 +16,7 @@ namespace DA.Interfaces
         Task<UsuarioAuth> ObtenerUsuarioIdentityPorId(string Id);
         Task<UsuarioAuth> ObtenerUsuarioIdentityPorEmail(String Email);
         Task AsignarRol(string userId, string rol);
+        Task<LoginResponse> Login(LoginRequest login);
 
 
     }

@@ -23,7 +23,7 @@ namespace Reglas
         }
         public static void ValidarUsuario(bool existe)
         {
-            if (existe)
+            if (!existe)
                 throw new BusinessException("El usuario no existe .");
         }
 

@@ -13,14 +13,33 @@ namespace Abstracciones.Modelos.Requests
             public string Apellido { get; set; }
             public List<TelefonoDto> Telefonos { get; set; }
 
+
         }
-        public class RegisterRequest
+        public class EditarUsuarioAdminRequest
         {
             [Required]
             public string Nombre { get; set; }
-
             [Required]
             public string Apellido { get; set; }
+            [Required]
+            [EmailAddress]
+            public string Email { get; set; }
+            [Required]
+            public string Identificacion { get; set; }
+            [Required]
+            public string TipoIdentificacion { get; set; }
+            [Required]
+            public string Rol { get; set; }
+
+            [Required]
+            public DateTime FechaDeNacimiento { get; set; }
+            [Required]
+            public bool Estado { get; set; }
+            public List<TelefonoDto> Telefonos { get; set; }
+
+        }
+        public class RegisterRequest
+        {
 
             [Required]
             [EmailAddress]
@@ -45,8 +64,7 @@ namespace Abstracciones.Modelos.Requests
             [Required]
             public string Rol { get; set; }
 
-            [Required]
-            public string TipoIdentificacion { get; set; }
+
         }
     }
 }

@@ -11,6 +11,6 @@ namespace Abstracciones.Api
         Task<IActionResult> CambiarEstadoTarea(int idTarea);
         Task<IActionResult> ListarTareas();
         Task<IActionResult> ObtenerPorId(int idTarea);
-        Task<IActionResult> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo);
+        Task<IActionResult> ListarTareasPorGrupo(int IdGrupo);
     }
 }

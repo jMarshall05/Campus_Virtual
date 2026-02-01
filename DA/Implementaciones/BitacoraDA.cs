@@ -12,7 +12,7 @@ namespace DA.Implementaciones
         }
         public async Task RegistrarBitacora(BitacoraAD Bitacora)
         {
-            var entidad = await _elContexto.Bitacora.AddAsync(Bitacora);
+            await _elContexto.Bitacora.AddAsync(Bitacora);
             await _elContexto.SaveChangesAsync();
 
         }

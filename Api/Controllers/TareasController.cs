@@ -18,13 +18,13 @@ namespace Api.Controllers
             _tareas = tareas;
             _logger = logger;
         }
-        [HttpPost("Add")]
+        [HttpPost]
         public async Task<IActionResult> AgregarTarea(AgregarTareaRequest tarea)
         {
             try
             {
                 var resultado = await _tareas.AgregarTarea(tarea);
-                return Ok(new TareaDto { IdTarea = resultado });
+                return Ok($"Se inserto correctamente la tarea id: {resultado}");
             }
             catch (BusinessException ex)
             {
@@ -37,7 +37,7 @@ namespace Api.Controllers
             }
 
         }
-        [HttpPatch("EditState/{idTarea}")]
+        [HttpPatch("{idTarea}/estado")]
         public async Task<IActionResult> CambiarEstadoTarea(int idTarea)
         {
             try
@@ -55,7 +55,7 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpPut("Edit/{idTarea}")]
+        [HttpPut("{idTarea}")]
         public async Task<IActionResult> EditarTarea(int idTarea, EditarTareaRequest tarea)
         {
             try
@@ -73,7 +73,7 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpGet("List")]
+        [HttpGet]
         public async Task<IActionResult> ListarTareas()
         {
             try
@@ -92,13 +92,13 @@ namespace Api.Controllers
                 return StatusCode(500, "Algo inesperado a sucedido");
             }
         }
-        [HttpPost("ListByStudent")]
-        public async Task<IActionResult> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
+        [HttpGet("grupo/{IdGrupo}")]
+        public async Task<IActionResult> ListarTareasPorGrupo(int IdGrupo)
         {
             try
             {
 
-                var resultado = await _tareas.ListarTareasPorEstudiante(estudianteGrupo);
+                var resultado = await _tareas.ListarTareasPorGrupo(IdGrupo);
                 return Ok(resultado);
             }
             catch (BusinessException ex)
@@ -107,12 +107,12 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al listar las tareas para el estudiante con ID: {EstudianteId}", estudianteGrupo.EstudianteId);
+                _logger.LogError(ex, "Error al listar las tareas para el estudiante con ID: {EstudianteId}", IdGrupo);
                 return StatusCode(500, "Algo inesperado a sucedido");
 
             }
         }
-        [HttpGet("GetById/{idTarea}")]
+        [HttpGet("{idTarea}")]
         public async Task<IActionResult> ObtenerPorId(int idTarea)
         {
             try

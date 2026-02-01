@@ -14,9 +14,8 @@ namespace Servicios.Servicios
     public class TareasService : ITareasService
     {
         private readonly ITareasAD _tareas;
-        private readonly IMateriasDA _materias;
-        private readonly IGruposDA _grupo;
-        private readonly IUsuariosDA _usuarios;
+        private readonly IMateriasDA _materias;//Cambiar por service
+        private readonly IGruposDA _grupo;//Cambiar por service
         private readonly IMapper _mapper;
 
         public TareasService(IMapper mapper, ITareasAD tareas, IMateriasDA materias, IGruposDA grupo, IUsuariosDA usuarios)
@@ -24,7 +23,6 @@ namespace Servicios.Servicios
             _tareas = tareas;
             _materias = materias;
             _grupo = grupo;
-            _usuarios = usuarios;
             _mapper = mapper;
         }
         public async Task<int> AgregarTarea(AgregarTareaRequest tarea)
@@ -32,10 +30,7 @@ namespace Servicios.Servicios
             var existeMateria = await _materias.ObtenerMateriaPorId(tarea.IdMateria) != null;
             MateriaReglas.ExisteMateria(existeMateria);
             var existeGrupo = await _grupo.BuscarGruposPorId(tarea.IdGrupo) != null;
-            if (!existeGrupo)
-            {
-                throw new BusinessException("El grupo asignado no existe.");
-            }
+            GruposReglas.ExisteGrupo(existeGrupo);
             var resultado = await _tareas.AgregarTarea(_mapper.Map<TareasAD>(tarea));
             return resultado;
         }
@@ -60,16 +55,11 @@ namespace Servicios.Servicios
             return resultado;
         }
 
-        public async Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
+        public async Task<List<TareaDto>> ListarTareasPorGrupo(int IdGrupo)
         {
-            var existeEstudiante = await _usuarios.ObtenerUsuarioPorId(estudianteGrupo.EstudianteId) != null;
-            UsuarioReglas.ValidarUsuario(existeEstudiante);
-            var existeGrupo = await _grupo.BuscarGruposPorId((int)estudianteGrupo.GrupoId) != null;
-            if (!existeGrupo)
-            {
-                throw new BusinessException("El grupo no existe.");
-            }
-            var resultado = await _tareas.ListarTareasPorEstudiante(estudianteGrupo);
+            var existeGrupo = await _grupo.BuscarGruposPorId(IdGrupo) != null;
+            GruposReglas.ExisteGrupo(existeGrupo);
+            var resultado = await _tareas.ListarTareasPorGrupo(IdGrupo);
             return resultado;
         }
 

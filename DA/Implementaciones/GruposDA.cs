@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace DA.Implementaciones
@@ -8,9 +9,11 @@ namespace DA.Implementaciones
     public class GruposDA : IGruposDA
     {
         private readonly ApplicationDbContext _elContexto;
-        public GruposDA(ApplicationDbContext elContexto)
+        private readonly IMapper _mapper;
+        public GruposDA(ApplicationDbContext elContexto, IMapper mapper)
         {
             _elContexto = elContexto;
+            _mapper = mapper;
         }
         public async Task<int> AgregarGrupo(GruposAD grupo)
         {
@@ -21,18 +24,7 @@ namespace DA.Implementaciones
 
         public async Task<GruposDto> BuscarGruposPorId(int idGrupo)
         {
-            var grupo = await _elContexto.Grupos.Where(g => g.id_grupo == idGrupo)
-                .Select(grupo => new GruposDto
-                {
-                    id_grupo = grupo.id_grupo,
-                    nombre_grupo = grupo.nombre_grupo,
-                    descripcion = grupo.descripcion,
-                    creado_por = grupo.creado_por,
-                    estado = grupo.estado,
-                    FechaDeCreacion = grupo.FechaDeCreacion,
-                    FechaDeModificacion = grupo.FechaDeModificacion,
-                    modificado_por = grupo.modificado_por
-                }).FirstOrDefaultAsync();
+            var grupo = _mapper.Map<GruposDto>(await _elContexto.Grupos.FindAsync(idGrupo)) ?? null;
             return grupo;
         }
 

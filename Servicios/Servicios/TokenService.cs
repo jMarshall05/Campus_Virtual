@@ -1,12 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Abstracciones.Servicios;
 using DA;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using static Abstracciones.Modelos.Responses.AuthResponses;
 
-public class TokenService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -19,7 +21,7 @@ public class TokenService
         _userManager = userManager;
     }
 
-    public async Task<string> CrearToken(ApplicationUser user)
+    public string CrearToken(LoginResponse user)
     {
         var jwt = _config.GetSection("Jwt");
 
@@ -27,11 +29,10 @@ public class TokenService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(ClaimTypes.Role, user.Rol)
 
-        var roles = await _userManager.GetRolesAsync(user);
-        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+        };
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(jwt["Key"]!)

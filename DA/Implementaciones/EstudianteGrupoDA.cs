@@ -14,7 +14,7 @@ namespace DA.Implementaciones
         }
         public async Task ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
         {
-            var EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FindAsync(estudiante);
+            var EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FindAsync(estudiante.IdEstudianteGrupo);
             EstudianteGrupoEnBase.GrupoId = estudiante.GrupoId;
             await _elContexto.SaveChangesAsync();
         }

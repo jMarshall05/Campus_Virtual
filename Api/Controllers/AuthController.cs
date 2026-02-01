@@ -1,46 +1,39 @@
 ﻿using Abstracciones.Api;
-using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using DA;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
 [ApiController]
 [Route("api/auth")]
 public class AuthController : ControllerBase, IAuthController
 {
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly TokenService _tokenService;
     private readonly IUsuariosService _usuarios;
-    private readonly ITelefonosService _telefonos;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
         TokenService tokenService,
-        IUsuariosService usuarios,
-        ITelefonosService telefonos)
+        IUsuariosService usuarios
+        )
     {
-        _userManager = userManager;
         _tokenService = tokenService;
         _usuarios = usuarios;
-        _telefonos = telefonos;
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
+        var token = await _usuarios.Login(request);
+        if (token == null)
             return Unauthorized();
 
-        if (!await _userManager.CheckPasswordAsync(user, request.Password))
-            return Unauthorized();
-
-        var token = await _tokenService.CrearToken(user);
         return Ok(new { token });
     }
     [HttpPost("Register")]
-    public async Task<IActionResult> Register([FromBody] Abstracciones.Modelos.Requests.UsuariosRequests.RegisterRequest register)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest register)
     {
         if (ModelState.IsValid == false)
         {

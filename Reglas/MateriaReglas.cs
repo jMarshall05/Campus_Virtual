@@ -1,11 +1,13 @@
-﻿namespace Reglas
+﻿using Abstracciones.Excepciones;
+
+namespace Reglas
 {
     public class MateriaReglas
     {
         public static void ExisteMateria(bool existe)
         {
             if (!existe)
-                throw new Abstracciones.Excepciones.BusinessException("La materia no existe");
+                throw new BusinessException("La materia no existe");
         }
     }
 }

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using MapsterMapper;
+using static Abstracciones.Modelos.Responses.AuthResponses;
+using Abstracciones.Modelos.Requests;
 
 namespace DA.Implementaciones
 {
@@ -23,6 +25,17 @@ namespace DA.Implementaciones
             _mapper = mapper;
         }
 
+        public async Task<LoginResponse> Login(LoginRequest login)
+        {
+            var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario o contraseña incorrectos");
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, login.Password);
+            if (!isPasswordValid)
+                throw new BusinessException("Usuario o contraseña incorrectos");
+            var respuesta = user.Adapt<LoginResponse>();
+            respuesta.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+            return respuesta;
+        }
+
         public async Task<string> AgregarUsuario(UsuariosAD usuario, string password)
         {
             var user = CrearUsuario(usuario);
@@ -30,6 +43,7 @@ namespace DA.Implementaciones
             if (!resultado.Succeeded)
                 throw new BusinessException(resultado.Errors.First().Description);
             await AsignarRol(user.Id, usuario.Rol);
+            usuario.FechaDeRegistro = DateTime.UtcNow;
             var entidad = await _elContexto.Usuarios.AddAsync(usuario);
 
             await _elContexto.SaveChangesAsync();

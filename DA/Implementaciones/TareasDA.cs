@@ -14,6 +14,8 @@ namespace DA.Implementaciones
         }
         public async Task<int> AgregarTarea(TareasAD tarea)
         {
+            tarea.FechaPublicacion = DateTime.UtcNow;
+            tarea.Estado = true;
             var entidad = await _elContexto.Tareas.AddAsync(tarea);
             await _elContexto.SaveChangesAsync();
             return entidad.Entity.IdTarea;
@@ -50,7 +52,7 @@ namespace DA.Implementaciones
                      Titulo = t.Titulo,
                      Descripcion = t.Descripcion,
                      FechaEntrega = t.FechaEntrega,
-                     IdMateria = t.id_materia,
+                     IdMateria = t.IdMateria,
                      ArchivoAdjunto = t.ArchivoAdjunto,
                      FechaModificacion = t.FechaModificacion,
                      FechaPublicacion = t.FechaPublicacion,
@@ -66,10 +68,10 @@ namespace DA.Implementaciones
             return tareas;
         }
 
-        public async Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo)
+        public async Task<List<TareaDto>> ListarTareasPorGrupo(int IdGrupo)
         {
             var tareas = await _elContexto.Tareas
-                   .Where(t => t.IdGrupo == estudianteGrupo.GrupoId)
+                   .Where(t => t.IdGrupo == IdGrupo)
                    .Include(t => t.Grupo)
                    .Select(t => new TareaDto
                    {
@@ -77,7 +79,7 @@ namespace DA.Implementaciones
                        Titulo = t.Titulo,
                        Descripcion = t.Descripcion,
                        FechaEntrega = t.FechaEntrega,
-                       IdMateria = t.id_materia,
+                       IdMateria = t.IdMateria,
                        ArchivoAdjunto = t.ArchivoAdjunto,
                        FechaModificacion = t.FechaModificacion,
                        FechaPublicacion = t.FechaPublicacion,
@@ -104,7 +106,7 @@ namespace DA.Implementaciones
                     Titulo = t.Titulo,
                     Descripcion = t.Descripcion,
                     FechaEntrega = t.FechaEntrega,
-                    IdMateria = t.id_materia,
+                    IdMateria = t.IdMateria,
                     ArchivoAdjunto = t.ArchivoAdjunto,
                     FechaModificacion = t.FechaModificacion,
                     FechaPublicacion = t.FechaPublicacion,

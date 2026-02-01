@@ -3,14 +3,18 @@ using System.Globalization;
 using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Modelos.Requests;
+using Abstracciones.Modelos.Responses;
 using Abstracciones.Servicios;
 using DA;
 using DA.Entidades;
 using DA.Interfaces;
+using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Reglas;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
+using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace Servicios.Servicios
 {
@@ -18,18 +22,21 @@ namespace Servicios.Servicios
     public class UsuariosService : IUsuariosService
     {
         private readonly IUsuariosDA _usuariosDA;
-        private readonly ITelefonosDA _telefonosDA;
-        private readonly IEstudianteGrupoDA _estudianteGrupo;
-        private readonly IGruposDA _grupos;
+        private readonly ITelefonosDA _telefonosDA;//Cambiar por service
+        private readonly IEstudianteGrupoDA _estudianteGrupo;//Cambiar por service
+        private readonly IGruposDA _grupos;//Cambiar por service
+        private readonly ITokenService _TokenService;
         private readonly IMapper _mapper;
 
-        public UsuariosService(IMapper mapper, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
+        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
         {
             _usuariosDA = usuariosDA;
             _telefonosDA = telefonosDA;
             _estudianteGrupo = estudianteGrupo;
             _grupos = grupos;
             _mapper = mapper;
+            _TokenService = tokenService;
+
         }
         public async Task<string> AgregarUsuario(RegisterRequest request)
         {
@@ -80,10 +87,10 @@ namespace Servicios.Servicios
             }
         }
 
-        public async Task EditarUsuarioAdmin(string id, UsuariosDto usuario, int? Idgrupo)
+        public async Task EditarUsuarioAdmin(string id, EditarUsuarioAdminRequest usuario, int? Idgrupo)
         {
-            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(id) ?? throw new BusinessException("El usuario no existe");
-          
+            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(id);
+            UsuarioReglas.ValidarUsuario(user != null);
             if (Idgrupo != null)
             {
                 var existe = await _grupos.BuscarGruposPorId((int)Idgrupo) != null;
@@ -115,7 +122,7 @@ namespace Servicios.Servicios
             if (Idgrupo != null)
             {
                 var estudianteGrupo = await _estudianteGrupo.BuscarEstudianteGrupoPorEstudianteId(id);
-                var estudiante = new EstudianteGrupoAD { EstudianteId = id, GrupoId = Idgrupo.Value };
+                var estudiante = estudianteGrupo.Adapt<EstudianteGrupoAD>();
 
                 if (estudianteGrupo == null)
                 {
@@ -136,6 +143,14 @@ namespace Servicios.Servicios
             var usuarios = await _usuariosDA.ListarUsuarios();
             return usuarios ?? [];
         }
+
+        public async Task<string> Login(LoginRequest login)
+        {
+            var usuario =await _usuariosDA.Login(login);
+            var Token = _TokenService.CrearToken(usuario);
+            return Token;
+        }
+
         public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
             var usuario = await _usuariosDA.ObtenerUsuarioPorId(idUsuario);

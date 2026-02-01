@@ -90,6 +90,7 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<ITelefonosService, TelefonosService>();
 builder.Services.AddScoped<ITareasService, TareasService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

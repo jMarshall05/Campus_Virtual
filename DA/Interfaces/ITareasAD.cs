@@ -10,7 +10,7 @@ namespace DA.Interfaces
         Task CambiarEstadoTarea(int idTarea);
         Task<IEnumerable<TareaDto>> ListarTareas();
         Task<TareaDto> ObtenerPorId(int idTarea);
-        Task<List<TareaDto>> ListarTareasPorEstudiante(EstudianteGrupoDto estudianteGrupo);
+        Task<List<TareaDto>> ListarTareasPorGrupo(int IdGrupo);
 
     }
 }

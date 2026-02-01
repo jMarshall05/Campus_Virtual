@@ -44,9 +44,9 @@ namespace DA.Implementaciones
             return materias;
         }
 
-        public Task<MateriaDto> ObtenerMateriaPorId(int id)
+        public async Task<MateriaDto> ObtenerMateriaPorId(int id)
         {
-            var materia = _elContexto.Materias.Where(t => t.IdMateria == id).Select(t => new MateriaDto
+            var materia =await _elContexto.Materias.Where(t => t.IdMateria == id).Select(t => new MateriaDto
             {
                 Id_Materia = t.IdMateria,
                 Nombre = t.Nombre,

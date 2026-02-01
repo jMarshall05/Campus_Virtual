@@ -6,7 +6,7 @@ namespace Abstracciones.Api
 {
     public interface IUsuariosController
     {
-        Task<IActionResult> EditarUsuarioAdmin(string id, UsuariosDto usuario, int? idGrupo);
+        Task<IActionResult> EditarUsuarioAdmin(string id, EditarUsuarioAdminRequest usuario, int? idGrupo);
         Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request);
         Task<IActionResult> ListarUsuarios();
         Task<IActionResult> ObtenerUsuarioPorId(string idUsuario);
