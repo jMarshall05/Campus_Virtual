@@ -5,3 +5,8 @@ export async function getUsers() {
         method: 'GET',
     });
 }
+
+export async function getUsersByRole(rol) {
+    return apiFetch(`users/ByRol?rol=${rol}`
+    );
+}

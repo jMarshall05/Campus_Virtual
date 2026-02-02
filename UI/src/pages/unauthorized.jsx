@@ -10,9 +10,6 @@ export default function Unauthorized() {
       </p>
 
       <div className="actions">
-        <Link to="/dashboard" className="link">
-          Ir al Dashboard
-        </Link>
         <Link to="/login" className="linkSecondary">
           Volver al Login   
         </Link>

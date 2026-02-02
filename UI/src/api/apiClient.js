@@ -4,6 +4,7 @@ export async function apiFetch(endpoint, options = {}) {
     const url = `${urlBase}/${endpoint}`;
     const token = localStorage.getItem('token') ;
     const response = await fetch(url,{
+        method: options.method || 'GET',
         headers: {
             'Content-Type': 'application/json',
             ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -15,5 +16,5 @@ export async function apiFetch(endpoint, options = {}) {
         const error =await response.text();
         throw new Error(error || 'Error en la solicitud');
     }
-    return response; 
+    return response.json(); 
 }

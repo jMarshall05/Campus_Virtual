@@ -18,12 +18,8 @@ function Login() {
     try {
       const response = await login(email, password);
 
-      if (!response.ok) {
-        throw new Error("Credenciales inválidas");
-      }
-      const data = await response.json();
-      GuardarToken(data.token);
-    navigate("/Dashboard")
+      GuardarToken(response.token);
+      navigate("/Dashboard")
     } catch (err) {
       setError(`${err.message}`);
     }
