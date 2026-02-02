@@ -138,6 +138,12 @@ namespace Servicios.Servicios
 
         }
 
+        public Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol)
+        {
+            var usuarios = _usuariosDA.ListarPorRol(rol);
+            return usuarios;
+        }
+
         public async Task<IEnumerable<UsuariosDto>> ListarUsuarios()
         {
             var usuarios = await _usuariosDA.ListarUsuarios();
@@ -146,9 +152,13 @@ namespace Servicios.Servicios
 
         public async Task<string> Login(LoginRequest login)
         {
-            var usuario =await _usuariosDA.Login(login);
-            var Token = _TokenService.CrearToken(usuario);
-            return Token;
+            var usuario = await _usuariosDA.Login(login);
+            if (usuario != null)
+            {
+                var Token = _TokenService.CrearToken(usuario);
+                return Token;
+            }
+            return null;
         }
 
         public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)

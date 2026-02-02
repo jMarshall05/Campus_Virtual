@@ -17,6 +17,7 @@ namespace DA.Interfaces
         Task<UsuarioAuth> ObtenerUsuarioIdentityPorEmail(String Email);
         Task AsignarRol(string userId, string rol);
         Task<LoginResponse> Login(LoginRequest login);
+        Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol);
 
 
     }

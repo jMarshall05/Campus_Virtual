@@ -13,5 +13,7 @@ namespace Abstracciones.Servicios
         Task<IEnumerable<UsuariosDto>> ListarUsuarios();
         Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario);
         Task<string> Login(LoginRequest login);
+        Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol);
+
     }
 }

@@ -17,17 +17,19 @@ namespace DA.Implementaciones
     {
         private readonly ApplicationDbContext _elContexto;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<string>> _roleManager;
         private readonly IMapper _mapper;
-        public UsuariosDA(IMapper mapper, ApplicationDbContext Contexto, UserManager<ApplicationUser> userManager)
+        public UsuariosDA(RoleManager<IdentityRole<string>> roleManager, IMapper mapper, ApplicationDbContext Contexto, UserManager<ApplicationUser> userManager)
         {
             _elContexto = Contexto;
             _userManager = userManager;
             _mapper = mapper;
+            _roleManager = roleManager;
         }
 
         public async Task<LoginResponse> Login(LoginRequest login)
         {
-            var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario o contraseña incorrectos");
+            var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario incorrecto");
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, login.Password);
             if (!isPasswordValid)
                 throw new BusinessException("Usuario o contraseña incorrectos");
@@ -232,5 +234,13 @@ namespace DA.Implementaciones
             await _userManager.AddToRoleAsync(user, rol);
         }
 
+        public async Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol)
+        {
+            var roles = _roleManager.Roles.Select(r => r.Name).ToList();
+            if (!roles.Contains(rol))
+                throw new BusinessException("El rol especificado no existe");
+            var usuarios = (await _elContexto.Usuarios.Where(u => u.Rol == rol).ToListAsync()).Adapt<IEnumerable<UsuariosDto>>();
+            return usuarios;
+        }
     }
 }
