@@ -1,1 +1,11 @@
-export { faTachometerAlt } from "@fortawesome/free-solid-svg-icons";
+export { faTachometerAlt,
+  faUserGraduate,
+  faChalkboardTeacher,
+  faBolt,
+  faTasks,
+  faInbox,
+  faUsersCog,
+  faBook,
+  faCalendarAlt,
+  faFileAlt,
+  faBullhorn } from "@fortawesome/free-solid-svg-icons";
