@@ -1,11 +1,8 @@
-﻿using Abstracciones.Excepciones;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
-using DA;
 using DA.Entidades;
 using DA.Interfaces;
 using MapsterMapper;
-using Microsoft.AspNetCore.Identity;
 using Reglas;
 using static Abstracciones.Modelos.Requests.TareasRequests;
 
@@ -28,7 +25,7 @@ namespace Servicios.Servicios
         public async Task<int> AgregarTarea(AgregarTareaRequest tarea)
         {
             var existeMateria = await _materias.ObtenerMateriaPorId(tarea.IdMateria) != null;
-            MateriaReglas.ExisteMateria(existeMateria);
+            MateriaReglas.SiExiste(existeMateria);
             var existeGrupo = await _grupo.BuscarGruposPorId(tarea.IdGrupo) != null;
             GruposReglas.ExisteGrupo(existeGrupo);
             var resultado = await _tareas.AgregarTarea(_mapper.Map<TareasAD>(tarea));

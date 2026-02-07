@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Excepciones;
+﻿using Abstracciones.Excepciones;
 
 namespace Reglas
 {
@@ -11,7 +6,7 @@ namespace Reglas
     {
         public static void ExisteGrupo(bool existe)
         {
-            if(!existe)
+            if (!existe)
                 throw new BusinessException("El grupo no existe");
         }
     }

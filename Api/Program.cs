@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Servicios.Helpers;
 using Servicios.Servicios;
 
 
@@ -108,6 +109,9 @@ builder.Services.AddScoped<IUsuariosService, UsuariosService>();
 builder.Services.AddScoped<ITelefonosService, TelefonosService>();
 builder.Services.AddScoped<ITareasService, TareasService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IEstudianteGrupoService, EstudianteGrupoService>();
+builder.Services.AddScoped<IMateriasService, MateriasService>();
+builder.Services.AddScoped<IEstudianteGrupoHelper, EstudianteGrupoHelper>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

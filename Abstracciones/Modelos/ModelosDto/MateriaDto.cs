@@ -7,7 +7,7 @@ namespace Abstracciones.Modelos.ModelosDto
     {
         [Key]
         [DisplayName("ID de Materia")]
-        public int Id_Materia { get; set; }
+        public int IdMateria { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         [DisplayName("Nombre")]

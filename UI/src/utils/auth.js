@@ -1,3 +1,4 @@
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode"
 import { useNavigate } from "react-router-dom";
 
@@ -36,12 +37,12 @@ export function getUserRole() {
 
 export function validarToken() {
   const token = localStorage.getItem("token");
-
-  if (!token) return false;
+   if (!token || typeof token !== "string") return false;
+  const payload = jwtDecode(token);
 
   const now = Date.now() / 1000;
 
-  if (token.exp < now) {
+  if (payload.exp < now) {
     localStorage.removeItem("token");
     return false;
   }

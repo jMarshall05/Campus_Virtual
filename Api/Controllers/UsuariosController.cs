@@ -1,6 +1,5 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
-using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,9 +59,9 @@ namespace Api.Controllers
             }
         }
         [HttpGet("ByRol")]
-        public async Task<ActionResult> ListarPorRol([FromQuery]string rol)
+        public async Task<ActionResult> ListarPorRol([FromQuery] string rol)
         {
-            var usuarios =await _usuario.ListarPorRol(rol);
+            var usuarios = await _usuario.ListarPorRol(rol);
             if (usuarios != null)
                 return Ok(usuarios);
             return NoContent();
@@ -71,7 +70,7 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="Administradores")]
+        //[Authorize(Roles = "Administradores")]
         public async Task<IActionResult> ListarUsuarios()
         {
             var usuarios = await _usuario.ListarUsuarios();

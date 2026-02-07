@@ -27,11 +27,18 @@ namespace Servicios.Servicios
             await _telefonos.EditarTelefono(telefonosAD);
         }
 
+        public async Task<bool> ExisteTelefono(int codigo, long telefono)
+        {
+            var existe = await _telefonos.ExisteTelefono(codigo, telefono);
+            return existe;
+        }
+
         public async Task<IEnumerable<TelefonoDto>> ListarTelefonos()
         {
             var telefonos = await _telefonos.ListarTelefonos();
             return telefonos;
         }
+
 
     }
 }

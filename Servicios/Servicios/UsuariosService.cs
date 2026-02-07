@@ -1,20 +1,14 @@
 ﻿using System.Data;
-using System.Globalization;
-using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
-using Abstracciones.Modelos.Responses;
 using Abstracciones.Servicios;
-using DA;
 using DA.Entidades;
 using DA.Interfaces;
-using Mapster;
 using MapsterMapper;
-using Microsoft.AspNetCore.Identity;
 using Reglas;
+using Servicios.Helpers;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
-using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace Servicios.Servicios
 {
@@ -22,16 +16,16 @@ namespace Servicios.Servicios
     public class UsuariosService : IUsuariosService
     {
         private readonly IUsuariosDA _usuariosDA;
-        private readonly ITelefonosDA _telefonosDA;//Cambiar por service
-        private readonly IEstudianteGrupoDA _estudianteGrupo;//Cambiar por service
-        private readonly IGruposDA _grupos;//Cambiar por service
+        private readonly ITelefonosService _telefonos;
+        private readonly IEstudianteGrupoHelper _estudianteGrupo;
+        private readonly IGruposDA _grupos;
         private readonly ITokenService _TokenService;
         private readonly IMapper _mapper;
 
-        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosDA telefonosDA, IEstudianteGrupoDA estudianteGrupo, IGruposDA grupos)
+        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposDA grupos)
         {
             _usuariosDA = usuariosDA;
-            _telefonosDA = telefonosDA;
+            _telefonos = telefonos;
             _estudianteGrupo = estudianteGrupo;
             _grupos = grupos;
             _mapper = mapper;
@@ -49,19 +43,17 @@ namespace Servicios.Servicios
             var identificacionExiste = await _usuariosDA.ExisteIdentificacion(request.Identificacion);
             UsuarioReglas.ValidarIdentificacionUnica(identificacionExiste);
 
-            foreach (var telefono in request.Telefonos ?? new List<TelefonoDto>())
+            foreach (var telefono in request.Telefonos)
             {
-                var telefonoExiste = await _telefonosDA.ExisteTelefono(telefono.Codigo, telefono.Telefono);
+                var telefonoExiste = await _telefonos.ExisteTelefono(telefono.Codigo, telefono.Telefono);
                 UsuarioReglas.ValidarTelefonoUnico(telefonoExiste, telefono);
-
             }
             var usuarioAD = CrearUsuario(request);
             var user = await _usuariosDA.AgregarUsuario(usuarioAD, request.Password);
 
             request.Telefonos?.ForEach(t => t.IdUsuario = user);
-            var telefonosAD = _mapper.Map<IEnumerable<TelefonoAD>>(request.Telefonos);
             if (request.Telefonos != null)
-                await _telefonosDA.AgregarTelefono(telefonosAD);
+                await _telefonos.AgregarTelefono(request.Telefonos);
             return user;
 
         }
@@ -77,11 +69,11 @@ namespace Servicios.Servicios
                                .Where(t => t.Telefono > 0 && !string.IsNullOrWhiteSpace(t.Tipo))
                                .ToList();
 
-                var telefonosExistentes = _mapper.Map<IEnumerable<TelefonoAD>>(telefonosValidos.Where(t => t.Id > 0).ToList());
+                var telefonosExistentes = telefonosValidos.Where(t => t.Id > 0).ToList();
 
                 if (telefonosExistentes.Any())
                 {
-                    await _telefonosDA.EditarTelefono(telefonosExistentes);
+                    await _telefonos.EditarTelefono(telefonosExistentes);
 
                 }
             }
@@ -94,7 +86,7 @@ namespace Servicios.Servicios
             if (Idgrupo != null)
             {
                 var existe = await _grupos.BuscarGruposPorId((int)Idgrupo) != null;
-                EstudianteGrupoReglas.ExisteGrupo(existe);
+                GruposReglas.ExisteGrupo(existe);
             }
 
             if (user.Email != usuario.Email)
@@ -111,32 +103,24 @@ namespace Servicios.Servicios
             var telefonosExistentes = telefonosValidos.Where(t => t.Id > 0).ToList();
             if (telefonosExistentes.Count != 0)
             {
-                await _telefonosDA.EditarTelefono(_mapper.Map<IEnumerable<TelefonoAD>>(telefonosExistentes));
+                await _telefonos.EditarTelefono(telefonosExistentes);
             }
             var telefonosNuevos = telefonosValidos.Where(t => t.Id == 0).ToList();
             if (telefonosNuevos.Count > 0)
             {
                 telefonosNuevos.ForEach(t => t.IdUsuario = id);
-                await _telefonosDA.AgregarTelefono(_mapper.Map<IEnumerable<TelefonoAD>>(telefonosNuevos));
+                await _telefonos.AgregarTelefono(telefonosNuevos);
             }
             if (Idgrupo != null)
             {
-                var estudianteGrupo = await _estudianteGrupo.BuscarEstudianteGrupoPorEstudianteId(id);
-                var estudiante = estudianteGrupo.Adapt<EstudianteGrupoAD>();
-
-                if (estudianteGrupo == null)
-                {
-                    await _estudianteGrupo.AgregarEstudianteGrupo(estudiante);
-                }
-                else
-                {
-                    await _estudianteGrupo.ActualizarEstudianteGrupo(estudiante);
-                }
+               await _estudianteGrupo.AddOrEdit(id,Idgrupo);
             }
             var usuarioAD = _mapper.Map<UsuariosAD>(usuario);
             await _usuariosDA.EditarUsuarioAdmin(id, usuarioAD);
 
         }
+
+        
 
         public Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol)
         {

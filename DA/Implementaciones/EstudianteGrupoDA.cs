@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace DA.Implementaciones
@@ -14,7 +15,7 @@ namespace DA.Implementaciones
         }
         public async Task ActualizarEstudianteGrupo(EstudianteGrupoAD estudiante)
         {
-            var EstudianteGrupoEnBase = await _elContexto.EstudianteGrupos.FindAsync(estudiante.IdEstudianteGrupo);
+            var EstudianteGrupoEnBase = BuscarEstudianteGrupoPorEstudianteId(estudiante.EstudianteId).Adapt<EstudianteGrupoAD>();
             EstudianteGrupoEnBase.GrupoId = estudiante.GrupoId;
             await _elContexto.SaveChangesAsync();
         }

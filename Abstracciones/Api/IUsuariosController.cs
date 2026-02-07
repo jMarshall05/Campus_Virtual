@@ -1,5 +1,4 @@
-﻿using Abstracciones.Modelos.ModelosDto;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
 namespace Abstracciones.Api

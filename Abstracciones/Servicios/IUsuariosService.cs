@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
-using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace Abstracciones.Servicios
 {
