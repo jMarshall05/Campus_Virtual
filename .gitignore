@@ -394,3 +394,13 @@ UI/.env.*
 # Logs
 ##################################
 *.log
+##################################
+#Imagenes y archivos
+*.png
+*.svg
+*.xls
+*.pdf
+*.docx
+*.doc
+*.pptx
+
