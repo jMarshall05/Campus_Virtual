@@ -138,6 +138,7 @@ namespace DA.Implementaciones
             var usuario = await _elContexto.Usuarios
                 .Include(u => u.Telefonos)
                 .Include(u => u.EstudianteGrupo)
+                .ThenInclude(eg => eg.Grupo)
                 .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
             if (usuario == null)
                 return null;
@@ -156,14 +157,12 @@ namespace DA.Implementaciones
                     Tipo = t.Tipo,
                     Estado = t.Estado
                 }).ToList(),
-                Grupo = _elContexto.Grupos
-                .Where(u => u.id_grupo == usuario.EstudianteGrupo.GrupoId)
-                .Select(u => new GruposDto
-                {
-                    id_grupo = u.id_grupo,
-                    nombre_grupo = u.nombre_grupo
-
-                }).FirstOrDefault(),
+                Grupo = usuario.EstudianteGrupo == null
+                    ? null : new GruposDto
+                    {
+                        id_grupo = usuario.EstudianteGrupo.Grupo.id_grupo,
+                        Nombre = usuario.EstudianteGrupo.Grupo.Nombre
+                    },
                 FechaDeNacimiento = usuario.FechaDeNacimiento,
                 Identificacion = usuario.Identificacion,
                 FechaDeRegistro = usuario.FechaDeRegistro,

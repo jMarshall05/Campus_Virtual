@@ -31,8 +31,8 @@ public class TokenService : ITokenService
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, user.Rol)
-
+            new Claim(ClaimTypes.Role, user.Rol),
+            new Claim("twoFactorEnabled",user.TwoFactorEnabled ? "true":"false")
         };
 
         var key = new SymmetricSecurityKey(

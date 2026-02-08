@@ -1,6 +1,7 @@
 using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
+using Abstracciones.Servicios.Helpers;
 using DA;
 using DA.Implementaciones;
 using DA.Interfaces;
@@ -112,6 +113,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IEstudianteGrupoService, EstudianteGrupoService>();
 builder.Services.AddScoped<IMateriasService, MateriasService>();
 builder.Services.AddScoped<IEstudianteGrupoHelper, EstudianteGrupoHelper>();
+builder.Services.AddScoped<IGruposService, GruposService>();
+builder.Services.AddScoped<IGruposHelper, GruposHelper>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

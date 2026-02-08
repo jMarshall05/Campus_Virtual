@@ -12,6 +12,7 @@ namespace DA.Entidades
 
         [Column("EstudianteId")]
         public string EstudianteId { get; set; }
+
         [ForeignKey(nameof(EstudianteId))]
         public virtual UsuariosAD Estudiante { get; set; }
 

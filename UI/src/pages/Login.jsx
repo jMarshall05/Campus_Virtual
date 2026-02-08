@@ -5,7 +5,7 @@ import { GuardarToken } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader.jsx";
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -82,4 +82,4 @@ function Login() {
   );
 }
 
-export default Login;
+

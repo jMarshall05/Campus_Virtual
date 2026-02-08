@@ -3,6 +3,7 @@ using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
+using Abstracciones.Servicios.Helpers;
 using DA.Entidades;
 using DA.Interfaces;
 using MapsterMapper;
@@ -18,11 +19,11 @@ namespace Servicios.Servicios
         private readonly IUsuariosDA _usuariosDA;
         private readonly ITelefonosService _telefonos;
         private readonly IEstudianteGrupoHelper _estudianteGrupo;
-        private readonly IGruposDA _grupos;
+        private readonly IGruposHelper _grupos;
         private readonly ITokenService _TokenService;
         private readonly IMapper _mapper;
 
-        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposDA grupos)
+        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposHelper grupos)
         {
             _usuariosDA = usuariosDA;
             _telefonos = telefonos;
@@ -85,7 +86,7 @@ namespace Servicios.Servicios
             UsuarioReglas.ValidarUsuario(user != null);
             if (Idgrupo != null)
             {
-                var existe = await _grupos.BuscarGruposPorId((int)Idgrupo) != null;
+                var existe = await _grupos.BuscarGrupoPorId((int)Idgrupo) != null;
                 GruposReglas.ExisteGrupo(existe);
             }
 

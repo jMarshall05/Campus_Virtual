@@ -4,7 +4,7 @@ import { EliminarToken, leerToken, validarToken } from "../utils/auth";
 import logo from '../assets/LogoInstitucion.png';
 
 
-const Layout = () => {
+export default function Layout (){
 
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -110,7 +110,7 @@ return (
                                 </button>
                                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
                                     <li>
-                                        <Link to='/perfil' className="dropdown-item">
+                                        <Link to='/Profile' className="dropdown-item">
                                             <i className="bi bi-person-circle me-2"></i>
                                             Mi perfil
                                         </Link>
@@ -142,5 +142,3 @@ return (
     </div>
 );
 }
-
-export default Layout;

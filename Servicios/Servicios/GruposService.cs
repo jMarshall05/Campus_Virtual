@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Modelos.Requests;
+using Abstracciones.Servicios;
+using DA.Entidades;
+using DA.Interfaces;
+using Mapster;
+using MapsterMapper;
+using Reglas;
+using static Abstracciones.Modelos.Requests.GruposRequests;
+
+namespace Servicios.Servicios
+{
+    public class GruposService : IGruposService
+    {
+        private readonly IGruposDA _grupos;
+        private readonly IUsuariosService _usuarios;
+        private readonly IMapper _mapper;
+
+        public GruposService(IGruposDA grupos,IUsuariosService usuarios , IMapper mapper)
+        {
+            _grupos = grupos;
+            _usuarios = usuarios;
+            _mapper = mapper;
+        }
+
+        public async Task<int> AgregarGrupo(string idUsuario,AgregarGrupoRequest request)
+        {
+           var usuario =await _usuarios.ObtenerUsuarioPorId(idUsuario);
+            UsuarioReglas.ValidarUsuario(usuario!=null);
+            var grupo = request.Adapt<GruposDto>();
+            grupo.creado_por = $"{usuario.Nombre} {usuario.Apellido}";
+            grupo.FechaDeCreacion = DateTime.Now;
+            var resultado = await _grupos.AgregarGrupo(grupo.Adapt<GruposAD>());
+            return resultado;
+
+        }
+
+        public Task<GruposDto> BuscarGruposPorId(int idGrupo)
+        {
+           var grupo = _grupos.BuscarGruposPorId(idGrupo);
+            return grupo;
+        }
+
+        public async Task EditarGrupo(string idUsuario, EditarGrupoRequest request)
+        {
+            var grupoExiste = await BuscarGruposPorId(request.IdGrupo) !=null;
+            GruposReglas.ExisteGrupo(grupoExiste);
+            var usuario = await _usuarios.ObtenerUsuarioPorId(idUsuario);
+            UsuarioReglas.ValidarUsuario(usuario != null);
+            var grupo = request.Adapt<GruposDto>();
+            grupo.modificado_por = $"{usuario.Nombre} {usuario.Apellido}";
+            grupo.FechaDeModificacion = DateTime.Now;
+            await _grupos.EditarGrupo(grupo.Adapt<GruposAD>());
+
+        }
+
+        public Task<IEnumerable<GruposDto>> ListarGrupos()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

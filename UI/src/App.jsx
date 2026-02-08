@@ -7,6 +7,7 @@ import Login from './pages/Login.jsx'
 import Unauthorized from './pages/unauthorized.jsx'
 import Layout from './layouts/adminLayout.jsx'
 import { validarToken } from './utils/auth.js';
+import Profile from './pages/ProfileManage.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +30,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/profile" element={<Profile/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

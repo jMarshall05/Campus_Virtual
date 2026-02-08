@@ -1,4 +1,6 @@
-﻿using DA.Entidades;
+﻿using System.Reflection.Emit;
+using DA.Entidades;
+using DA.Implementaciones;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -35,10 +37,15 @@ namespace DA
                 WithMany(t => t.Telefonos).
                 HasForeignKey(t => t.IdUsuario);
 
-            builder.Entity<EstudianteGrupoAD>().
-                HasOne(u => u.Estudiante).
-                WithOne(e => e.EstudianteGrupo).
-                HasForeignKey<EstudianteGrupoAD>(eg => eg.EstudianteId);
+            builder.Entity<EstudianteGrupoAD>()
+                .HasOne(eg => eg.Estudiante)
+                .WithOne(u => u.EstudianteGrupo)
+                .HasForeignKey<EstudianteGrupoAD>(eg => eg.EstudianteId);
+
+            builder.Entity<EstudianteGrupoAD>()
+                .HasOne(eg => eg.Grupo)
+                .WithMany(g => g.EstudianteGrupos)
+                .HasForeignKey(eg => eg.GrupoId);
 
             builder.Entity<CalificacionesAD>()
                .Property(c => c.Calificacion)

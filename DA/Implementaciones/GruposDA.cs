@@ -28,11 +28,11 @@ namespace DA.Implementaciones
             return grupo;
         }
 
-        public async Task EditarGrupo(int id, GruposAD grupo)
+        public async Task EditarGrupo( GruposAD grupo)
         {
-            var grupoExistente = await _elContexto.Grupos.FindAsync(id);
-            grupoExistente.nombre_grupo = grupo.nombre_grupo;
-            grupoExistente.descripcion = grupo.descripcion;
+            var grupoExistente = await _elContexto.Grupos.FindAsync(grupo.id_grupo);
+            grupoExistente.Nombre = grupo.Nombre;
+            grupoExistente.Descripcion = grupo.Descripcion;
             grupoExistente.modificado_por = grupo.modificado_por;
             grupoExistente.FechaDeModificacion = DateTime.Now;
             grupoExistente.estado = grupo.estado;
@@ -44,8 +44,8 @@ namespace DA.Implementaciones
             var grupos = await _elContexto.Grupos.Select(grupo => new GruposDto
             {
                 id_grupo = grupo.id_grupo,
-                nombre_grupo = grupo.nombre_grupo,
-                descripcion = grupo.descripcion,
+                Nombre = grupo.Nombre,
+                Descripcion = grupo.Descripcion,
                 creado_por = grupo.creado_por,
                 estado = grupo.estado,
                 FechaDeCreacion = grupo.FechaDeCreacion,

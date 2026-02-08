@@ -32,7 +32,7 @@ namespace DA.Implementaciones
                      NombreProfesor = curso.Profesor != null
                          ? $"{curso.Profesor.Nombre} {curso.Profesor.Apellido}"
                          : string.Empty,
-                     NombreGrupo = curso.Grupo.nombre_grupo,
+                     NombreGrupo = curso.Grupo.Nombre,
                      NombreMateria = curso.Materia.Nombre,
                      Estado = curso.Estado
                  }).ToListAsync();
@@ -61,7 +61,7 @@ namespace DA.Implementaciones
                      NombreProfesor = curso.Profesor != null
                          ? $"{curso.Profesor.Nombre} {curso.Profesor.Apellido}"
                          : string.Empty,
-                     NombreGrupo = curso.Grupo.nombre_grupo,
+                     NombreGrupo = curso.Grupo.Nombre,
                      NombreMateria = curso.Materia.Nombre,
                      Estado = curso.Estado
                  }).FirstOrDefaultAsync();

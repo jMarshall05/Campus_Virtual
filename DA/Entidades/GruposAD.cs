@@ -11,9 +11,9 @@ namespace DA.Entidades
         [Column("id_grupo")]
         public int id_grupo { get; set; }
         [Column("nombre_grupo")]
-        public string nombre_grupo { get; set; }
+        public string Nombre { get; set; }
         [Column("descripcion")]
-        public string descripcion { get; set; }
+        public string Descripcion { get; set; }
         [Column("creado_por")]
         public string? creado_por { get; set; }
         [Column("estado")]
@@ -25,6 +25,8 @@ namespace DA.Entidades
 
         [Column("modificado_por")]
         public string? modificado_por { get; set; }
+
+        public virtual ICollection<EstudianteGrupoAD> EstudianteGrupos { get; set; }
 
     }
 }

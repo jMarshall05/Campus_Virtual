@@ -11,11 +11,11 @@ namespace Servicios.Servicios
     public class TareasService : ITareasService
     {
         private readonly ITareasAD _tareas;
-        private readonly IMateriasDA _materias;//Cambiar por service
-        private readonly IGruposDA _grupo;//Cambiar por service
+        private readonly IMateriasService _materias;
+        private readonly IGruposService _grupo;
         private readonly IMapper _mapper;
 
-        public TareasService(IMapper mapper, ITareasAD tareas, IMateriasDA materias, IGruposDA grupo, IUsuariosDA usuarios)
+        public TareasService(IMapper mapper, ITareasAD tareas, IMateriasService materias, IGruposService grupo)
         {
             _tareas = tareas;
             _materias = materias;

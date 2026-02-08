@@ -60,7 +60,7 @@ namespace DA.Implementaciones
                      Grupo = new GruposDto
                      {
                          id_grupo = t.Grupo.id_grupo,
-                         nombre_grupo = t.Grupo.nombre_grupo
+                         Nombre = t.Grupo.Nombre
                      },
                      Estado = t.Estado
                  })
@@ -87,7 +87,7 @@ namespace DA.Implementaciones
                        Grupo = new GruposDto
                        {
                            id_grupo = t.Grupo.id_grupo,
-                           nombre_grupo = t.Grupo.nombre_grupo
+                           Nombre = t.Grupo.Nombre
                        },
                        Estado = t.Estado
                    })
@@ -114,7 +114,7 @@ namespace DA.Implementaciones
                     Grupo = new GruposDto
                     {
                         id_grupo = t.Grupo.id_grupo,
-                        nombre_grupo = t.Grupo.nombre_grupo
+                        Nombre = t.Grupo.Nombre
                     },
                     Estado = t.Estado
                 })
