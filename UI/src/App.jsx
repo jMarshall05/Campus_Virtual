@@ -8,6 +8,8 @@ import Unauthorized from './pages/unauthorized.jsx'
 import Layout from './layouts/adminLayout.jsx'
 import { validarToken } from './utils/auth.js';
 import Profile from './pages/ProfileManage.jsx';
+import Usuarios from './pages/Usuarios.jsx';
+import Login2fa from './pages/Login2fa.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -20,6 +22,7 @@ function App() {
 
         <Route path="/" element={token ? <Navigate to="/Dashboard" replace /> : <Login />} />
         <Route path="/login" element={<Login />} />
+        {/* <Route path='login2fa' element={<Login2fa/>}/> */}
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route element={<Layout />}>
           <Route
@@ -30,8 +33,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/profile" element={<Profile/>}/>
+          {<Route path="/usuarios" element={<ProtectedRoute requiredRole="Administradores">
+            <Usuarios />
+          </ProtectedRoute>
+          } />}
+          <Route path="/profile" element={<Profile />} />
+
         </Route>
+
       </Routes>
     </BrowserRouter>
   )

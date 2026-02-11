@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
-using Abstracciones.Servicios;
-using DA.Entidades;
+﻿using DA.Entidades;
 using DA.Interfaces;
 
 namespace Servicios.Helpers
@@ -13,7 +6,8 @@ namespace Servicios.Helpers
     public class EstudianteGrupoHelper : IEstudianteGrupoHelper
     {
         private readonly IEstudianteGrupoDA _estudianteGrupo;
-        public EstudianteGrupoHelper(IEstudianteGrupoDA estudianteGrupoService) {
+        public EstudianteGrupoHelper(IEstudianteGrupoDA estudianteGrupoService)
+        {
             _estudianteGrupo = estudianteGrupoService;
         }
 

@@ -28,7 +28,7 @@ namespace DA.Implementaciones
             return grupo;
         }
 
-        public async Task EditarGrupo( GruposAD grupo)
+        public async Task EditarGrupo(GruposAD grupo)
         {
             var grupoExistente = await _elContexto.Grupos.FindAsync(grupo.id_grupo);
             grupoExistente.Nombre = grupo.Nombre;

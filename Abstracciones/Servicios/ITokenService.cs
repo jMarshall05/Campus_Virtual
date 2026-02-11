@@ -1,9 +1,9 @@
-﻿using static Abstracciones.Modelos.Responses.AuthResponses;
+﻿using Abstracciones.Modelos.Requests;
 
 namespace Abstracciones.Servicios
 {
     public interface ITokenService
     {
-        string CrearToken(LoginResponse user);
+        string CrearToken(TokenRequest data);
     }
 }

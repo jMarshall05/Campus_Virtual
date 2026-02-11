@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Net;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
@@ -6,10 +7,16 @@ using Abstracciones.Servicios;
 using Abstracciones.Servicios.Helpers;
 using DA.Entidades;
 using DA.Interfaces;
+using Mapster;
 using MapsterMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using OtpNet;
+using QRCoder;
 using Reglas;
 using Servicios.Helpers;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
+using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace Servicios.Servicios
 {
@@ -22,8 +29,10 @@ namespace Servicios.Servicios
         private readonly IGruposHelper _grupos;
         private readonly ITokenService _TokenService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuracion;
+        private readonly SecretProtectorService _secrets;
 
-        public UsuariosService(ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposHelper grupos)
+        public UsuariosService(IConfiguration configuration, ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposHelper grupos, SecretProtectorService secrets)
         {
             _usuariosDA = usuariosDA;
             _telefonos = telefonos;
@@ -31,6 +40,8 @@ namespace Servicios.Servicios
             _grupos = grupos;
             _mapper = mapper;
             _TokenService = tokenService;
+            _secrets = secrets;
+            _configuracion = configuration;
 
         }
         public async Task<string> AgregarUsuario(RegisterRequest request)
@@ -114,14 +125,12 @@ namespace Servicios.Servicios
             }
             if (Idgrupo != null)
             {
-               await _estudianteGrupo.AddOrEdit(id,Idgrupo);
+                await _estudianteGrupo.AddOrEdit(id, Idgrupo);
             }
             var usuarioAD = _mapper.Map<UsuariosAD>(usuario);
             await _usuariosDA.EditarUsuarioAdmin(id, usuarioAD);
 
         }
-
-        
 
         public Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol)
         {
@@ -146,6 +155,72 @@ namespace Servicios.Servicios
             return null;
         }
 
+        public async Task<TwofaResponse> EnableAuthenticator(string userId)
+        {
+            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(userId);
+
+            if (!string.IsNullOrEmpty(user.GoogleAuthenticatorSecretTemp))
+            {
+                var existingSecret = _secrets.Unprotect(user.GoogleAuthenticatorSecretTemp);
+
+                return GenerarQr(existingSecret, user.Email);
+            }
+
+            var secret = Base32Encoding.ToString(KeyGeneration.GenerateRandomKey(20));
+            var googleKey = _secrets.Protect(secret);
+
+            await _usuariosDA.EnableAuthenticator(userId, googleKey);
+
+            return GenerarQr(secret, user.Email);
+        }
+
+        private TwofaResponse GenerarQr(string secret, string email)
+        {
+            var issuerRaw = _configuracion["keys:AppName"];
+            var issuer = WebUtility.UrlEncode(issuerRaw);
+            var emailEncoded = WebUtility.UrlEncode(email);
+
+            var otpauthUrl = $"otpauth://totp/{issuer}:{emailEncoded}?secret={secret}&issuer={issuer}";
+
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(otpauthUrl, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new PngByteQRCode(qrCodeData);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            return new TwofaResponse
+            {
+                Qr = Convert.ToBase64String(qrCodeImage),
+                SecretKey = secret
+            };
+        }
+
+        public async Task<string> VerifyTwoFa(string idusuario, string code)
+        {
+            var user =await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
+            var secret = _secrets.Unprotect(user.GoogleAuthenticatorSecretTemp);
+            var totp = new Totp(Base32Encoding.ToBytes(secret));
+            var serverCode = totp.ComputeTotp();
+            code = code?.Trim();
+            var isValid = totp.VerifyTotp(code.Trim(), out long _, new VerificationWindow(previous: 2, future: 2));
+
+
+            if (!isValid)
+            {
+                throw new BusinessException("Código incorrecto");
+            }
+            var tokenRequest = await _usuariosDA.VerifyTwoFa(idusuario);
+            var token = _TokenService.CrearToken(tokenRequest);
+            return token;
+        }
+        public async Task<string> DisableAuthenticator(string IdUsuario)
+        {
+            var existe = await _usuariosDA.ObtenerUsuarioIdentityPorId(IdUsuario) != null;
+            UsuarioReglas.ValidarUsuario(existe);
+            var respuesta = await _usuariosDA.DisableAuthenticator(IdUsuario);
+            var token = _TokenService.CrearToken(respuesta);
+            return token;
+        }
+
         public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
         {
             var usuario = await _usuariosDA.ObtenerUsuarioPorId(idUsuario);
@@ -159,7 +234,6 @@ namespace Servicios.Servicios
             usuario.Estado = true;
             return usuario;
         }
-
     }
 
 }

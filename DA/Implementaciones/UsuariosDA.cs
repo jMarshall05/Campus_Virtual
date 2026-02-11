@@ -9,7 +9,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Abstracciones.Modelos.Responses.AuthResponses;
+using OtpNet;
 
 namespace DA.Implementaciones
 {
@@ -27,13 +27,13 @@ namespace DA.Implementaciones
             _roleManager = roleManager;
         }
 
-        public async Task<LoginResponse> Login(LoginRequest login)
+        public async Task<TokenRequest> Login(LoginRequest login)
         {
             var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario incorrecto");
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, login.Password);
             if (!isPasswordValid)
                 throw new BusinessException("Usuario o contraseña incorrectos");
-            var respuesta = user.Adapt<LoginResponse>();
+            var respuesta = user.Adapt<TokenRequest>();
             respuesta.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
             return respuesta;
         }
@@ -96,6 +96,8 @@ namespace DA.Implementaciones
         {
             var user = await _userManager.FindByIdAsync(idUsuario);
             await _userManager.SetEmailAsync(user, nuevoCorreo);
+            await _elContexto.SaveChangesAsync();
+
         }
 
         public async Task<bool> ExisteIdentificacion(string identificacion)
@@ -231,6 +233,8 @@ namespace DA.Implementaciones
                 await _userManager.RemoveFromRolesAsync(user, rolesActuales);
 
             await _userManager.AddToRoleAsync(user, rol);
+            await _elContexto.SaveChangesAsync();
+
         }
 
         public async Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol)
@@ -240,6 +244,51 @@ namespace DA.Implementaciones
                 throw new BusinessException("El rol especificado no existe");
             var usuarios = (await _elContexto.Usuarios.Where(u => u.Rol == rol).ToListAsync()).Adapt<IEnumerable<UsuariosDto>>();
             return usuarios;
+        }
+
+        public async Task EnableAuthenticator(string IdUsuario, string googleKey)
+        {
+            var user = await _userManager.FindByIdAsync(IdUsuario);
+
+            user.GoogleAuthenticatorSecretTemp = googleKey;
+            user.TwoFactorEnabled = false;
+            user.GoogleAuthenticatorSecretKey = null;
+            await _userManager.UpdateAsync(user);
+            await _elContexto.SaveChangesAsync();
+            ;
+        }
+        public async Task<TokenRequest> DisableAuthenticator(string IdUsuario)
+        {
+            var user = await _userManager.FindByIdAsync(IdUsuario);
+
+            user.TwoFactorEnabled = false;
+            user.GoogleAuthenticatorSecretKey = null;
+            await _userManager.UpdateAsync(user);
+            await _elContexto.SaveChangesAsync();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var rol = roles.FirstOrDefault();
+
+            var usuario = user.Adapt<TokenRequest>();
+            usuario.Rol = rol;
+
+            return usuario;
+        }
+
+        public async Task<TokenRequest> VerifyTwoFa(string IdUsuario)
+        {
+            var user = await _userManager.FindByIdAsync(IdUsuario);
+            user.GoogleAuthenticatorSecretKey = user.GoogleAuthenticatorSecretTemp;
+            user.GoogleAuthenticatorSecretTemp = null;
+            user.TwoFactorEnabled = true;
+            await _userManager.UpdateAsync(user);
+            await _elContexto.SaveChangesAsync();
+            var roles = await _userManager.GetRolesAsync(user);
+            var rol = roles.FirstOrDefault();
+
+            var usuario = user.Adapt<TokenRequest>();
+            usuario.Rol = rol;
+            return usuario;
         }
     }
 }

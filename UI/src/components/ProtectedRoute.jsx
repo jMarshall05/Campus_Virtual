@@ -7,15 +7,14 @@ export default function ProtectedRoute({ children, requiredRole }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!validarToken(token)) {
+  if (!validarToken()) {
     return <Navigate to="/login" replace />;
   }
 
-  const userRole = getUserRole(token);
+  const userRole = getUserRole();
 
   if (requiredRole && userRole !== requiredRole) {
     return <Navigate to="/unauthorized" replace />;
   }
-
   return children;
 }

@@ -1,12 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using DA;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using static Abstracciones.Modelos.Responses.AuthResponses;
 
 public class TokenService : ITokenService
 {
@@ -21,7 +21,7 @@ public class TokenService : ITokenService
         _userManager = userManager;
     }
 
-    public string CrearToken(LoginResponse user)
+    public string CrearToken(TokenRequest user)
     {
         var jwt = _config.GetSection("Jwt");
 

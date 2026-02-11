@@ -1,6 +1,5 @@
-import { fas } from "@fortawesome/free-solid-svg-icons";
 import { jwtDecode } from "jwt-decode"
-import { useNavigate } from "react-router-dom";
+import { disable2FA } from "../api/authService";
 
 export function GuardarToken(token) {
   localStorage.setItem('token', token);
@@ -37,15 +36,30 @@ export function getUserRole() {
 
 export function validarToken() {
   const token = localStorage.getItem("token");
-   if (!token || typeof token !== "string") return false;
-  const payload = jwtDecode(token);
+  if (!token || typeof token !== "string") return false;
+  try {
+    const payload = jwtDecode(token);
+    const now = Date.now() / 1000;
 
-  const now = Date.now() / 1000;
+    if (payload.exp < now) {
+      localStorage.removeItem("token");
+      return false;
+    }
 
-  if (payload.exp < now) {
-    localStorage.removeItem("token");
+    return true;
+  } catch (error) {
+    console.error("Token invalido:", error);
     return false;
   }
 
-  return true;
+}
+
+export async function disable2Factor(IdUsuario) {
+  const tokenNuevo = await disable2FA(IdUsuario);
+  return tokenNuevo;
+}
+
+export function cambiarToken(tokenNuevo){
+  localStorage.removeItem("token")
+  localStorage.setItem("token", tokenNuevo);
 }

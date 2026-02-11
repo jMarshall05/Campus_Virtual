@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
+using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace Abstracciones.Servicios
 {
@@ -13,6 +14,9 @@ namespace Abstracciones.Servicios
         Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario);
         Task<string> Login(LoginRequest login);
         Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol);
+        Task<string> DisableAuthenticator(string IdUsuario);
+        Task<TwofaResponse> EnableAuthenticator(string IdUsuario);
+        Task<string> VerifyTwoFa(string idusuario,string code);
 
     }
 }

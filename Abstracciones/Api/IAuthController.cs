@@ -8,6 +8,9 @@ namespace Abstracciones.Api
     {
         Task<IActionResult> Login(LoginRequest request);
         Task<IActionResult> Register(RegisterRequest register);
-        Task<IActionResult> Logout();
+        Task<IActionResult> DisableAuthenticator(string IdUsuario);
+        Task<IActionResult> EnableAuthenticator(string IdUsuario);
+        Task<IActionResult> VerifyTwoFa(string IdUsuario,string code);
+
     }
 }

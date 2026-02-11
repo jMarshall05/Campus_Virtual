@@ -22,7 +22,7 @@ namespace Servicios.Servicios
 
         public async Task<int> AgregarMateria(MateriaRequests materia)
         {
-            var existe =await ObtenerMateriaNombre(materia.Nombre) != null;
+            var existe = await ObtenerMateriaNombre(materia.Nombre) != null;
             MateriaReglas.SiExiste(existe);
             var resultado = await _materias.AgregarMateria(materia.Adapt<MateriasAD>());
             return resultado;
@@ -30,14 +30,14 @@ namespace Servicios.Servicios
 
         public async Task CambiarEstadoMateria(int materiaId)
         {
-            var existe =await ObtenerMateriaPorId(materiaId) != null;
+            var existe = await ObtenerMateriaPorId(materiaId) != null;
             MateriaReglas.NoExiste(existe);
             await _materias.CambiarEstadoMateria(materiaId);
         }
 
         public async Task EditarMateria(int IdMateria, MateriaRequests materia)
         {
-            var existe =await ObtenerMateriaPorId(IdMateria) != null;
+            var existe = await ObtenerMateriaPorId(IdMateria) != null;
             MateriaReglas.NoExiste(existe);
             await _materias.EditarMateria(IdMateria, materia.Adapt<MateriasAD>());
         }

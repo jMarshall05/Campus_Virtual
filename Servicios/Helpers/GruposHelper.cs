@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios.Helpers;
 using DA.Interfaces;
 
@@ -18,7 +13,7 @@ namespace Servicios.Helpers
         }
         public Task<GruposDto> BuscarGrupoPorId(int IdGrupo)
         {
-           var grupo = _grupos.BuscarGruposPorId(IdGrupo);
+            var grupo = _grupos.BuscarGruposPorId(IdGrupo);
             return grupo;
         }
     }

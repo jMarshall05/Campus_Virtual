@@ -110,7 +110,7 @@ return (
                                 </button>
                                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
                                     <li>
-                                        <Link to='/Profile' className="dropdown-item">
+                                        <Link to='/profile' className="dropdown-item">
                                             <i className="bi bi-person-circle me-2"></i>
                                             Mi perfil
                                         </Link>

@@ -3,7 +3,6 @@ using Abstracciones.Excepciones;
 using Abstracciones.Modelos.Requests;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Api.Controllers
 {

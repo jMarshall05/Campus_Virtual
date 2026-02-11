@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
-using Abstracciones.Modelos.Requests;
+﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using DA.Entidades;
 using DA.Interfaces;
@@ -21,17 +15,17 @@ namespace Servicios.Servicios
         private readonly IUsuariosService _usuarios;
         private readonly IMapper _mapper;
 
-        public GruposService(IGruposDA grupos,IUsuariosService usuarios , IMapper mapper)
+        public GruposService(IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
         {
             _grupos = grupos;
             _usuarios = usuarios;
             _mapper = mapper;
         }
 
-        public async Task<int> AgregarGrupo(string idUsuario,AgregarGrupoRequest request)
+        public async Task<int> AgregarGrupo(string idUsuario, AgregarGrupoRequest request)
         {
-           var usuario =await _usuarios.ObtenerUsuarioPorId(idUsuario);
-            UsuarioReglas.ValidarUsuario(usuario!=null);
+            var usuario = await _usuarios.ObtenerUsuarioPorId(idUsuario);
+            UsuarioReglas.ValidarUsuario(usuario != null);
             var grupo = request.Adapt<GruposDto>();
             grupo.creado_por = $"{usuario.Nombre} {usuario.Apellido}";
             grupo.FechaDeCreacion = DateTime.Now;
@@ -42,13 +36,13 @@ namespace Servicios.Servicios
 
         public Task<GruposDto> BuscarGruposPorId(int idGrupo)
         {
-           var grupo = _grupos.BuscarGruposPorId(idGrupo);
+            var grupo = _grupos.BuscarGruposPorId(idGrupo);
             return grupo;
         }
 
         public async Task EditarGrupo(string idUsuario, EditarGrupoRequest request)
         {
-            var grupoExiste = await BuscarGruposPorId(request.IdGrupo) !=null;
+            var grupoExiste = await BuscarGruposPorId(request.IdGrupo) != null;
             GruposReglas.ExisteGrupo(grupoExiste);
             var usuario = await _usuarios.ObtenerUsuarioPorId(idUsuario);
             UsuarioReglas.ValidarUsuario(usuario != null);

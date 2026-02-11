@@ -9,7 +9,7 @@ namespace Abstracciones.Api
         Task<IActionResult> EditarUsuario(string id, EditarUsuarioRequest request);
         Task<IActionResult> ListarUsuarios();
         Task<IActionResult> ObtenerUsuarioPorId(string idUsuario);
-        Task<ActionResult> ListarPorRol(string rol);
+        Task<IActionResult> ListarPorRol(string rol);
 
     }
 }

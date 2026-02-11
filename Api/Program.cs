@@ -115,6 +115,7 @@ builder.Services.AddScoped<IMateriasService, MateriasService>();
 builder.Services.AddScoped<IEstudianteGrupoHelper, EstudianteGrupoHelper>();
 builder.Services.AddScoped<IGruposService, GruposService>();
 builder.Services.AddScoped<IGruposHelper, GruposHelper>();
+builder.Services.AddScoped<SecretProtectorService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

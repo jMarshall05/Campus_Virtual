@@ -1,4 +1,5 @@
-export { faTachometerAlt,
+export {
+  faTachometerAlt,
   faUserGraduate,
   faChalkboardTeacher,
   faBolt,
@@ -8,4 +9,16 @@ export { faTachometerAlt,
   faBook,
   faCalendarAlt,
   faFileAlt,
-  faBullhorn } from "@fortawesome/free-solid-svg-icons";
+  faBullhorn,
+  faUserShield,
+  faUserCheck,
+  faUsers,
+  faPlusCircle,
+  faSearch,
+  faDownload,
+  faEnvelope,
+  faEye,
+  faPen,
+  faChevronLeft,
+  faChevronRight
+} from "@fortawesome/free-solid-svg-icons";

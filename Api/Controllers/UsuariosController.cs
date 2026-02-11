@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
@@ -59,7 +58,7 @@ namespace Api.Controllers
             }
         }
         [HttpGet("ByRol")]
-        public async Task<ActionResult> ListarPorRol([FromQuery] string rol)
+        public async Task<IActionResult> ListarPorRol([FromQuery] string rol)
         {
             var usuarios = await _usuario.ListarPorRol(rol);
             if (usuarios != null)
@@ -87,5 +86,7 @@ namespace Api.Controllers
                 return Ok(usuario);
             return NotFound($"No se encontró el usuario de ID: {idUsuario}");
         }
+
+       
     }
 }

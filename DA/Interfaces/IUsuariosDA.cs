@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using DA.Entidades;
-using static Abstracciones.Modelos.Responses.AuthResponses;
 
 namespace DA.Interfaces
 {
@@ -16,9 +15,11 @@ namespace DA.Interfaces
         Task<UsuarioAuth> ObtenerUsuarioIdentityPorId(string Id);
         Task<UsuarioAuth> ObtenerUsuarioIdentityPorEmail(String Email);
         Task AsignarRol(string userId, string rol);
-        Task<LoginResponse> Login(LoginRequest login);
+        Task<TokenRequest> Login(LoginRequest login);
         Task<IEnumerable<UsuariosDto>> ListarPorRol(string rol);
-
+        Task<TokenRequest> DisableAuthenticator(string IdUsuario);
+        Task EnableAuthenticator(string IdUsuario, string googleKey);
+        Task<TokenRequest> VerifyTwoFa(string IdUsuario);
 
     }
 }
