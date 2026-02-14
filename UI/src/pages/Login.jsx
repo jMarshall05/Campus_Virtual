@@ -5,14 +5,14 @@ import { GuardarToken } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader.jsx";
 import "../content/login.css"
-import Login2fa from "./Login2fa.jsx";
+import { jwtDecode } from "jwt-decode";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [modalhidden, setModalHidden] = useState(true)
 
 
 
@@ -25,6 +25,11 @@ export default function Login() {
       const response = await login(email, password);
 
       GuardarToken(response.token);
+      const tokenData = jwtDecode(response.token);
+      if (tokenData.twoFactorEnabled === true || tokenData.twoFactorEnabled === "true") {
+        navigate("/login2fa")
+        return;
+      }
       navigate("/dashboard")
     } catch (err) {
       setError(`${err.message}`);

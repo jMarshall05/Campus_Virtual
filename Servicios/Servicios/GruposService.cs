@@ -53,9 +53,10 @@ namespace Servicios.Servicios
 
         }
 
-        public Task<IEnumerable<GruposDto>> ListarGrupos()
+        public async Task<IEnumerable<GruposDto>> ListarGrupos()
         {
-            throw new NotImplementedException();
+            var grupos =await _grupos.ListarGrupos();
+            return grupos;
         }
     }
 }

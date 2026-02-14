@@ -116,6 +116,7 @@ builder.Services.AddScoped<IEstudianteGrupoHelper, EstudianteGrupoHelper>();
 builder.Services.AddScoped<IGruposService, GruposService>();
 builder.Services.AddScoped<IGruposHelper, GruposHelper>();
 builder.Services.AddScoped<SecretProtectorService>();
+builder.Services.AddScoped<IExportService, ExportService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

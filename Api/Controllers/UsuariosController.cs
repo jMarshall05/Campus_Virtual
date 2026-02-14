@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
+using iText.Layout.Element;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
@@ -38,7 +39,7 @@ namespace Api.Controllers
             }
         }
         [HttpPut("{IdUsuario}/admin")]
-        public async Task<IActionResult> EditarUsuarioAdmin(string IdUsuario, EditarUsuarioAdminRequest usuario, int? idGrupo)
+        public async Task<IActionResult> EditarUsuarioAdmin(string IdUsuario, [FromBody]EditarUsuarioAdminRequest usuario,[FromQuery] int? idGrupo)
         {
             try
             {
@@ -78,15 +79,46 @@ namespace Api.Controllers
             return NoContent();
 
         }
+
         [HttpGet("{IdUsuario}")]
-        public async Task<IActionResult> ObtenerUsuarioPorId(string idUsuario)
+        public async Task<IActionResult> ObtenerUsuarioPorId(string IdUsuario)
         {
-            var usuario = await _usuario.ObtenerUsuarioPorId(idUsuario);
+            var usuario = await _usuario.ObtenerUsuarioPorId(IdUsuario);
             if (usuario != null)
                 return Ok(usuario);
-            return NotFound($"No se encontró el usuario de ID: {idUsuario}");
+            return NotFound($"No se encontró el usuario de ID: {IdUsuario}");
         }
+        [HttpGet("exportarPdf/{IdUsuario}")]
+        public async Task<IActionResult> ExportarUsuarioPDF(string IdUsuario)
+        {
+            var pdf = await _usuario.ExportarUsuarioPDF(IdUsuario, null);//no paso logo
+            if (pdf != null)
+                return File(pdf, "application/pdf");
+        
+            return NotFound($"No se encontró el usuario de ID: {IdUsuario}");
+        }
+        [HttpGet("exportarPdf")]
 
-       
+        public async Task<IActionResult> ExportarUsuariosGeneralPDF()
+        {
+            var pdf = await _usuario.ExportarUsuariosGeneralPDF(null);
+            if (pdf != null)
+                return File(pdf, "application/pdf");
+            return NoContent();
+        }
+        [HttpGet("exportarQr")]
+        public IActionResult QrExportar(string? IdUsuario)
+        {
+            if (!string.IsNullOrEmpty(IdUsuario))
+            {
+                var url = Url.Action("ExportarUsuarioPDF", "Usuarios", new { IdUsuario }, Request.Scheme);
+                var qr = _usuario.QrExportar(url);
+                return File(qr, "image/png");
+            }
+            var link = Url.Action("ExportarUsuariosGeneralPDF", "Usuarios", null, Request.Scheme);
+            var Qr = _usuario.QrExportar(link);
+            return File(Qr,"image/png");
+
+        }
     }
 }

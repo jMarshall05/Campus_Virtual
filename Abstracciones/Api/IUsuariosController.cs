@@ -10,6 +10,9 @@ namespace Abstracciones.Api
         Task<IActionResult> ListarUsuarios();
         Task<IActionResult> ObtenerUsuarioPorId(string idUsuario);
         Task<IActionResult> ListarPorRol(string rol);
+        Task<IActionResult> ExportarUsuariosGeneralPDF();
+        Task<IActionResult> ExportarUsuarioPDF(string IdUsuario);
+        IActionResult QrExportar(string IdUsuario);
 
     }
 }

@@ -10,6 +10,7 @@ using DA.Interfaces;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OtpNet;
 using QRCoder;
@@ -17,6 +18,7 @@ using Reglas;
 using Servicios.Helpers;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 using static Abstracciones.Modelos.Responses.AuthResponses;
+using static QRCoder.PayloadGenerator;
 
 namespace Servicios.Servicios
 {
@@ -30,9 +32,10 @@ namespace Servicios.Servicios
         private readonly ITokenService _TokenService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuracion;
+        private readonly IExportService _exportar;
         private readonly SecretProtectorService _secrets;
 
-        public UsuariosService(IConfiguration configuration, ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposHelper grupos, SecretProtectorService secrets)
+        public UsuariosService(IExportService exportar, IConfiguration configuration, ITokenService tokenService, IMapper mapper, IUsuariosDA usuariosDA, ITelefonosService telefonos, IEstudianteGrupoHelper estudianteGrupo, IGruposHelper grupos, SecretProtectorService secrets)
         {
             _usuariosDA = usuariosDA;
             _telefonos = telefonos;
@@ -42,6 +45,7 @@ namespace Servicios.Servicios
             _TokenService = tokenService;
             _secrets = secrets;
             _configuracion = configuration;
+            _exportar = exportar;
 
         }
         public async Task<string> AgregarUsuario(RegisterRequest request)
@@ -196,22 +200,32 @@ namespace Servicios.Servicios
 
         public async Task<string> VerifyTwoFa(string idusuario, string code)
         {
-            var user =await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
-            var secret = _secrets.Unprotect(user.GoogleAuthenticatorSecretTemp);
-            var totp = new Totp(Base32Encoding.ToBytes(secret));
-            var serverCode = totp.ComputeTotp();
-            code = code?.Trim();
-            var isValid = totp.VerifyTotp(code.Trim(), out long _, new VerificationWindow(previous: 2, future: 2));
+            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
+            validarCodigo(code, user.GoogleAuthenticatorSecretTemp);
+            var tokenRequest = await _usuariosDA.VerifyTwoFa(idusuario);
+            var token = _TokenService.CrearToken(tokenRequest);
+            return token;
+        }
+        public async Task<string> Login2fa(string idusuario, string code)
+        {
+            var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
+            validarCodigo(code, user.GoogleAuthenticatorSecretKey);
+            var token = _TokenService.CrearToken(user.Adapt<TokenRequest>());
+            return token;
+        }
 
+        private void validarCodigo(string code, string key)
+        {
+            var secret = _secrets.Unprotect(key);
+            var totp = new Totp(Base32Encoding.ToBytes(secret));
+            var isValid = totp.VerifyTotp(code.Trim(), out long _, new VerificationWindow(previous: 2, future: 2));
 
             if (!isValid)
             {
                 throw new BusinessException("Código incorrecto");
             }
-            var tokenRequest = await _usuariosDA.VerifyTwoFa(idusuario);
-            var token = _TokenService.CrearToken(tokenRequest);
-            return token;
         }
+
         public async Task<string> DisableAuthenticator(string IdUsuario)
         {
             var existe = await _usuariosDA.ObtenerUsuarioIdentityPorId(IdUsuario) != null;
@@ -233,6 +247,26 @@ namespace Servicios.Servicios
             usuario.FechaDeRegistro = DateTime.UtcNow;
             usuario.Estado = true;
             return usuario;
+        }
+
+        public async Task<byte[]> ExportarUsuariosGeneralPDF(string? rutaLogo)
+        {
+            var usuarios = await ListarUsuarios();
+            var pdf = _exportar.ExportarListaAPdf(usuarios, "Reporte de Usuarios", "Listado de Usuarios", null);
+            return pdf;
+        }
+
+        public async Task<byte[]> ExportarUsuarioPDF(string IdUsuario,string? rutaLogo)
+        {
+            var usuario =await ObtenerUsuarioPorId(IdUsuario);
+            var pdf = _exportar.ExportarObjetoAPdf(usuario, "Reporte de Usuario", "Detalle del Usuario", null);
+            return pdf;
+        }
+
+        public byte[] QrExportar(string url)
+        {
+            var qr = _exportar.ExportarReporteQr(url);
+            return qr;
         }
     }
 

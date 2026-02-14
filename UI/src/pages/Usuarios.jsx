@@ -1,29 +1,56 @@
 import "../content/usuarios.css";
 import { useEffect, useState } from "react";
-import { getUsers } from "../api/userService";
+import { exportUsersPdf, getUsers } from "../api/userService";
 import Loader from "../components/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserShield, faUserCheck, faUsers, faPlusCircle, faSearch, faDownload, faEnvelope, faEye, faPen, faChevronLeft, faChevronRight } from "../content/icons.js"
+import UserDetails from "./UserDetails.jsx";
+import UserEdit from "./UserEdit.jsx";
 
 export default function () {
     const [loading, setLoading] = useState(true);
     const [usuarios, setUsuarios] = useState([]);
-    const [usuariosActivos, setUsuariosActivos] = useState([])
-
+    const [search, setSearch] = useState("");
+    const [modalhidden, setModalHidden] = useState(true);
+    const [userModal, setUserModal] = useState(null);
+    const [modalType, setModalType] = useState("");
+    const cargarDatos = async () => {
+        try {
+            var users = await getUsers();
+            setUsuarios(users);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
-        const cargarDatos = async () => {
-            try {
-                var users = await getUsers();
-                setUsuarios(users);
+       cargarDatos();
+    }, []);
 
-                const activeUsers = users.filter(u => u.estado === true);
-                setUsuariosActivos(activeUsers)
-            } finally {
-                setLoading(false);
-            }
-        };
-        cargarDatos();
-    }, [])
+    const usuariosFiltrados = usuarios.filter(u => {
+        const texto = search.toLowerCase();
+        const fullName = `${u.nombre} ${u.apellido}`;
+        return (
+            fullName.toLowerCase().includes(texto) ||
+            u.nombre.toLowerCase().includes(texto) ||
+            u.apellido.toLowerCase().includes(texto) ||
+            u.email.toLowerCase().includes(texto) ||
+            u.identificacion.toLowerCase().includes(texto) ||
+            u.rol.toLowerCase().includes(texto))
+    }
+    );
+    const usuariosActivosFiltrados = usuariosFiltrados.filter(u => u.estado === true);
+
+    const Pdf = async () => {
+        try {
+            const response = await exportUsersPdf();
+            const url = URL.createObjectURL(response);
+            window.open(url, "_blank");
+        } catch (error) {
+            console.error("Error al generar el PDF:", error);
+        }
+    };
+
     if (loading) return <Loader />;
     return (
         <div className="admin-container-fluid">
@@ -50,7 +77,7 @@ export default function () {
                             <FontAwesomeIcon icon={faUsers} />
                         </div>
                         <div className="stat-info">
-                            <h3>{usuarios.length}</h3>
+                            <h3>{usuariosFiltrados.length}</h3>
                             <p>Total Usuarios</p>
                         </div>
                     </div>
@@ -59,7 +86,7 @@ export default function () {
                             <FontAwesomeIcon icon={faUserCheck} />
                         </div>
                         <div className="stat-info">
-                            <h3>{usuariosActivos.length}</h3>
+                            <h3>{usuariosActivosFiltrados.length}</h3>
                             <p>Usuarios Activos</p>
                         </div>
                     </div>
@@ -70,11 +97,18 @@ export default function () {
                     <div className="header-actions">
                         <div className="search-container">
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
-                            <input type="text" className="search-input" placeholder="Buscar usuarios..." id="searchInput" />
+                            <input
+                                type="text"
+                                className="search-input"
+                                placeholder="Buscar usuarios..."
+                                id="searchInput"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
                         </div>
                         <div className="filter-actions">
 
-                            <button /*onClick={exportGeneral}*/ className="btn-export" >
+                            <button onClick={Pdf} className="btn-export" >
                                 <FontAwesomeIcon icon={faDownload} />
                                 Exportar
                             </button>
@@ -95,7 +129,7 @@ export default function () {
                                 </tr>
                             </thead>
                             <tbody>
-                                {usuarios.length === 0 ? (
+                                {usuariosFiltrados.length === 0 ? (
                                     <tr>
                                         <td colspan="6" className="text-center text-muted py-4">
                                             <FontAwesomeIcon icon={faUsers} />
@@ -105,7 +139,7 @@ export default function () {
                                         </td>
                                     </tr>
                                 ) : (
-                                    usuarios.map((usuario) => (
+                                    usuariosFiltrados.map((usuario) => (
                                         <tr key={usuario.idUsuario} className="user-row">
                                             <td className="user-info-cell" data-label="Usuario">
                                                 <div className="user-info">
@@ -129,20 +163,34 @@ export default function () {
                                             </td>
                                             <td className="status-cell" data-label="Estado">
                                                 {usuario.estado ? (
-                                                    <span className="status-badge active">Activo</span>
+                                                    <span className="status-badge activo">Activo</span>
                                                 ) : (
-                                                    <span className="status-badge inactive">Inactivo</span>
+                                                    <span className="status-badge inactivo">Inactivo</span>
                                                 )}
                                             </td>
                                             <td className="actions-cell" data-label="Acciones">
                                                 <div className="actions-container">
 
-                                                    <button className="btn btn-outline-dark btn-sm btn-Detalles" data-id="@item.IdUsuario" data-bs-toggle="tooltip" title="Ver Detalles">
+                                                    <button className="btn btn-outline-dark btn-sm btn-Detalles"
+                                                        data-bs-toggle="tooltip"
+                                                        title="Ver Detalles"
+                                                        onClick={() => {
+                                                            setUserModal(usuario);
+                                                            setModalType("details");
+                                                            setModalHidden(false);
+                                                        }}>
                                                         <FontAwesomeIcon icon={faEye} />
                                                         <span className="action-text">Detalles</span>
                                                     </button>
 
-                                                    <button className="btn btn-outline-primary btn-sm btn-Editar" data-id="@item.IdUsuario" data-bs-toggle="tooltip" title="Editar">
+                                                    <button className="btn btn-outline-primary btn-sm btn-Editar"
+                                                        data-bs-toggle="tooltip"
+                                                        title="Editar"
+                                                        onClick={() => {
+                                                            setUserModal(usuario);
+                                                            setModalType("edit");
+                                                            setModalHidden(false);
+                                                        }}>
                                                         <FontAwesomeIcon icon={faPen} />
                                                         <span className="action-text">Editar</span>
                                                     </button>
@@ -164,15 +212,34 @@ export default function () {
                 </div>
                 <div className="pagination-controls">
                     <button className="pagination-btn disabled">
-                        <FontAwesomeIcon icon={faChevronLeft}/>
+                        <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
                     <button className="pagination-btn active">1</button>
                     <button className="pagination-btn">
-                        <FontAwesomeIcon icon={faChevronRight}/>
+                        <FontAwesomeIcon icon={faChevronRight} />
                     </button>
                 </div>
             </div>
-        </div>
+            {!modalhidden && (
+                <>
+                    <div className="modal fade show d-block" tabIndex="-1">
+                        <div className="modal-dialog modal-dialog-centered modal-lg ">
+                            <div className="modal-content">
+                                <div className="modal-body">
+                                    {
+                                        modalType === "details" && <UserDetails usuario={userModal} onClose={() => setModalHidden(true)} />
+                                    }
+                                    {
+                                        modalType === "edit" && <UserEdit usuario={userModal} onClose={() => { setModalHidden(true); cargarDatos(); }} />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="modal-backdrop fade show"></div>
+                </>
+            )}
 
+        </div>
     );
 };

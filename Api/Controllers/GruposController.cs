@@ -8,7 +8,7 @@ using static Abstracciones.Modelos.Requests.GruposRequests;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("api/grupos")]
+    [Route("api/groups")]
     public class GruposController : ControllerBase, IGruposController
     {
         private readonly IGruposService _grupos;

@@ -40,18 +40,18 @@ export default function Profile() {
 
 
     const inactivar2fa = async () => {
-  try {
-    const response = await disable2Factor(userId);
+        try {
+            const response = await disable2Factor(userId);
 
-    if (response?.token) {
-      cambiarToken(response.token);
-    }
-    setTwoFactor(false);
+            if (response?.token) {
+                cambiarToken(response.token);
+            }
+            setTwoFactor(false);
 
-  } catch (error) {
-    console.error(error);
-  }
-};
+        } catch (error) {
+            console.error(error);
+        }
+    };
     const activar2fa = async () => {
         setModalHidden(false)
     }
@@ -354,7 +354,7 @@ export default function Profile() {
                                 <div className="modal-body">
                                     <EnableTwoFa onClose={() => setModalHidden(true)}
                                         onEnabled={(newToken) => {
-                                            const token =jwtDecode(newToken.token);
+                                            const token = jwtDecode(newToken.token);
                                             cambiarToken(newToken.token);
                                             setTwoFactor(token.twoFactorEnabled === true || token.twoFactorEnabled === "true")
                                             setModalHidden(true);

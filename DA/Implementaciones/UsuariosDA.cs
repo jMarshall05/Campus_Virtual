@@ -109,6 +109,8 @@ namespace DA.Implementaciones
         public async Task<IEnumerable<UsuariosDto>> ListarUsuarios()
         {
             var usuariosDto = await _elContexto.Usuarios
+                .Include(u => u.EstudianteGrupo)
+                .ThenInclude(eg => eg.Grupo)
                 .Select(u => new UsuariosDto
                 {
                     IdUsuario = u.IdUsuario,
@@ -124,7 +126,14 @@ namespace DA.Implementaciones
                         Tipo = t.Tipo,
                         Estado = t.Estado
                     }).ToList(),
+                    Grupo = u.EstudianteGrupo == null
+                    ? null : new GruposDto
+                    {
+                        id_grupo = u.EstudianteGrupo.Grupo.id_grupo,
+                        Nombre = u.EstudianteGrupo.Grupo.Nombre
+                    },
                     FechaDeNacimiento = u.FechaDeNacimiento,
+                    TipoIdentificacion = u.TipoIdentificacion,
                     Identificacion = u.Identificacion,
                     FechaDeRegistro = u.FechaDeRegistro,
                     FechaDeModificacion = u.FechaDeModificacion,
@@ -166,6 +175,7 @@ namespace DA.Implementaciones
                         Nombre = usuario.EstudianteGrupo.Grupo.Nombre
                     },
                 FechaDeNacimiento = usuario.FechaDeNacimiento,
+                TipoIdentificacion = usuario.TipoIdentificacion,
                 Identificacion = usuario.Identificacion,
                 FechaDeRegistro = usuario.FechaDeRegistro,
                 FechaDeModificacion = usuario.FechaDeModificacion,

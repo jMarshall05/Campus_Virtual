@@ -11,6 +11,6 @@ namespace Abstracciones.Api
         Task<IActionResult> DisableAuthenticator(string IdUsuario);
         Task<IActionResult> EnableAuthenticator(string IdUsuario);
         Task<IActionResult> VerifyTwoFa(string IdUsuario,string code);
-
+        Task<IActionResult> Login2fa(string idusuario, string code);
     }
 }

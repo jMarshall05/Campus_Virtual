@@ -17,6 +17,11 @@ namespace Abstracciones.Servicios
         Task<string> DisableAuthenticator(string IdUsuario);
         Task<TwofaResponse> EnableAuthenticator(string IdUsuario);
         Task<string> VerifyTwoFa(string idusuario,string code);
+        Task<string> Login2fa(string idusuario, string code);
+        Task<Byte[]> ExportarUsuariosGeneralPDF(string? rutaLogo );
+        Task<Byte[]> ExportarUsuarioPDF(string IdUsuario,string? rutaLogo);
+        Byte[] QrExportar(string url);
+
 
     }
 }

@@ -22,7 +22,7 @@ function App() {
 
         <Route path="/" element={token ? <Navigate to="/Dashboard" replace /> : <Login />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path='login2fa' element={<Login2fa/>}/> */}
+       <Route path='login2fa' element={<Login2fa/>}/>
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route element={<Layout />}>
           <Route

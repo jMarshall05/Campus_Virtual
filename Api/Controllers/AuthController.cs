@@ -119,5 +119,24 @@ namespace Api.Controllers
                 return StatusCode(500, "Ocurrió un error inesperado");
             }
         }
+
+        [HttpPost("2fa/login")]
+        public async Task<IActionResult> Login2fa(string idUsuario, string code)
+        {
+            try
+            {
+                var token = await _usuarios.Login2fa(idUsuario, code);
+                return Ok(new { token });
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al habilitar 2FA");
+                return StatusCode(500, "Ocurrió un error inesperado");
+            }
+        }
     }
 }
