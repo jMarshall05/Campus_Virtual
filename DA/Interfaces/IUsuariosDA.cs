@@ -20,6 +20,7 @@ namespace DA.Interfaces
         Task<TokenRequest> DisableAuthenticator(string IdUsuario);
         Task EnableAuthenticator(string IdUsuario, string googleKey);
         Task<TokenRequest> VerifyTwoFa(string IdUsuario);
+        Task<bool> ObtenerEstadoUsuario(string IdUsuario);
 
     }
 }

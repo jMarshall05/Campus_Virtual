@@ -35,6 +35,7 @@ namespace DA.Implementaciones
                 throw new BusinessException("Usuario o contraseña incorrectos");
             var respuesta = user.Adapt<TokenRequest>();
             respuesta.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+            respuesta.Estado =await ObtenerEstadoUsuario(user.Id);
             return respuesta;
         }
 
@@ -45,7 +46,7 @@ namespace DA.Implementaciones
             if (!resultado.Succeeded)
                 throw new BusinessException(resultado.Errors.First().Description);
             await AsignarRol(user.Id, usuario.Rol);
-            usuario.FechaDeRegistro = DateTime.UtcNow;
+            usuario.IdUsuario = user.Id;
             var entidad = await _elContexto.Usuarios.AddAsync(usuario);
 
             await _elContexto.SaveChangesAsync();
@@ -299,6 +300,12 @@ namespace DA.Implementaciones
             var usuario = user.Adapt<TokenRequest>();
             usuario.Rol = rol;
             return usuario;
+        }
+
+        public async Task<bool> ObtenerEstadoUsuario(string IdUsuario)
+        {
+            var estado = await _elContexto.Usuarios.Where(u => u.IdUsuario == IdUsuario).Select(u => u.Estado).FirstOrDefaultAsync();
+            return estado;
         }
     }
 }

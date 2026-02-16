@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import './App.css'
-import Dashboard from './pages/AdminDashboard.jsx'
-import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './pages/users/AdminDashboard.jsx'
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import Login from './pages/Login.jsx'
-import Unauthorized from './pages/unauthorized.jsx'
+import Login from './pages/auth/Login.jsx'
+import Unauthorized from './pages/auth/Unauthorized.jsx'
 import Layout from './layouts/adminLayout.jsx'
 import { validarToken } from './utils/auth.js';
-import Profile from './pages/ProfileManage.jsx';
-import Usuarios from './pages/Usuarios.jsx';
-import Login2fa from './pages/Login2fa.jsx';
+import Profile from './pages/users/ProfileManage.jsx';
+import Login2fa from './pages/auth/Login2fa.jsx';
+import AddUser from './pages/users/AddUser.jsx';
+import Users from './pages/users/Users.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,8 +23,12 @@ function App() {
 
         <Route path="/" element={token ? <Navigate to="/Dashboard" replace /> : <Login />} />
         <Route path="/login" element={<Login />} />
-       <Route path='login2fa' element={<Login2fa/>}/>
+        <Route path='login2fa' element={<Login2fa />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/addUser" element={<ProtectedRoute requiredRole="Administradores">
+          <AddUser />
+        </ProtectedRoute>} />
+
         <Route element={<Layout />}>
           <Route
             path="/dashboard"
@@ -33,10 +38,11 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {<Route path="/usuarios" element={<ProtectedRoute requiredRole="Administradores">
-            <Usuarios />
+          <Route path="/users" element={<ProtectedRoute requiredRole="Administradores">
+            <Users />
           </ProtectedRoute>
-          } />}
+          } />
+
           <Route path="/profile" element={<Profile />} />
 
         </Route>

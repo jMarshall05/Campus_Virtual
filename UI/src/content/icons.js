@@ -39,5 +39,7 @@ export {
   faCog,
   faSave,
   faTimes,
-  faIdCardAlt
+  faIdCardAlt,
+  faPlus,
+  faLock
 } from "@fortawesome/free-solid-svg-icons";

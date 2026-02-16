@@ -1,17 +1,20 @@
-import { faUser, faEnvelope, faPlusCircle, faTrash, faInfoCircle, faIdCardAlt, faFingerprint, faCalendarAlt, faCog, faUserTag, faTimes, faSave } from "../content/icons.js";
+import { faUser, faEnvelope, faPlusCircle, faTrash, faInfoCircle, faIdCardAlt, faFingerprint, faCalendarAlt, faCog, faUserTag, faTimes, faSave } from "../../content/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../content/userEdit.css";
+import "../../content/users/userEdit.css";
 import { faAddressBook } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import Loader from "../components/Loader.jsx";
-import { getGroups } from "../api/groupsService.js";
-import { editUserAdmin } from "../api/userService.js";
+import Loader from "../Loader.jsx";
+import { getGroups } from "../../api/groupsService.js";
+import { editUserAdmin } from "../../api/userService.js";
 
 export default function UserEdit({ usuario, onClose }) {
 
     const [grupos, setGrupos] = useState([]);
     const [loadingGrupos, setLoadingGrupos] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [telefonos, setTelefonos] = useState([]);
+    const [tipoIdentificacion, setTipoIdentificacion] = useState(usuario?.tipoIdentificacion || "");
+
     useEffect(() => {
         const cargarGrupos = async () => {
             try {
@@ -28,7 +31,42 @@ export default function UserEdit({ usuario, onClose }) {
 
         };
         cargarGrupos();
-    }, []);
+        if (usuario.telefonos) {
+            setTelefonos(usuario.telefonos);
+        }
+    }, [usuario]);
+
+    const agregarTelefono = () => {
+        const ultimo = telefonos[telefonos.length - 1];
+        if (ultimo && (!ultimo.codigo || !ultimo.telefono || !ultimo.tipo)) {
+            alert("Completa el teléfono anterior primero 😉");
+            return;
+        }
+        setTelefonos(prev => [
+            ...prev, {
+                id: 0,
+                codigo: "",
+                telefono: "",
+                tipo: "",
+                estado: true
+            }
+        ])
+    }
+    const eliminarTelefono = (index) => {
+        setTelefonos(prev => prev.filter((_, i) => i !== index));
+    }
+    const tipoIdentificacionChange = (tipo) => {
+        setTipoIdentificacion(tipo);
+    };
+    const soloNumeros = (e, max) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, max);
+    };
+
+    const alfaNumerico = (e, max) => {
+        e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
+    };
+
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,7 +74,7 @@ export default function UserEdit({ usuario, onClose }) {
 
         const form = e.currentTarget;
         const data = {
-           
+
             Nombre: form.Nombre.value,
             Apellido: form.Apellido.value,
             Email: form.Email.value,
@@ -45,7 +83,7 @@ export default function UserEdit({ usuario, onClose }) {
             Rol: form.Rol.value,
             FechaDeNacimiento: form.FechaDeNacimiento.value,
             Estado: form.Estado.checked,
-            Telefonos: usuario.telefonos.map((tel, i) => ({
+            Telefonos: telefonos.map((tel, i) => ({
                 Id: tel.id,
                 Codigo: form[`Telefonos[${i}].Codigo`].value,
                 Telefono: form[`Telefonos[${i}].Telefono`].value,
@@ -53,14 +91,13 @@ export default function UserEdit({ usuario, onClose }) {
                 Estado: form[`Telefonos[${i}].Estado`]?.checked ?? false,
             }))
             
+
         };
 
         if (!data.FechaDeNacimiento) {
             delete data.FechaDeNacimiento;
         }
         try {
-            console.log("JSON ENVIADO:");
-            console.log(JSON.stringify(data, null, 2));
             const response = await editUserAdmin(usuario.idUsuario, data);
             if (response) {
                 alert("Usuario actualizado exitosamente");
@@ -186,6 +223,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                 name="TipoIdentificacion"
                                                 id="tipoIdentificacion"
                                                 defaultValue={usuario?.tipoIdentificacion}
+                                                onChange={(e) => tipoIdentificacionChange(e.target.value)}
                                                 required
                                             >
                                                 <option value="">Seleccione tipo</option>
@@ -200,19 +238,72 @@ export default function UserEdit({ usuario, onClose }) {
                                         <label className="form-label">
                                             Número ID <span className="required-mark">*</span>
                                         </label>
+
                                         <div className="input-wrapper">
-                                            <span className="input-icon"><FontAwesomeIcon icon={faFingerprint} /></span>
-                                            <input
-                                                className="form-control"
-                                                name="Identificacion"
-                                                id="numeroIdentificacion"
-                                                defaultValue={usuario?.identificacion}
-                                                placeholder="Número de identificación"
-                                                required
-                                            />
+                                            <span className="input-icon">
+                                                <FontAwesomeIcon icon={faFingerprint} />
+                                            </span>
+
+                                            {tipoIdentificacion === "Fisica" ? (
+                                                <input
+                                                    className="form-control"
+                                                    name="Identificacion"
+                                                    id="numeroIdentificacion"
+                                                    defaultValue={usuario?.identificacion}
+                                                    placeholder="Ej: 123456789"
+                                                    minLength={9}
+                                                    maxLength={9}
+                                                    inputMode="numeric"
+                                                    pattern="[0-9]{9}"
+                                                    required
+                                                    onInput={(e) => soloNumeros(e, 9)}
+                                                />
+                                            ) : tipoIdentificacion === "Dimex" ? (
+                                                <input
+                                                    className="form-control"
+                                                    name="Identificacion"
+                                                    id="numeroIdentificacion"
+                                                    defaultValue={usuario?.identificacion}
+                                                    placeholder="Ej: 12345678901"
+                                                    minLength={11}
+                                                    maxLength={12}
+                                                    inputMode="numeric"
+                                                    pattern="[0-9]{11,12}"
+                                                    required
+                                                    onInput={(e) => soloNumeros(e, 12)}
+                                                />
+                                            ) : tipoIdentificacion === "Pasaporte" ? (
+                                                <input
+                                                    className="form-control"
+                                                    name="Identificacion"
+                                                    id="numeroIdentificacion"
+                                                    defaultValue={usuario?.identificacion}
+                                                    placeholder="Ej: A1234567"
+                                                    minLength={6}
+                                                    maxLength={12}
+                                                    pattern="[A-Za-z0-9]{6,12}"
+                                                    required
+                                                    onInput={(e) => alfaNumerico(e, 12)}
+                                                />
+                                            ) : (
+                                                <input
+                                                    className="form-control"
+                                                    name="Identificacion"
+                                                    id="numeroIdentificacion"
+                                                    placeholder="Seleccione tipo de identificación"
+                                                    disabled
+                                                    required
+                                                />
+                                            )}
                                         </div>
-                                        <small className="form-text" id="formatoAyuda"></small>
+
+                                        <small className="form-text" id="formatoAyuda">
+                                            {tipoIdentificacion === "Fisica" && "9 dígitos numéricos"}
+                                            {tipoIdentificacion === "Dimex" && "11 a 12 dígitos numéricos (DIMEX)"}
+                                            {tipoIdentificacion === "Pasaporte" && "6–12 caracteres alfanuméricos"}
+                                        </small>
                                     </div>
+
                                 </div>
 
                                 <div className="form-row">
@@ -257,14 +348,14 @@ export default function UserEdit({ usuario, onClose }) {
                                     <div className="form-group">
                                         <label className="form-label">Grupo</label>
                                         <div className="input-wrapper">
-                                            <select className="form-control" name="IdGrupo" defaultValue={usuario?.idGrupo ?? ""}>
-                                                <option value="">Seleccione un grupo</option>
-                                                {grupos.map((grupo) => (
-                                                    <option key={grupo.id} value={grupo.id}>
+                                            <select className="form-control" name="IdGrupo" defaultValue={usuario?.grupo.id_grupo ?? ""}>
+                                                <option key="default-grupo" value="">Seleccione un grupo</option>
+
+                                                {grupos.map((grupo, index) => (
+                                                    <option key={`grupo-${grupo.id_grupo}-${index}`} value={grupo.id_grupo}>
                                                         {grupo.nombre}
                                                     </option>
                                                 ))}
-
                                             </select>
                                         </div>
                                     </div>
@@ -276,14 +367,14 @@ export default function UserEdit({ usuario, onClose }) {
                             <div className="section-header">
                                 <span className="section-icon"><FontAwesomeIcon icon={faAddressBook} /></span>
                                 <h3 className="section-title">Teléfonos</h3>
-                                <button type="button" id="addTelefono" className="btn btn-add-tel">
+                                <button type="button" id="addTelefono" className="btn btn-add-tel" onClick={agregarTelefono}>
                                     <FontAwesomeIcon icon={faPlusCircle} className="me-1" />Agregar
                                 </button>
                             </div>
 
                             <div id="telefonosContainer" className="telefonos-list">
-                                {usuario?.telefonos && usuario.telefonos.length > 0 ? (
-                                    usuario.telefonos.map((tel, i) => (
+                                {telefonos.length > 0 ? (
+                                    telefonos.map((tel, i) => (
                                         <div className="telefono-item" key={i}>
                                             <input type="hidden" name={`Telefonos[${i}].Id`} defaultValue={tel.id} />
 
@@ -295,8 +386,11 @@ export default function UserEdit({ usuario, onClose }) {
                                                         name={`Telefonos[${i}].Codigo`}
                                                         defaultValue={tel.codigo}
                                                         placeholder="+506"
-                                                        maxLength={4}
+                                                        maxLength={3}
                                                         required
+                                                        type="tel"
+                                                        inputMode="numeric"
+                                                        pattern="[0-9]*"
                                                     />
                                                 </div>
 
@@ -310,6 +404,10 @@ export default function UserEdit({ usuario, onClose }) {
                                                         minLength={8}
                                                         maxLength={8}
                                                         required
+                                                        type="tel"
+                                                        inputMode="numeric"
+                                                        pattern="[0-9]*"
+
                                                     />
                                                 </div>
 
@@ -347,7 +445,7 @@ export default function UserEdit({ usuario, onClose }) {
 
                                                 <div className="tel-field tel-action">
                                                     <label className="form-label">&nbsp;</label>
-                                                    <button type="button" className="btn btn-remove-tel btn-remove-telefono">
+                                                    <button type="button" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>

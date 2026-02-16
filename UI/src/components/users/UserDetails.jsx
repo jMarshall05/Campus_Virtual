@@ -1,8 +1,8 @@
-import {faUsers,faEyeSlash,faEye,faDownload, faInfoCircle, faEdit, faArrowLeft, faIdCard, faPassport, faPlane, faUser, faCircle,faEnvelope,faPhone,faFingerprint,faCalendarAlt,faBirthdayCake,faUserPlus  } from "../content/icons.js";
+import {faUsers,faEyeSlash,faEye,faDownload, faInfoCircle, faEdit, faArrowLeft, faIdCard, faPassport, faPlane, faUser, faCircle,faEnvelope,faPhone,faFingerprint,faCalendarAlt,faBirthdayCake,faUserPlus  } from "../../content/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { exportQr, exportUserPdf } from "../api/userService.js";
-import "../content/userDetails.css";
+import { exportQr, exportUserPdf } from "../../api/userService.js";
+import "../../content/users/userDetails.css";
 
 export default function UserDetails({ usuario, onClose }) {
     const [visibles, setVisibles] = useState({});
@@ -215,7 +215,7 @@ export default function UserDetails({ usuario, onClose }) {
                             </div>
                         </div>
                     </div>
-                    <div className="info-section ">
+                    <div className="info-section justify-content-center text-center">
                         <a onClick={UserPdf}
                             className="qr-link" target="_blank">
                             <div className="qr-container">

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import "../content/profileManage.css"
-import Loader from "../components/Loader";
-import { leerToken, disable2Factor, cambiarToken } from "../utils/auth";
-import { getUserById } from "../api/userService";
+import "../../content/users/profileManage.css"
+import Loader from "../../components/Loader";
+import { leerToken, disable2Factor, cambiarToken } from "../../utils/auth";
+import { getUserById } from "../../api/userService";
 import { Link } from "react-router-dom";
-import EnableTwoFa from "./EnableTwoFa";
+import EnableTwoFa from "../../components/users/EnableTwoFa";
 import { jwtDecode } from "jwt-decode";
 
 export default function Profile() {

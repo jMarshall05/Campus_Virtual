@@ -1,10 +1,10 @@
 import { useState } from "react";
-import logo from '../assets/LogoInstitucion.png';
-import { login } from "../api/authService";
-import { GuardarToken } from "../utils/auth";
+import logo from '../../assets/LogoInstitucion.png';
+import { login } from "../../api/authService.js";
+import { GuardarToken } from "../../utils/auth.js";
 import { Link, useNavigate } from "react-router-dom";
-import Loader from "../components/Loader.jsx";
-import "../content/login.css"
+import Loader from "../../components/Loader.jsx";
+import "../../content/users/login.css"
 import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
@@ -75,7 +75,7 @@ export default function Login() {
             {error && <p className="text-danger">{error}</p>}
 
             <div className=" mb-3">
-              <button type="submit" className="btn btn-login">
+              <button type="submit" className="btn btn-login ">
                 Iniciar Sesión
               </button>
             </div>

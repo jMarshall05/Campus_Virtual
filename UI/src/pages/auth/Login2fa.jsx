@@ -1,10 +1,10 @@
 import { Link,useNavigate } from "react-router-dom";
-import "../content/login2fa.css";
+import "../../content/auth/login2fa.css";
 import { useState } from "react";
-import Loader from "../components/Loader";
-import { leerToken } from "../utils/auth";
-import { login2FA } from "../api/authService";
-import { cambiarToken } from "../utils/auth";
+import Loader from "../../components/Loader";
+import { leerToken } from "../../utils/auth";
+import { login2FA } from "../../api/authService";
+import { cambiarToken } from "../../utils/auth";
 
 export default function Login2faView() {
     const [code, setCode] = useState("");

@@ -39,7 +39,7 @@ return (
 
             <ul className="menu">
                 <li>
-                    <Link to="/usuarios">
+                    <Link to="/users">
                         <i className="fas fa-user"></i> Usuarios
                     </Link>
                 </li>

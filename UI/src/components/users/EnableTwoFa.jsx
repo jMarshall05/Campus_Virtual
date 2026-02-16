@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { enable2FA, verify2FA } from "../api/authService";
-import { leerToken, GuardarToken, cambiarToken } from "../utils/auth";
-import Loader from "../components/Loader";
+import { enable2FA, verify2FA } from "../../api/authService";
+import { leerToken, GuardarToken, cambiarToken } from "../../utils/auth";
+import Loader from "../Loader";
 
 
 export default function Enable2FA({ onClose,onEnabled }) {

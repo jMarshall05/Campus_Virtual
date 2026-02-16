@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../content/dashboard.css';
-import { getUsersByRole } from "../api/userService.js";
+import '../../content/users/dashboard.css';
+import { getUsersByRole } from "../../api/userService.js";
 import { Link } from "react-router-dom";
-import Loader from "../components/Loader.jsx";
+import Loader from "../../components/Loader.jsx";
 import {
     faTachometerAlt,
     faUserGraduate,
@@ -16,7 +16,7 @@ import {
     faCalendarAlt,
     faFileAlt,
     faBullhorn
-} from '../content/icons.js'
+} from '../../content/icons.js'
 
 
 export default function Dashboard() {
@@ -87,7 +87,7 @@ export default function Dashboard() {
                 </h4>
                 <div className="row g-3 mb-4">
                     <div className="col-12 col-sm-6 col-lg-3">
-                        <Link to='/usuarios' className="action-link">
+                        <Link to='/users' className="action-link">
                             <div className="action-card-modern action-warning">
                                 <div className="action-icon-circle">
                                     <FontAwesomeIcon icon={faUsersCog} />

@@ -151,6 +151,8 @@ namespace Servicios.Servicios
         public async Task<string> Login(LoginRequest login)
         {
             var usuario = await _usuariosDA.Login(login);
+            AuthReglas.UsuarioInactivo(usuario.Estado);
+
             if (usuario != null)
             {
                 var Token = _TokenService.CrearToken(usuario);

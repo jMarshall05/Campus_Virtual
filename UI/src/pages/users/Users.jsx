@@ -1,13 +1,14 @@
-import "../content/usuarios.css";
+import "../../content/users/usuarios.css";
 import { useEffect, useState } from "react";
-import { exportUsersPdf, getUsers } from "../api/userService";
-import Loader from "../components/Loader";
+import { exportUsersPdf, getUsers } from "../../api/userService.js";
+import Loader from "../../components/Loader.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserShield, faUserCheck, faUsers, faPlusCircle, faSearch, faDownload, faEnvelope, faEye, faPen, faChevronLeft, faChevronRight } from "../content/icons.js"
-import UserDetails from "./UserDetails.jsx";
-import UserEdit from "./UserEdit.jsx";
+import { faUserShield, faUserCheck, faUsers, faPlusCircle, faSearch, faDownload, faEnvelope, faEye, faPen, faChevronLeft, faChevronRight } from "../../content/icons.js"
+import UserDetails from "../../components/users/UserDetails.jsx";
+import UserEdit from "../../components/users/UserEdit.jsx";
+import { Link } from "react-router-dom";
 
-export default function () {
+export default function Users() {
     const [loading, setLoading] = useState(true);
     const [usuarios, setUsuarios] = useState([]);
     const [search, setSearch] = useState("");
@@ -65,10 +66,10 @@ export default function () {
                             <p className="header-subtitle">Administra todos los usuarios del sistema</p>
                         </div>
                     </div>
-                    <button /*onClick={Register}*/ className="btn-premium">
+                    <Link to="/addUser" className="btn-premium">
                         <FontAwesomeIcon icon={faPlusCircle} />
                         Nuevo Usuario
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="stats-grid">
