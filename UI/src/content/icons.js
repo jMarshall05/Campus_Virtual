@@ -41,5 +41,11 @@ export {
   faTimes,
   faIdCardAlt,
   faPlus,
-  faLock
+  faLock,
+  faSort,
+  faChartBar,
+  faQrcode,
+  faUserSlash,
+  faCheckCircle,
+  faAlignLeft
 } from "@fortawesome/free-solid-svg-icons";

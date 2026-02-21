@@ -56,10 +56,10 @@ namespace DA.Implementaciones
                      ArchivoAdjunto = t.ArchivoAdjunto,
                      FechaModificacion = t.FechaModificacion,
                      FechaPublicacion = t.FechaPublicacion,
-                     Id_grupo = t.IdGrupo,
+                     idGrupo = t.IdGrupo,
                      Grupo = new GruposDto
                      {
-                         id_grupo = t.Grupo.id_grupo,
+                         idGrupo = t.Grupo.idGrupo,
                          Nombre = t.Grupo.Nombre
                      },
                      Estado = t.Estado
@@ -83,10 +83,10 @@ namespace DA.Implementaciones
                        ArchivoAdjunto = t.ArchivoAdjunto,
                        FechaModificacion = t.FechaModificacion,
                        FechaPublicacion = t.FechaPublicacion,
-                       Id_grupo = t.IdGrupo,
+                       idGrupo = t.IdGrupo,
                        Grupo = new GruposDto
                        {
-                           id_grupo = t.Grupo.id_grupo,
+                           idGrupo = t.Grupo.idGrupo,
                            Nombre = t.Grupo.Nombre
                        },
                        Estado = t.Estado
@@ -110,10 +110,10 @@ namespace DA.Implementaciones
                     ArchivoAdjunto = t.ArchivoAdjunto,
                     FechaModificacion = t.FechaModificacion,
                     FechaPublicacion = t.FechaPublicacion,
-                    Id_grupo = t.IdGrupo,
+                    idGrupo = t.IdGrupo,
                     Grupo = new GruposDto
                     {
-                        id_grupo = t.Grupo.id_grupo,
+                        idGrupo = t.Grupo.idGrupo,
                         Nombre = t.Grupo.Nombre
                     },
                     Estado = t.Estado

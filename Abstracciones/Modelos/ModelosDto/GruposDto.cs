@@ -5,18 +5,20 @@ namespace Abstracciones.Modelos.ModelosDto
     public class GruposDto
     {
         [Key]
-        public int id_grupo { get; set; }
+        public int idGrupo { get; set; }
 
         [Required(ErrorMessage = "El nombre del grupo es obligatorio.")]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "La descripción del grupo es obligatoria.")]
         public string Descripcion { get; set; }
         public string? creado_por { get; set; }
-        public bool estado { get; set; } = true;
+        public bool Estado { get; set; } = true;
         [Required(ErrorMessage = "La fecha de creación es obligatoria.")]
         public DateTime FechaDeCreacion { get; set; }
         public DateTime? FechaDeModificacion { get; set; }
         public string? modificado_por { get; set; }
+
+        public virtual ICollection<UsuariosDto>? Estudiantes {get; set;}
 
     }
 }

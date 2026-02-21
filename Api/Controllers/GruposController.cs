@@ -19,7 +19,7 @@ namespace Api.Controllers
             _grupos = gruposService;
         }
         [HttpPost]
-        public async Task<IActionResult> AgregarGrupo(string IdUsuario, GruposRequests.AgregarGrupoRequest grupo)
+        public async Task<IActionResult> AgregarGrupo(string IdUsuario, AgregarGrupoRequest grupo)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Api.Controllers
             try
             {
                 await _grupos.EditarGrupo(IdUsuario, grupo);
-                return Ok($"Se ha editado correctamente el grupo de id {grupo.IdGrupo}");
+                return Ok($"Se ha editado correctamente el grupo de id {grupo.idGrupo}");
             }
             catch (BusinessException ex)
             {

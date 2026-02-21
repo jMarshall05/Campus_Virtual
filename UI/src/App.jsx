@@ -11,6 +11,7 @@ import Profile from './pages/users/ProfileManage.jsx';
 import Login2fa from './pages/auth/Login2fa.jsx';
 import AddUser from './pages/users/AddUser.jsx';
 import Users from './pages/users/Users.jsx';
+import Groups from './pages/groups/Groups.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -40,6 +41,10 @@ function App() {
           />
           <Route path="/users" element={<ProtectedRoute requiredRole="Administradores">
             <Users />
+          </ProtectedRoute>
+          } />
+          <Route path="/groups" element={<ProtectedRoute requiredRole="Administradores">
+            <Groups />
           </ProtectedRoute>
           } />
 

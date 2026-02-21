@@ -13,6 +13,7 @@ export default function Layout (){
 
         const token = leerToken();
         if (!token || !validarToken()) {
+            alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
             navigate('/login');
             return;
         }
@@ -49,7 +50,7 @@ return (
                     </Link>
                 </li>
                 <li>
-                    <Link to="/grupos">
+                    <Link to="/groups">
                         <i className="fas fa-users"></i> Grupos
                     </Link>
                 </li>
@@ -88,9 +89,9 @@ return (
                         <div className="col">
                             <div className="d-flex align-items-center">
                                 <div className="user-avatar me-3">
-                                    <div className="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center">
+                                    <Link to="/dashboard" className="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center">
                                         <i className="bi bi-person-fill fs-4"></i>
-                                    </div>
+                                    </Link>
                                 </div>
 
                                 <div>

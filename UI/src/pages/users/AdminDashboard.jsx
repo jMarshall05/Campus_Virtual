@@ -15,7 +15,8 @@ import {
     faBook,
     faCalendarAlt,
     faFileAlt,
-    faBullhorn
+    faBullhorn,
+    faUsers
 } from '../../content/icons.js'
 
 
@@ -54,7 +55,8 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-            </div><div className="metrics-section mb-4">
+            </div>
+            <div className="metrics-section mb-4">
                 <div className="row g-3">
                     <div className="col-12 col-sm-6 col-lg-6">
                         <div className="metric-card metric-students">
@@ -133,7 +135,17 @@ export default function Dashboard() {
                 </div>
 
                 <div className="row g-3 justify-content-center">
-
+                    <div className="col-12 col-sm-6 col-lg-3">
+                        <Link to='/groups' className="action-link">
+                            <div className="action-card-modern action-green">
+                                <div className="action-icon-circle">
+                                    <FontAwesomeIcon icon={faUsers} />
+                                </div>
+                                <h5 className="action-label">Grupos</h5>
+                                <p className="action-desc">Eventos y fechas</p>
+                            </div>
+                        </Link>
+                    </div>
                     <div className="col-12 col-sm-6 col-lg-3">
                         <Link to='/#' className="action-link">
                             <div className="action-card-modern action-pink">

@@ -36,7 +36,7 @@ namespace Abstracciones.Modelos.ModelosDto
 
         [Required(ErrorMessage = "Debe seleccionar un grupo.")]
         [DisplayName("Grupo")]
-        public int Id_grupo { get; set; }
+        public int idGrupo { get; set; }
 
         [ForeignKey("id_grupo")]
         public virtual GruposDto Grupo { get; set; }

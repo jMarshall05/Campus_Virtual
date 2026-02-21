@@ -14,12 +14,13 @@ namespace Servicios.Servicios
         private readonly IGruposDA _grupos;
         private readonly IUsuariosService _usuarios;
         private readonly IMapper _mapper;
-
-        public GruposService(IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
+        private readonly IExportService _exportar;
+        public GruposService(IExportService exportar,IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
         {
             _grupos = grupos;
             _usuarios = usuarios;
             _mapper = mapper;
+            _exportar = exportar;
         }
 
         public async Task<int> AgregarGrupo(string idUsuario, AgregarGrupoRequest request)
@@ -42,13 +43,12 @@ namespace Servicios.Servicios
 
         public async Task EditarGrupo(string idUsuario, EditarGrupoRequest request)
         {
-            var grupoExiste = await BuscarGruposPorId(request.IdGrupo) != null;
+            var grupoExiste = await BuscarGruposPorId(request.idGrupo) != null;
             GruposReglas.ExisteGrupo(grupoExiste);
             var usuario = await _usuarios.ObtenerUsuarioPorId(idUsuario);
             UsuarioReglas.ValidarUsuario(usuario != null);
             var grupo = request.Adapt<GruposDto>();
             grupo.modificado_por = $"{usuario.Nombre} {usuario.Apellido}";
-            grupo.FechaDeModificacion = DateTime.Now;
             await _grupos.EditarGrupo(grupo.Adapt<GruposAD>());
 
         }
@@ -57,6 +57,11 @@ namespace Servicios.Servicios
         {
             var grupos =await _grupos.ListarGrupos();
             return grupos;
+        }
+        public byte[] QrExportar(string url)
+        {
+            var qr = _exportar.ExportarReporteQr(url);
+            return qr;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace DA.Entidades
 
         [Key]
         [Column("id_grupo")]
-        public int id_grupo { get; set; }
+        public int idGrupo { get; set; }
         [Column("nombre_grupo")]
         public string Nombre { get; set; }
         [Column("descripcion")]
@@ -25,8 +25,6 @@ namespace DA.Entidades
 
         [Column("modificado_por")]
         public string? modificado_por { get; set; }
-
         public virtual ICollection<EstudianteGrupoAD> EstudianteGrupos { get; set; }
-
     }
 }

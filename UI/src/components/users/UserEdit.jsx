@@ -4,7 +4,7 @@ import "../../content/users/userEdit.css";
 import { faAddressBook } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import Loader from "../Loader.jsx";
-import { getGroups } from "../../api/groupsService.js";
+import { getGroups } from "../../api/groupService.js";
 import { editUserAdmin } from "../../api/userService.js";
 
 export default function UserEdit({ usuario, onClose }) {

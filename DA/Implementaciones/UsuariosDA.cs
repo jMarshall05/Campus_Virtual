@@ -130,7 +130,7 @@ namespace DA.Implementaciones
                     Grupo = u.EstudianteGrupo == null
                     ? null : new GruposDto
                     {
-                        id_grupo = u.EstudianteGrupo.Grupo.id_grupo,
+                        idGrupo = u.EstudianteGrupo.Grupo.idGrupo,
                         Nombre = u.EstudianteGrupo.Grupo.Nombre
                     },
                     FechaDeNacimiento = u.FechaDeNacimiento,
@@ -172,7 +172,7 @@ namespace DA.Implementaciones
                 Grupo = usuario.EstudianteGrupo == null
                     ? null : new GruposDto
                     {
-                        id_grupo = usuario.EstudianteGrupo.Grupo.id_grupo,
+                        idGrupo = usuario.EstudianteGrupo.Grupo.idGrupo,
                         Nombre = usuario.EstudianteGrupo.Grupo.Nombre
                     },
                 FechaDeNacimiento = usuario.FechaDeNacimiento,

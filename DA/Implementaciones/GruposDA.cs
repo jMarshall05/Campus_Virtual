@@ -19,7 +19,7 @@ namespace DA.Implementaciones
         {
             var entidad = await _elContexto.Grupos.AddAsync(grupo);
             await _elContexto.SaveChangesAsync();
-            return entidad.Entity.id_grupo;
+            return entidad.Entity.idGrupo;
         }
 
         public async Task<GruposDto> BuscarGruposPorId(int idGrupo)
@@ -30,7 +30,7 @@ namespace DA.Implementaciones
 
         public async Task EditarGrupo(GruposAD grupo)
         {
-            var grupoExistente = await _elContexto.Grupos.FindAsync(grupo.id_grupo);
+            var grupoExistente = await _elContexto.Grupos.FindAsync(grupo.idGrupo);
             grupoExistente.Nombre = grupo.Nombre;
             grupoExistente.Descripcion = grupo.Descripcion;
             grupoExistente.modificado_por = grupo.modificado_por;
@@ -41,17 +41,30 @@ namespace DA.Implementaciones
 
         public async Task<IEnumerable<GruposDto>> ListarGrupos()
         {
-            var grupos = await _elContexto.Grupos.Select(grupo => new GruposDto
-            {
-                id_grupo = grupo.id_grupo,
-                Nombre = grupo.Nombre,
-                Descripcion = grupo.Descripcion,
-                creado_por = grupo.creado_por,
-                estado = grupo.estado,
-                FechaDeCreacion = grupo.FechaDeCreacion,
-                FechaDeModificacion = grupo.FechaDeModificacion,
-                modificado_por = grupo.modificado_por
-            }).ToListAsync();
+            var grupos = await _elContexto.Grupos
+                .Include(g => g.EstudianteGrupos)
+                .ThenInclude(eg => eg.Estudiante)
+                .Select(grupo => new GruposDto
+                {
+                    idGrupo = grupo.idGrupo,
+                    Nombre = grupo.Nombre,
+                    Descripcion = grupo.Descripcion,
+                    Estudiantes =grupo.EstudianteGrupos.
+                    Select(e => new UsuariosDto
+                    {
+                        IdUsuario = e.Estudiante.IdUsuario,
+                        Nombre = e.Estudiante.Nombre,
+                        Apellido = e.Estudiante.Apellido,
+                        Email = e.Estudiante.Email,
+                        Identificacion = e.Estudiante.Identificacion
+
+                    }).ToList(),
+                    creado_por = grupo.creado_por,
+                    Estado = grupo.estado,
+                    FechaDeCreacion = grupo.FechaDeCreacion,
+                    FechaDeModificacion = grupo.FechaDeModificacion,
+                    modificado_por = grupo.modificado_por
+                }).ToListAsync();
             return grupos;
         }
     }

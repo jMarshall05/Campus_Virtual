@@ -140,7 +140,7 @@ export default function Users() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    usuariosFiltrados.map((usuario) => (
+                                    usuariosFiltrados.map((usuario) => ( 
                                         <tr key={usuario.idUsuario} className="user-row">
                                             <td className="user-info-cell" data-label="Usuario">
                                                 <div className="user-info">
