@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faUserCheck, faSearch, faSort, faEdit, faEye, faPlusCircle, faChevronLeft, faChevronRight } from "../../content/icons.js";
 import GroupDetails from "../../components/groups/GroupDetails.jsx";
 import GroupEdit from "../../components/groups/GroupEdit.jsx";
+import AddGroup from "../../components/groups/AddGroup.jsx";
 
 export default function Groups() {
     const [groups, setGroups] = useState([]);
@@ -48,7 +49,7 @@ export default function Groups() {
                             <p className="header-subtitle">Administra todos los grupos del sistema</p>
                         </div>
                     </div>
-                    <button className="btn-premium btn-Agregar-Grupo">
+                    <button className="btn-premium btn-Agregar-Grupo" onClick={()=>{setModalType('add'); setModalHidden(false)}}>
                         <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
                         Nuevo Grupo
                     </button>
@@ -245,6 +246,9 @@ export default function Groups() {
                                     }
                                     {
                                         modalType === "edit" && <GroupEdit grupo={groupModal} onClose={() => { setModalHidden(true); cargarDatos(); }} />
+                                    }
+                                    {
+                                        modalType ==="add" && <AddGroup onClose={() => { setModalHidden(true); cargarDatos(); }}/>
                                     }
                                 </div>
                             </div>

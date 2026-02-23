@@ -1,8 +1,34 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../content/groups/groupDetails.css";
 import { faUserSlash, faEnvelope, faUsers, faArrowLeft, faChartBar, faUserGraduate, faCheckCircle, faQrcode, faDownload } from "../../content/icons.js";
-
+import { exportGroupPdf, exportGroupQr } from "../../api/groupService.js";
+import { useState,useEffect } from "react";
 export default function GroupDetails({ grupo, onClose }) {
+    const [qr, setQr] = useState();
+
+    useEffect(() => {
+        const cargarQr = async () => {
+            try {
+                const response = await exportGroupQr(grupo.idGrupo);
+                const url = URL.createObjectURL(response);
+                setQr(url);
+            } catch (error) {
+                console.error("Error al cargar el QR:", error);
+            }
+        };
+        cargarQr();
+    }, [grupo]);
+
+    const groupPdf = async () => {
+        try {
+            const response = await exportGroupPdf(grupo.idGrupo);
+            const url = URL.createObjectURL(response);
+            window.open(url, "_blank");
+        } catch (error) {
+            console.error("Error al generar el PDF:", error);
+        }
+    };
+
 
     return (
         <div className="group-detail-modal">
@@ -108,10 +134,12 @@ export default function GroupDetails({ grupo, onClose }) {
                             <FontAwesomeIcon icon={faQrcode} className="me-2" />Reporte Digital
                         </h3>
                         <div className="qr-section">
-                            <a href="/Grupos/GenerarReportePDF?id=@Model.grupo.id_grupo" className="qr-link" target="_blank">
+                            <a onClick={groupPdf} className="qr-link" target="_blank">
                                 <div className="qr-container">
-                                    <img src="/Grupos/GenerarReporteQR?id=@Model.grupo.id_grupo" alt="QR Code" className="qr-code" />
-                                    <div className="qr-overlay">
+                                    <img src={`${qr}`}
+                                        alt="Código QR"
+                                        className="img-fluid"
+                                        style={{ maxWidth: "250px" }} />                                    <div className="qr-overlay">
                                         <FontAwesomeIcon icon={faDownload} className="text-white" />
                                         <span>Descargar Reporte</span>
                                     </div>

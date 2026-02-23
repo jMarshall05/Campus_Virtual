@@ -1,7 +1,7 @@
 import {faUsers,faEyeSlash,faEye,faDownload, faInfoCircle, faEdit, faArrowLeft, faIdCard, faPassport, faPlane, faUser, faCircle,faEnvelope,faPhone,faFingerprint,faCalendarAlt,faBirthdayCake,faUserPlus  } from "../../content/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { exportQr, exportUserPdf } from "../../api/userService.js";
+import { exportUserQr, exportUserPdf } from "../../api/userService.js";
 import "../../content/users/userDetails.css";
 
 export default function UserDetails({ usuario, onClose }) {
@@ -23,7 +23,7 @@ export default function UserDetails({ usuario, onClose }) {
     useEffect(() => {
         const cargarQr = async () => {
             try {
-                const response = await exportQr(usuario.idUsuario);
+                const response = await exportUserQr(usuario.idUsuario);
                 const url = URL.createObjectURL(response);
                 setQr(url);
             } catch (error) {

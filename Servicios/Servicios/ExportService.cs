@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Abstracciones.Modelos.ModelosDto;
+using Abstracciones.Servicios;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
@@ -16,14 +18,16 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Mapster;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using QRCoder;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using Border = iText.Layout.Borders.Border;
-using Paragraph = iText.Layout.Element.Paragraph;
-using Abstracciones.Servicios;
 using Color = System.Drawing.Color;
 using Image = iText.Layout.Element.Image;
+using Paragraph = iText.Layout.Element.Paragraph;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace Servicios.Servicios
@@ -233,6 +237,12 @@ namespace Servicios.Servicios
             string rutaLogo = null,
             Dictionary<string, string> encabezados = null)
         {
+            if(titulo == "Reporte de Grupo" && dato.GetType().Name =="GruposDto")
+            {
+                var file = reporteGrupo(dato.Adapt<GruposDto>());
+                return file;
+
+            }
             var propiedades = ObtenerPropiedades<T>(encabezados);
 
             using var ms = new MemoryStream();
@@ -276,6 +286,100 @@ namespace Servicios.Servicios
             {
                 throw new Exception("ERROR REAL iText: " + ex.ToString());
 
+            }
+        }
+
+        private byte[] reporteGrupo(GruposDto grupo)
+        {
+            using (var ms = new MemoryStream())
+            {
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf, iText.Kernel.Geom.PageSize.A4);
+                document.SetMargins(40, 40, 40, 40);
+
+                //try
+                //{
+                //    byte[] imageBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/logo_SantaAna.jpg"));
+                //    Image logo = new Image(iText.IO.Image.ImageDataFactory.Create(imageBytes));
+                //    logo.ScaleToFit(100, 100);
+                //    logo.SetHorizontalAlignment(HorizontalAlignment.CENTER);
+                //    document.Add(logo);
+                //}
+                //catch { }
+
+                PdfFont bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
+                Paragraph titulo = new Paragraph("Reporte del Grupo")
+                    .SetFont(bold)
+                    .SetFontSize(20)
+                    .SetFontColor(iText.Kernel.Colors.ColorConstants.BLUE)
+                    .SetTextAlignment(TextAlignment.CENTER)
+                    .SetMarginBottom(20);
+                document.Add(titulo);
+
+                // Tabla con datos del grupo
+                Table infoTable = new Table(2, false).SetWidth(UnitValue.CreatePercentValue(100));
+
+                void AddRow(string label, string value)
+                {
+                    infoTable.AddCell(new Cell().Add(new Paragraph(label)).SetBackgroundColor(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY));
+                    infoTable.AddCell(new Cell().Add(new Paragraph(value ?? "")));
+                }
+
+                AddRow("Nombre del Grupo", grupo.Nombre);
+                AddRow("Descripción del Grupo", grupo.Descripcion);
+                AddRow("Creador", grupo.creado_por ?? "");
+                if (grupo.modificado_por != null)
+                {
+                    AddRow("Modificado por", grupo.modificado_por);
+
+                }
+                AddRow("Fecha de Creación", grupo.FechaDeCreacion.ToString("dd/MM/yyyy HH:mm"));
+                if (grupo.modificado_por != null )
+                {
+                    AddRow("Ultima Modificacion", grupo.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm"));
+
+                }
+                AddRow("Estado", grupo.Estado ? "Activo" : "Inactivo");
+
+                document.Add(infoTable);
+
+                document.Add(new Paragraph("\n"));
+
+                //Tabla con miembros
+
+                Paragraph subtitulo = new Paragraph("Miembros del Grupo")
+                    .SetFont(bold)
+                    .SetFontSize(14)
+                    .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
+                    .SetTextAlignment(TextAlignment.LEFT)
+                    .SetMarginBottom(10);
+                document.Add(subtitulo);
+
+                Table cursosTable = new Table(new float[] { 2, 2, 4, 3, 3 });
+                cursosTable.SetWidth(UnitValue.CreatePercentValue(100));
+
+                // Encabezados
+                string[] headers = { "Nombre", "Apellido", "Email", "Teléfonos", "Identificacion" };
+                foreach (var header in headers)
+                {
+                    cursosTable.AddHeaderCell(new Cell()
+                        .Add(new Paragraph(header).SetFont(bold))
+                        .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY));
+                }
+
+                foreach (var u in grupo.Estudiantes)
+                {
+                    cursosTable.AddCell(new Paragraph(u.Nombre));
+                    cursosTable.AddCell(new Paragraph(u.Apellido));
+                    cursosTable.AddCell(new Paragraph(u.Email));
+                    cursosTable.AddCell(new Paragraph(u.Identificacion.ToString()));
+                }
+
+                document.Add(cursosTable);
+
+                document.Close();
+                return ms.ToArray();
             }
         }
 
@@ -520,7 +624,7 @@ namespace Servicios.Servicios
                     items.Add(FormatearObjeto(item));
                 }
 
-                return string.Join("\n", items); 
+                return string.Join("\n", items);
             }
 
             return valor switch

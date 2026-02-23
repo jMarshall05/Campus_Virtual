@@ -90,5 +90,23 @@ namespace Api.Controllers
                 return StatusCode(500, "Ocurrió un error inesperado");
             }
         }
+
+        [HttpGet("exportarPdf/{IdGrupo}")]
+        public async Task<IActionResult> ExportarGrupoPDF(int IdGrupo)
+        {
+            var pdf = await _grupos.ExportarGrupoPDF(IdGrupo, null);//no paso logo
+            if (pdf != null)
+                return File(pdf, "application/pdf");
+
+            return NotFound($"No se encontró el grupo de ID: {IdGrupo}");
+        }
+        [HttpGet("exportarQr")]
+        public IActionResult QrExportar(int IdGrupo)
+        {
+            var url = Url.Action("ExportarGrupoPDF", "Grupos", new { IdGrupo }, Request.Scheme);
+            var qr = _grupos.QrExportar(url);
+            return File(qr, "image/png");
+
+        }
     }
 }

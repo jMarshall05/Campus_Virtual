@@ -3,6 +3,7 @@ using DA.Entidades;
 using DA.Interfaces;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DA.Implementaciones
 {
@@ -24,7 +25,30 @@ namespace DA.Implementaciones
 
         public async Task<GruposDto> BuscarGruposPorId(int idGrupo)
         {
-            var grupo = _mapper.Map<GruposDto>(await _elContexto.Grupos.FindAsync(idGrupo)) ?? null;
+            var grupo = await _elContexto.Grupos
+                .Include(eg => eg.EstudianteGrupos)
+                .ThenInclude(e => e.Estudiante).
+                Where(g => g.idGrupo == idGrupo).Select(grupo => new GruposDto
+                {
+                    idGrupo = grupo.idGrupo,
+                    Nombre = grupo.Nombre,
+                    Descripcion = grupo.Descripcion,
+                    Estudiantes = grupo.EstudianteGrupos.
+                    Select(e => new UsuariosDto
+                    {
+                        IdUsuario = e.Estudiante.IdUsuario,
+                        Nombre = e.Estudiante.Nombre,
+                        Apellido = e.Estudiante.Apellido,
+                        Email = e.Estudiante.Email,
+                        Identificacion = e.Estudiante.Identificacion
+
+                    }).ToList(),
+                    creado_por = grupo.creado_por,
+                    Estado = grupo.Estado,
+                    FechaDeCreacion = grupo.FechaDeCreacion,
+                    FechaDeModificacion = grupo.FechaDeModificacion,
+                    modificado_por = grupo.modificado_por
+                }).FirstOrDefaultAsync();
             return grupo;
         }
 
@@ -35,7 +59,7 @@ namespace DA.Implementaciones
             grupoExistente.Descripcion = grupo.Descripcion;
             grupoExistente.modificado_por = grupo.modificado_por;
             grupoExistente.FechaDeModificacion = DateTime.Now;
-            grupoExistente.estado = grupo.estado;
+            grupoExistente.Estado = grupo.Estado;
             await _elContexto.SaveChangesAsync();
         }
 
@@ -49,7 +73,7 @@ namespace DA.Implementaciones
                     idGrupo = grupo.idGrupo,
                     Nombre = grupo.Nombre,
                     Descripcion = grupo.Descripcion,
-                    Estudiantes =grupo.EstudianteGrupos.
+                    Estudiantes = grupo.EstudianteGrupos.
                     Select(e => new UsuariosDto
                     {
                         IdUsuario = e.Estudiante.IdUsuario,
@@ -60,7 +84,7 @@ namespace DA.Implementaciones
 
                     }).ToList(),
                     creado_por = grupo.creado_por,
-                    Estado = grupo.estado,
+                    Estado = grupo.Estado,
                     FechaDeCreacion = grupo.FechaDeCreacion,
                     FechaDeModificacion = grupo.FechaDeModificacion,
                     modificado_por = grupo.modificado_por

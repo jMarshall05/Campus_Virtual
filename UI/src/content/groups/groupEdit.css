@@ -221,7 +221,7 @@ textarea.form-control {
 
 .toggle-input { display: none; }
 
-.toggle-slider {
+.toggle-slider-large {
     position: relative;
     width: 48px;
     height: 26px;

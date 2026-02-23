@@ -9,5 +9,7 @@ namespace Abstracciones.Api
         Task<IActionResult> EditarGrupo(string IdUsuario, EditarGrupoRequest grupo);
         Task<IActionResult> ListarGrupos();
         Task<IActionResult> BuscarGruposPorId(int idGrupo);
+        IActionResult QrExportar(int idGrupo);
+        Task<IActionResult> ExportarGrupoPDF(int idGrupo);
     }
 }

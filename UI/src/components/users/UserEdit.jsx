@@ -14,7 +14,7 @@ export default function UserEdit({ usuario, onClose }) {
     const [saving, setSaving] = useState(false);
     const [telefonos, setTelefonos] = useState([]);
     const [tipoIdentificacion, setTipoIdentificacion] = useState(usuario?.tipoIdentificacion || "");
-
+    const [userState,setState] = useState(usuario.estado)
     useEffect(() => {
         const cargarGrupos = async () => {
             try {
@@ -471,8 +471,8 @@ export default function UserEdit({ usuario, onClose }) {
                                 <div className="status-toggle-container">
 
                                     <div className="status-text">
-                                        <span className={`status-badge ${usuario?.estado ? "active" : "inactive"}`}>
-                                            {usuario?.estado ? "Activo" : "Inactivo"}
+                                        <span className={`status-badge ${userState ? "active" : "inactive"}`}>
+                                            {userState ? "Activo" : "Inactivo"}
                                         </span>
                                         <small className="text-muted">
                                             <FontAwesomeIcon icon={faInfoCircle} className="me-1" />
@@ -486,7 +486,8 @@ export default function UserEdit({ usuario, onClose }) {
                                                 className="toggle-input"
                                                 id="estadoUsuario"
                                                 name="Estado"
-                                                defaultChecked={usuario?.estado}
+                                                defaultChecked={userState}
+                                                onChange={()=>{setState(!userState)}}
                                             />
                                             <span className="toggle-slider-large"></span>
                                         </label>

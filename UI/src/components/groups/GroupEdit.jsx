@@ -11,6 +11,7 @@ import Loader from "../Loader";
 
 export default function GroupEdit({ grupo, onClose }) {
     const [loading, setLoading] = useState(false);
+    const [groupState, setState] = useState(grupo.estado);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,10 +19,10 @@ export default function GroupEdit({ grupo, onClose }) {
 
         const token = leerToken();
         const data = {
-            idGrupo:     grupo.idGrupo,
-            nombre:      e.target.nombre.value,
+            idGrupo: grupo.idGrupo,
+            nombre: e.target.nombre.value,
             descripcion: e.target.descripcion.value,
-            estado:      e.target.estado.checked,
+            estado: e.target.estado.checked,
         };
 
         const response = await editGroup(token.sub, data);
@@ -41,7 +42,6 @@ export default function GroupEdit({ grupo, onClose }) {
     if (loading) return <Loader />;
     return (
         <div className="edit-group-modal">
-            {/* ── Header ── */}
             <div className="edit-header">
                 <div className="header-content">
                     <div className="header-icon">
@@ -57,7 +57,6 @@ export default function GroupEdit({ grupo, onClose }) {
             <form className="edit-form" onSubmit={handleSubmit} id="groupEditForm">
                 <div className="edit-content">
 
-                    {/* ── Nombre ── */}
                     <div className="form-section">
                         <h3 className="section-title">
                             <FontAwesomeIcon icon={faInfoCircle} />
@@ -84,7 +83,6 @@ export default function GroupEdit({ grupo, onClose }) {
                         </div>
                     </div>
 
-                    {/* ── Descripción ── */}
                     <div className="form-section">
                         <h3 className="section-title">
                             <FontAwesomeIcon icon={faAlignLeft} />
@@ -96,7 +94,6 @@ export default function GroupEdit({ grupo, onClose }) {
                                 <span className="input-icon" style={{ top: '0.75rem', alignSelf: 'flex-start' }}>
                                     <FontAwesomeIcon icon={faPen} />
                                 </span>
-                                {/* Fixed: was <input>, should be <textarea> */}
                                 <textarea
                                     className="form-control"
                                     name="descripcion"
@@ -110,9 +107,8 @@ export default function GroupEdit({ grupo, onClose }) {
                         </div>
                     </div>
 
-                    {/* ── Estado ── */}
                     <div className="form-group">
-                        <label className="form-label">Estado del Grupo</label>
+                        <label className="form-label" htmlFor="estado">Estado del Grupo</label>
                         <div className="toggle-group">
                             <label className="toggle-label">
                                 <input
@@ -120,11 +116,12 @@ export default function GroupEdit({ grupo, onClose }) {
                                     className="toggle-input"
                                     name="estado"
                                     id="estado"
-                                    defaultChecked={grupo.estado}
+                                    defaultChecked={groupState}
+                                    onChange={() => setState(!groupState)}
                                 />
-                                <span className="toggle-slider" />
+                                <span className="toggle-slider-large"></span>
                                 <span className="toggle-text">
-                                    {grupo.estado ? "Activo" : "Inactivo"}
+                                    {groupState ? "Activo" : "Inactivo"}
                                 </span>
                             </label>
                         </div>
@@ -132,7 +129,6 @@ export default function GroupEdit({ grupo, onClose }) {
 
                 </div>
 
-                {/* ── Footer ── */}
                 <div className="edit-footer">
                     <button
                         type="button"

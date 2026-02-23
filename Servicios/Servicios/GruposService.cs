@@ -63,5 +63,11 @@ namespace Servicios.Servicios
             var qr = _exportar.ExportarReporteQr(url);
             return qr;
         }
+        public async Task<byte[]> ExportarGrupoPDF(int IdGrupo, string? rutaLogo)
+        {
+            var grupo = await BuscarGruposPorId(IdGrupo);
+            var pdf = _exportar.ExportarObjetoAPdf(grupo, "Reporte de Grupo", "Reporte de Grupo", null);
+            return pdf;
+        }
     }
 }

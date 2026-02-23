@@ -49,7 +49,7 @@ export async function exportUsersPdf() {
     });
 }
 
-export async function exportQr(IdUsuario) {
+export async function exportUserQr(IdUsuario) {
     if (IdUsuario) {
         return await apiFetchBlob(`users/exportarQr?IdUsuario=${IdUsuario}`, {
             method: 'GET',
