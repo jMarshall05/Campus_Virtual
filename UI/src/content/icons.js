@@ -47,5 +47,6 @@ export {
   faQrcode,
   faUserSlash,
   faCheckCircle,
-  faAlignLeft
+  faAlignLeft,
+  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";

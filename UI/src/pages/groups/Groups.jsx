@@ -15,11 +15,14 @@ export default function Groups() {
     const [modalhidden, setModalHidden] = useState(true);
     const [modalType, setModalType] = useState("");
     const [groupModal, setGroupModal] = useState(null);
+    const [pagina, setPagina] = useState(1);
+    const porPagina = 10;
+
     const cargarDatos = async () => {
-            const response = await getGroups();
-            setGroups(response);
-            setLoading(false);
-        };
+        const response = await getGroups();
+        setGroups(response);
+        setLoading(false);
+    };
     useEffect(() => {
         cargarDatos();
     }, []);
@@ -33,7 +36,13 @@ export default function Groups() {
     }
     );
     const activeFilteredGroups = filteredGroups.filter(u => u.estado === true);
-
+    const totalPaginas = Math.ceil(filteredGroups.length / porPagina);
+    const inicio = (pagina - 1) * porPagina;
+    const fin = inicio + porPagina;
+    const gruposPaginados = filteredGroups.slice(inicio, fin);
+    useEffect(() => {
+        setPagina(1);
+    }, [search]);
 
     if (loading) return <Loader />;
     return (
@@ -49,7 +58,7 @@ export default function Groups() {
                             <p className="header-subtitle">Administra todos los grupos del sistema</p>
                         </div>
                     </div>
-                    <button className="btn-premium btn-Agregar-Grupo" onClick={()=>{setModalType('add'); setModalHidden(false)}}>
+                    <button className="btn-premium btn-Agregar-Grupo" onClick={() => { setModalType('add'); setModalHidden(false) }}>
                         <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
                         Nuevo Grupo
                     </button>
@@ -130,16 +139,16 @@ export default function Groups() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {groups && groups.length === 0 ? (
+                                {filteredGroups && filteredGroups.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="text-center text-muted py-4">
                                             <FontAwesomeIcon icon={faUsers} className="fa-2x mb-2" />
                                             <br />
-                                            No hay grupos registrados
+                                            No hay grupos registrados con el dato especificado
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredGroups.map((group) => {
+                                    gruposPaginados.map((group) => {
                                         const iniciales = group.creado_por
                                             ? group.creado_por
                                                 .split(" ")
@@ -149,7 +158,7 @@ export default function Groups() {
                                             : "AD";
 
                                         return (
-                                            <tr  className="group-row" key={group.idGrupo}>
+                                            <tr className="group-row" key={group.idGrupo}>
                                                 <td className="name-cell">
                                                     <div className="group-info">
                                                         <div className="group-icon">
@@ -200,7 +209,7 @@ export default function Groups() {
                                                             className="btn btn-outline-dark btn-sm btn-Detalles-Grupo"
                                                             data-id={group.idGrupo}
                                                             title="Ver Detalles"
-                                                             onClick={() => {
+                                                            onClick={() => {
                                                                 setModalType("details");
                                                                 setGroupModal(group);
                                                                 setModalHidden(false);
@@ -220,19 +229,30 @@ export default function Groups() {
                 </div>
 
                 <div className="card-footer-premium">
-                    <div className="pagination-info">
-                        Mostrando <strong>{filteredGroups.length}</strong> grupos
-                    </div>
-                    <div className="pagination-controls">
-                        <button className="pagination-btn disabled">
-                            <FontAwesomeIcon icon={faChevronLeft} />
-                        </button>
-                        <button className="pagination-btn active">1</button>
-                        <button className="pagination-btn">
-                            <FontAwesomeIcon icon={faChevronRight} />
-                        </button>
-                    </div>
+                <div className="pagination-info">
+                    Mostrando <strong>{gruposPaginados.length}</strong> de <strong>{filteredGroups.length}</strong> grupos
                 </div>
+
+                <div className="pagination-controls">
+                    <button
+                        className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
+                        disabled={pagina === 1}
+                        onClick={() => setPagina(p => Math.max(p - 1, 1))}
+                    >
+                        <FontAwesomeIcon icon={faChevronLeft} />
+                    </button>
+
+                    <span className="pagination-btn active">{pagina}</span>
+
+                    <button
+                        className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
+                        disabled={pagina === totalPaginas}
+                        onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}
+                    >
+                        <FontAwesomeIcon icon={faChevronRight} />
+                    </button>
+                </div>
+            </div>
             </div>
 
             {!modalhidden && (
@@ -248,7 +268,7 @@ export default function Groups() {
                                         modalType === "edit" && <GroupEdit grupo={groupModal} onClose={() => { setModalHidden(true); cargarDatos(); }} />
                                     }
                                     {
-                                        modalType ==="add" && <AddGroup onClose={() => { setModalHidden(true); cargarDatos(); }}/>
+                                        modalType === "add" && <AddGroup onClose={() => { setModalHidden(true); cargarDatos(); }} />
                                     }
                                 </div>
                             </div>

@@ -25,16 +25,17 @@ namespace DA.Implementaciones
             await _elContexto.SaveChangesAsync();
         }
 
-        public async Task EditarDocumento(DocumentosAD documento)
+        public async Task<bool> EditarDocumento(int id, DocumentosAD documento)
         {
-            var documentoExistente = await _elContexto.Documentos.FindAsync(documento);
+            var documentoExistente = await _elContexto.Documentos.FindAsync(id);
 
             documentoExistente.Titulo = documento.Titulo;
             documentoExistente.Descripcion = documento.Descripcion;
             documentoExistente.RutaArchivo = documento.RutaArchivo;
             documentoExistente.Categoria = documento.Categoria;
             documentoExistente.FechaRegistro = documento.FechaRegistro;
-            await _elContexto.SaveChangesAsync();
+            var result = await _elContexto.SaveChangesAsync();
+            return result != 0;
 
         }
 

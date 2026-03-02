@@ -32,7 +32,6 @@ namespace Api.Controllers
         {
             try
             {
-
                 var token = await _usuarios.Login(request);
                 if (token == null)
                     return Unauthorized("Usuario o contraseña incorrectos");

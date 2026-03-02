@@ -179,8 +179,11 @@
     background: linear-gradient(135deg, #8b5cf6, #a855f7);
 }
 
-.status-icon {
+.status-icon-true {
     background: linear-gradient(135deg, #10b981, #059669);
+}
+.status-icon-false {
+    background: linear-gradient(135deg, #e61313, #c00707);
 }
 
 .mini-stat-info h4 {

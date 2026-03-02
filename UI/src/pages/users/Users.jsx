@@ -15,6 +15,9 @@ export default function Users() {
     const [modalhidden, setModalHidden] = useState(true);
     const [userModal, setUserModal] = useState(null);
     const [modalType, setModalType] = useState("");
+    const [pagina, setPagina] = useState(1);
+    const porPagina = 10;
+
     const cargarDatos = async () => {
         try {
             var users = await getUsers();
@@ -23,9 +26,9 @@ export default function Users() {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
-       cargarDatos();
+        cargarDatos();
     }, []);
 
     const usuariosFiltrados = usuarios.filter(u => {
@@ -41,6 +44,13 @@ export default function Users() {
     }
     );
     const usuariosActivosFiltrados = usuariosFiltrados.filter(u => u.estado === true);
+    const totalPaginas = Math.ceil(usuariosFiltrados.length / porPagina);
+    const inicio = (pagina - 1) * porPagina;
+    const fin = inicio + porPagina;
+    const usuariosPaginados = usuariosFiltrados.slice(inicio, fin);
+    useEffect(() => {
+        setPagina(1);
+    }, [search]);
 
     const Pdf = async () => {
         try {
@@ -134,13 +144,13 @@ export default function Users() {
                                     <tr>
                                         <td colspan="6" className="text-center text-muted py-4">
                                             <FontAwesomeIcon icon={faUsers} />
-                                            <br>
-                                                No hay usuarios registrados
-                                            </br>
+                                            <p>
+                                                No hay usuarios registrados con el dato especificado
+                                            </p>
                                         </td>
                                     </tr>
                                 ) : (
-                                    usuariosFiltrados.map((usuario) => ( 
+                                    usuariosPaginados.map((usuario) => (
                                         <tr key={usuario.idUsuario} className="user-row">
                                             <td className="user-info-cell" data-label="Usuario">
                                                 <div className="user-info">
@@ -209,14 +219,25 @@ export default function Users() {
             </div >
             <div className="card-footer-premium">
                 <div className="pagination-info">
-                    Mostrando <strong>{usuarios.length}</strong> usuarios
+                    Mostrando <strong>{usuariosPaginados.length}</strong> de <strong>{usuariosFiltrados.length}</strong> usuarios
                 </div>
+
                 <div className="pagination-controls">
-                    <button className="pagination-btn disabled">
+                    <button
+                        className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
+                        disabled={pagina === 1}
+                        onClick={() => setPagina(p => Math.max(p - 1, 1))}
+                    >
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
-                    <button className="pagination-btn active">1</button>
-                    <button className="pagination-btn">
+
+                    <span className="pagination-btn active">{pagina}</span>
+
+                    <button
+                        className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
+                        disabled={pagina === totalPaginas}
+                        onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}
+                    >
                         <FontAwesomeIcon icon={faChevronRight} />
                     </button>
                 </div>

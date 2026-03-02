@@ -7,7 +7,7 @@ namespace DA.Interfaces
     {
         Task<int> AgregarDocumento(DocumentosAD documento);
         Task BorrarDocumento(int idDocumento);
-        Task EditarDocumento(DocumentosAD documento);
+        Task<bool> EditarDocumento(int id,DocumentosAD documento);
         Task<IEnumerable<DocumentosDto>> ListarDocumentos();
     }
 }

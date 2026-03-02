@@ -14,7 +14,7 @@ export default function UserEdit({ usuario, onClose }) {
     const [saving, setSaving] = useState(false);
     const [telefonos, setTelefonos] = useState([]);
     const [tipoIdentificacion, setTipoIdentificacion] = useState(usuario?.tipoIdentificacion || "");
-    const [userState,setState] = useState(usuario.estado)
+    const [userState, setState] = useState(usuario.estado)
     useEffect(() => {
         const cargarGrupos = async () => {
             try {
@@ -90,7 +90,7 @@ export default function UserEdit({ usuario, onClose }) {
                 Tipo: form[`Telefonos[${i}].Tipo`].value,
                 Estado: form[`Telefonos[${i}].Estado`]?.checked ?? false,
             }))
-            
+
 
         };
 
@@ -154,7 +154,7 @@ export default function UserEdit({ usuario, onClose }) {
 
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label className="form-label">
+                                        <label className="form-label" htmlFor="Nombre">
                                             Nombre <span className="required-mark">*</span>
                                         </label>
                                         <div className="input-wrapper">
@@ -162,6 +162,7 @@ export default function UserEdit({ usuario, onClose }) {
                                             <input
                                                 className="form-control"
                                                 name="Nombre"
+                                                id="Nombre"
                                                 defaultValue={usuario?.nombre}
                                                 placeholder="Nombre"
                                                 required
@@ -170,7 +171,7 @@ export default function UserEdit({ usuario, onClose }) {
                                     </div>
 
                                     <div className="form-group">
-                                        <label className="form-label">
+                                        <label className="form-label" htmlFor="Apellido">
                                             Apellido <span className="required-mark">*</span>
                                         </label>
                                         <div className="input-wrapper">
@@ -178,6 +179,7 @@ export default function UserEdit({ usuario, onClose }) {
                                             <input
                                                 className="form-control"
                                                 name="Apellido"
+                                                id="Apellido"
                                                 defaultValue={usuario?.apellido}
                                                 placeholder="Apellido"
                                                 required
@@ -187,7 +189,7 @@ export default function UserEdit({ usuario, onClose }) {
                                 </div>
 
                                 <div className="form-group mt-2">
-                                    <label className="form-label">
+                                    <label className="form-label" htmlFor="Email">
                                         Email <span className="required-mark">*</span>
                                     </label>
                                     <div className="input-wrapper">
@@ -195,6 +197,7 @@ export default function UserEdit({ usuario, onClose }) {
                                         <input
                                             className="form-control"
                                             name="Email"
+                                            id="Email"
                                             type="email"
                                             defaultValue={usuario?.email}
                                             autoComplete="true"
@@ -213,7 +216,7 @@ export default function UserEdit({ usuario, onClose }) {
 
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label className="form-label">
+                                        <label className="form-label" htmlFor="tipoIdentificacion">
                                             Tipo ID <span className="required-mark">*</span>
                                         </label>
                                         <div className="input-wrapper">
@@ -235,7 +238,7 @@ export default function UserEdit({ usuario, onClose }) {
                                     </div>
 
                                     <div className="form-group">
-                                        <label className="form-label">
+                                        <label className="form-label" htmlFor="numeroIdentificacion">
                                             Número ID <span className="required-mark">*</span>
                                         </label>
 
@@ -308,13 +311,14 @@ export default function UserEdit({ usuario, onClose }) {
 
                                 <div className="form-row">
                                     <div className="form-group">
-                                        <label className="form-label">Fecha de Nacimiento</label>
+                                        <label className="form-label" htmlFor="FechaDeNacimiento">Fecha de Nacimiento</label>
                                         <div className="input-wrapper">
                                             <span className="input-icon"><FontAwesomeIcon icon={faCalendarAlt} /></span>
                                             <input
                                                 className="form-control"
                                                 type="date"
                                                 name="FechaDeNacimiento"
+                                                id="FechaDeNacimiento"
                                                 required={true}
                                                 defaultValue={usuario?.fechaDeNacimiento
                                                     ? new Date(usuario.fechaDeNacimiento).toISOString().split("T")[0]
@@ -324,7 +328,7 @@ export default function UserEdit({ usuario, onClose }) {
                                     </div>
 
                                     <div className="form-group">
-                                        <label className="form-label">
+                                        <label className="form-label" htmlFor="rolSelector">
                                             Rol <span className="required-mark">*</span>
                                         </label>
                                         <div className="input-wrapper">
@@ -346,9 +350,9 @@ export default function UserEdit({ usuario, onClose }) {
 
                                 {usuario?.rol === "Estudiantes" && (
                                     <div className="form-group">
-                                        <label className="form-label">Grupo</label>
+                                        <label className="form-label" htmlFor="IdGrupo">Grupo</label>
                                         <div className="input-wrapper">
-                                            <select className="form-control" name="IdGrupo" defaultValue={usuario?.grupo.id_grupo ?? ""}>
+                                            <select className="form-control" id="IdGrupo" defaultValue={usuario?.grupo.id_grupo ?? ""}>
                                                 <option key="default-grupo" value="">Seleccione un grupo</option>
 
                                                 {grupos.map((grupo, index) => (
@@ -376,14 +380,15 @@ export default function UserEdit({ usuario, onClose }) {
                                 {telefonos.length > 0 ? (
                                     telefonos.map((tel, i) => (
                                         <div className="telefono-item" key={i}>
-                                            <input type="hidden" name={`Telefonos[${i}].Id`} defaultValue={tel.id} />
+                                            <input type="hidden" name={`Telefonos[${i}].Id`} id={`Telefonos[${i}].Id`} defaultValue={tel.id} />
 
                                             <div className="tel-row">
                                                 <div className="tel-field tel-code">
-                                                    <label className="form-label">Código</label>
+                                                    <label className="form-label" htmlFor={`Telefonos[${i}].Codigo`}>Código</label>
                                                     <input
                                                         className="form-control"
                                                         name={`Telefonos[${i}].Codigo`}
+                                                        id={`Telefonos[${i}].Codigo`}
                                                         defaultValue={tel.codigo}
                                                         placeholder="+506"
                                                         maxLength={3}
@@ -395,10 +400,11 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-number">
-                                                    <label className="form-label">Número</label>
+                                                    <label className="form-label" htmlFor={`Telefonos[${i}].Telefono`}>Número</label>
                                                     <input
                                                         className="form-control"
                                                         name={`Telefonos[${i}].Telefono`}
+                                                        id={`Telefonos[${i}].Telefono`}
                                                         defaultValue={tel.telefono}
                                                         placeholder="12345678"
                                                         minLength={8}
@@ -412,10 +418,11 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-type">
-                                                    <label className="form-label">Tipo</label>
+                                                    <label className="form-label" htmlFor={`Telefonos[${i}].Tipo`}>Tipo</label>
                                                     <select
                                                         className="form-control"
                                                         name={`Telefonos[${i}].Tipo`}
+                                                        id={`Telefonos[${i}].Tipo`}
                                                         defaultValue={tel.tipo}
                                                         required
                                                     >
@@ -429,13 +436,14 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-status">
-                                                    <label className="form-label">Estado</label>
+                                                    <label className="form-label" htmlFor={`Telefonos[${i}].Estado`}>Estado</label>
                                                     <div className="toggle-wrapper">
-                                                        <label className="toggle-label">
+                                                        <label className="toggle-label" htmlFor={`Telefonos[${i}].Estado`}>
                                                             <input
                                                                 type="checkbox"
                                                                 className="toggle-input"
                                                                 name={`Telefonos[${i}].Estado`}
+                                                                id={`Telefonos[${i}].Estado`}
                                                                 defaultChecked={tel.estado}
                                                             />
                                                             <span className="toggle-slider"></span>
@@ -444,8 +452,8 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-action">
-                                                    <label className="form-label">&nbsp;</label>
-                                                    <button type="button" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
+                                                    <label className="form-label" htmlFor="removePhone">&nbsp;</label>
+                                                    <button type="button"  id="removePhone" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
@@ -480,14 +488,14 @@ export default function UserEdit({ usuario, onClose }) {
                                         </small>
                                     </div>
                                     <div className="toggle-wrapper justify-content-upper">
-                                        <label className="toggle-label-large">
+                                        <label className="toggle-label-large" htmlFor="estadoUsuario">
                                             <input
                                                 type="checkbox"
                                                 className="toggle-input"
                                                 id="estadoUsuario"
                                                 name="Estado"
                                                 defaultChecked={userState}
-                                                onChange={()=>{setState(!userState)}}
+                                                onChange={() => { setState(!userState) }}
                                             />
                                             <span className="toggle-slider-large"></span>
                                         </label>

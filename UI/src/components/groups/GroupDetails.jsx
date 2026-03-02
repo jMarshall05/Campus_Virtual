@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../content/groups/groupDetails.css";
-import { faUserSlash, faEnvelope, faUsers, faArrowLeft, faChartBar, faUserGraduate, faCheckCircle, faQrcode, faDownload } from "../../content/icons.js";
+import { faTimesCircle, faUserSlash, faEnvelope, faUsers, faArrowLeft, faChartBar, faUserGraduate, faCheckCircle, faQrcode, faDownload } from "../../content/icons.js";
 import { exportGroupPdf, exportGroupQr } from "../../api/groupService.js";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 export default function GroupDetails({ grupo, onClose }) {
     const [qr, setQr] = useState();
 
@@ -113,14 +113,16 @@ export default function GroupDetails({ grupo, onClose }) {
                                 </div>
                             </div>
                             <div className="mini-stat-card">
-                                <div className="mini-stat-icon status-icon">
-                                    {grupo.estado ? (
-                                        <FontAwesomeIcon icon={faCheckCircle} className="text-success" />
-                                    ) : (
-                                        <FontAwesomeIcon icon={faTimesCircle} className="text-danger" />
-                                    )}
+                                {grupo.estado ? (
+                                    <div className="mini-stat-icon status-icon-true">
+                                        <FontAwesomeIcon icon={faCheckCircle} className="text-white" />
+                                    </div>
+                                ) : (
+                                    <div className="mini-stat-icon status-icon-false">
+                                        <FontAwesomeIcon icon={faTimesCircle} className="text-white" />
+                                    </div>
+                                )}
 
-                                </div>
                                 <div className="mini-stat-info">
                                     <p>Estado</p>
                                     <h4>{grupo.estado ? "Activo" : "Inactivo"}</h4>

@@ -11,10 +11,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Servicios.Helpers;
 using Servicios.Servicios;
+using Microsoft.AspNetCore.Http;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +30,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Swagger - NECESARIO para que Scalar funcione (genera el documento OpenAPI)
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
@@ -50,6 +61,9 @@ builder.Services
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+
+//builder.WebHost.UseUrls("http://0.0.0.0:5000");
 
 builder.Services.AddCors(options =>
 {
@@ -117,6 +131,12 @@ builder.Services.AddScoped<IGruposService, GruposService>();
 builder.Services.AddScoped<IGruposHelper, GruposHelper>();
 builder.Services.AddScoped<SecretProtectorService>();
 builder.Services.AddScoped<IExportService, ExportService>();
+builder.Services.AddScoped<IDocumentoService, DocumentoService>();
+builder.Services.AddScoped<IFileStorageService>(sp =>
+{
+    var env = sp.GetRequiredService<IWebHostEnvironment>();
+    return new FileStorageService(env.ContentRootPath);
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
