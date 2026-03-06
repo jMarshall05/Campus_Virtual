@@ -4,6 +4,7 @@ import { createGroup } from "../../api/groupService.js";
 import { leerToken } from "../../utils/auth.js";
 import { useState } from "react";
 import Loader from "../Loader.jsx";
+import Swal from "sweetalert2";
 
 export default function AddGroup({ onClose }) {
     const [loading, setLoading] = useState(false);
@@ -19,11 +20,20 @@ export default function AddGroup({ onClose }) {
         try {
             const response = await createGroup(token.sub, data)
             setLoading(false);
-            alert("Grupo creado con exito")
+            Swal.fire({
+                title: 'Grupo creado con exito!',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
             onClose()
         } catch (error) {
-            setLoading(false); s
-            alert("Algo a fallado intente de nuevo");
+            setLoading(false); 
+            Swal.fire({
+                title: 'Error',
+                text : 'Algo a fallado intente de nuevo',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
             console.log(error);
         }
     }

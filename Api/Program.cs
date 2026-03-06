@@ -39,7 +39,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 
 var config = TypeAdapterConfig.GlobalSettings;
@@ -139,7 +138,6 @@ builder.Services.AddScoped<IFileStorageService>(sp =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
 
 var app = builder.Build();
 

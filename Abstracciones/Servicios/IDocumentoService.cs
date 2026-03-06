@@ -13,6 +13,7 @@ namespace Abstracciones.Servicios
         Task BorrarDocumento(int idDocumento);
         Task<bool> EditarDocumento(int idDocumento, DocumentosDto documento);
         Task<IEnumerable<DocumentosDto>> ListarDocumentos();
+        Task<DocumentosDto> DescargarDocumento(int Id);
 
     }
 }

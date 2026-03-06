@@ -17,6 +17,7 @@ export {
   faSearch,
   faDownload,
   faEnvelope,
+  faCalendar,
   faEye,
   faPen,
   faChevronLeft,
@@ -48,5 +49,17 @@ export {
   faUserSlash,
   faCheckCircle,
   faAlignLeft,
-  faTimesCircle
+  faTimesCircle,
+  faCertificate,
+  faCirclePlus,
+  faEllipsisV,
+  faExternalLinkAlt,
+  faFileContract,
+  faFolder,
+  faFolderOpen,
+  faStar,
+  faFilePdf,
+  faFileUpload,
+  faHeading,
+  faTag
 } from "@fortawesome/free-solid-svg-icons";

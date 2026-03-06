@@ -8,6 +8,7 @@ import {
     faAlignLeft, faPen, faTimes, faSave
 } from "../../content/icons.js";
 import Loader from "../Loader";
+import Swal from "sweetalert2";
 
 export default function GroupEdit({ grupo, onClose }) {
     const [loading, setLoading] = useState(false);
@@ -24,35 +25,43 @@ export default function GroupEdit({ grupo, onClose }) {
             descripcion: e.target.descripcion.value,
             estado: e.target.estado.checked,
         };
-
         const response = await editGroup(token.sub, data);
 
         if (response.error) {
-            alert("Error al actualizar el grupo");
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al actualizar el grupo',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
+
             console.error(response.error);
             setLoading(false);
             return;
         }
 
         setLoading(false);
-        alert("Grupo actualizado exitosamente");
+        Swal.fire({
+            title: 'Grupo actualizado exitosamente',
+            icon: 'succes',
+            timer: 2000
+        })
         onClose();
     };
 
     if (loading) return <Loader />;
     return (
-        <div className="edit-group-modal">
-            <div className="edit-header">
-                <div className="header-content">
-                    <div className="header-icon">
-                        <FontAwesomeIcon icon={faEdit} />
-                    </div>
-                    <div>
-                        <h2 className="modal-title">Editar Grupo</h2>
-                        <p className="modal-subtitle">Actualiza la información del grupo</p>
-                    </div>
+        <>            <div className="edit-header">
+            <div className="header-content">
+                <div className="header-icon">
+                    <FontAwesomeIcon icon={faEdit} />
+                </div>
+                <div>
+                    <h2 className="modal-title">Editar Grupo</h2>
+                    <p className="modal-subtitle">Actualiza la información del grupo</p>
                 </div>
             </div>
+        </div>
 
             <form className="edit-form" onSubmit={handleSubmit} id="groupEditForm">
                 <div className="edit-content">
@@ -145,6 +154,6 @@ export default function GroupEdit({ grupo, onClose }) {
                     </button>
                 </div>
             </form>
-        </div>
-    );
+        </>
+        );
 }

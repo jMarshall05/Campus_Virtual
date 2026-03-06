@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace DA.Implementaciones
@@ -51,6 +52,12 @@ namespace DA.Implementaciones
                 FechaRegistro = doc.FechaRegistro
             }).ToListAsync();
             return documentos;
+        }
+
+        public async Task<DocumentosDto> ObtenerDocumento(int Id)
+        {
+            var doc = await _elContexto.Documentos.FindAsync(Id);
+            return doc.Adapt<DocumentosDto>();
         }
     }
 }

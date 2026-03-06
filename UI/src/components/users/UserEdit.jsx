@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import Loader from "../Loader.jsx";
 import { getGroups } from "../../api/groupService.js";
 import { editUserAdmin } from "../../api/userService.js";
+import Swal from "sweetalert2";
 
 export default function UserEdit({ usuario, onClose }) {
 
@@ -39,7 +40,11 @@ export default function UserEdit({ usuario, onClose }) {
     const agregarTelefono = () => {
         const ultimo = telefonos[telefonos.length - 1];
         if (ultimo && (!ultimo.codigo || !ultimo.telefono || !ultimo.tipo)) {
-            alert("Completa el teléfono anterior primero 😉");
+            Swal.fire({
+                title: 'Completa el teléfono anterior primero 😉',
+                icon: 'warning',
+                timer: 2000
+            })
             return;
         }
         setTelefonos(prev => [
@@ -100,17 +105,30 @@ export default function UserEdit({ usuario, onClose }) {
         try {
             const response = await editUserAdmin(usuario.idUsuario, data);
             if (response) {
-                alert("Usuario actualizado exitosamente");
+                Swal.fire({
+                    title: 'Usuario actualizado exitosamente',
+                    icon: 'succes',
+                    timer: 2000
+                })
                 setSaving(false);
 
                 onClose();
             } else {
-                alert("Error al actualizar usuario");
+                Swal.fire({
+                    title: 'Error al actualizar usuario',
+                    icon: 'error',
+                    timer: 2000
+                })
             }
 
         }
         catch (error) {
-            alert("Error al actualizar usuario: " + error.message);
+            Swal.fire({
+                title: 'Error al actualizar usuario',
+                icon: 'error',
+                timer: 2000
+            })
+            console.error(error.message)
         }
         finally {
             setSaving(false);
@@ -121,15 +139,12 @@ export default function UserEdit({ usuario, onClose }) {
 
     if (loadingGrupos) return <Loader />
     return (
-        <div className="edit-modal">
-            <form onSubmit={handleSubmit} id="editUserForm">
-                <div className="edit-content">
-
-                    {/* Header */}
+<>  
+          <form onSubmit={handleSubmit} id="editUserForm">
                     <div className="edit-header">
                         <div className="edit-header-info">
                             <div className="edit-avatar">
-                                <FontAwesomeIcon icon={faUser} />
+                                <FontAwesomeIcon icon={faUser} style={{width : '35px' , height: '35px'}} />
                             </div>
                             <div>
                                 <h2 className="edit-title">Editar Usuario</h2>
@@ -453,7 +468,7 @@ export default function UserEdit({ usuario, onClose }) {
 
                                                 <div className="tel-field tel-action">
                                                     <label className="form-label" htmlFor="removePhone">&nbsp;</label>
-                                                    <button type="button"  id="removePhone" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
+                                                    <button type="button" id="removePhone" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
@@ -516,8 +531,7 @@ export default function UserEdit({ usuario, onClose }) {
                         </button>
                     </div>
 
-                </div>
             </form>
-        </div>
+        </>
     );
 }

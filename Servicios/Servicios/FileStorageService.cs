@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -23,9 +24,23 @@ namespace Servicios.Servicios
             throw new NotImplementedException();
         }
 
-        public Task<Stream> GetAsync(string path)
+        public Task<string> GetAsync(string path)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(path))
+                throw new ArgumentException("Ruta inválida");
+
+            path = path.TrimStart('/');
+
+            var fullPath = Path.Combine(_rootPath, path);
+
+            if (!fullPath.StartsWith(_rootPath))
+                throw new UnauthorizedAccessException("Ruta no permitida");
+
+            if (!File.Exists(fullPath))
+                throw new FileNotFoundException($"No se encontró el archivo: {Path.GetFileName(path)}");
+
+
+            return Task.FromResult(fullPath);
         }
 
         public async Task<string> SaveAsync(IFormFile file, string folder)
@@ -39,7 +54,7 @@ namespace Servicios.Servicios
             using var stream = new FileStream(fullPath, FileMode.Create);
             await file.CopyToAsync(stream);
 
-            return $"/uploads/{folder}/{fileName}";
+            return Path.Combine("uploads", folder, fileName);
         }
     }
 }

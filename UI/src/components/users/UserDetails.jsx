@@ -51,7 +51,7 @@ export default function UserDetails({ usuario, onClose }) {
         }));
     };
     return (
-        <div className="user-detail-modal">
+        <>
             <div className="detail-header">
                 <div className="header-content">
                     <div className="user-avatar-large">
@@ -242,7 +242,7 @@ export default function UserDetails({ usuario, onClose }) {
                     </button>
                 </div>
             </div>
-        </div >
+        </ >
     );
 
 }

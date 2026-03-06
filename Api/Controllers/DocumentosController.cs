@@ -4,6 +4,7 @@ using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using static Abstracciones.Modelos.Requests.DocumentosRequest;
 
 namespace Api.Controllers
@@ -15,7 +16,7 @@ namespace Api.Controllers
         private readonly IDocumentoService _documentos;
         private readonly IFileStorageService _fileStorage;
         private readonly ILogger<DocumentosController> _logger;
-        public DocumentosController(ILogger<DocumentosController> logger,IDocumentoService documentos, IFileStorageService filestorage)
+        public DocumentosController(ILogger<DocumentosController> logger, IDocumentoService documentos, IFileStorageService filestorage)
         {
             _documentos = documentos;
             _fileStorage = filestorage;
@@ -49,7 +50,7 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al buscar grupos");
+                _logger.LogError(ex, "Error al Agregar Documento");
                 return StatusCode(500, "Ocurrió un error inesperado");
             }
         }
@@ -58,15 +59,65 @@ namespace Api.Controllers
         {
             throw new NotImplementedException();
         }
+
+        [HttpGet("download/{Id}")]
+        public async Task<IActionResult> DescargarDocumento(int Id)
+        {
+            try
+            {
+                var doc = await _documentos.DescargarDocumento(Id);
+                if (doc == null)
+                    return NoContent();
+
+                var file = await _fileStorage.GetAsync(doc.RutaArchivo);
+                var provider = new FileExtensionContentTypeProvider();
+
+                if (!provider.TryGetContentType(doc.RutaArchivo, out string contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
+                var fileName = Path.GetFileName(doc.RutaArchivo);
+
+                var nombreOriginal = fileName.Contains('_')
+                    ? fileName[(fileName.IndexOf('_') + 1)..]
+                    : fileName;
+
+                return PhysicalFile(file, contentType, nombreOriginal);
+            }
+            catch (BusinessException ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Error al Descargar Documento");
+                return StatusCode(500, "Ocurrió un error inesperado");
+            }
+        }
+
         [HttpPut("{idDocumento}")]
         public Task<IActionResult> EditarDocumento(int idDocumento, DocumentosDto documento)
         {
             throw new NotImplementedException();
         }
         [HttpGet]
-        public Task<IActionResult> ListarDocumentos()
+        public async Task<IActionResult> ListarDocumentos()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _documentos.ListarDocumentos();
+                return Ok(response);
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al Buscar Documentos");
+                return StatusCode(500, "Ocurrió un error inesperado");
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader.jsx";
 import "../../content/users/login.css"
 import { jwtDecode } from "jwt-decode";
+import Swal from 'sweetalert2'
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,6 +32,11 @@ export default function Login() {
         navigate("/login2fa")
         return;
       }
+      Swal.fire({
+        title: 'Login Succesful!',
+        icon: 'success',
+        timer : 2000
+      })
       navigate("/dashboard")
     } catch (err) {
       setError(`${err.message}`);

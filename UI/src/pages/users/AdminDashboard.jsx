@@ -158,7 +158,7 @@ export default function Dashboard() {
                         </Link>
                     </div>
                     <div className="col-12 col-sm-6 col-lg-3">
-                        <Link to='/#' className="action-link">
+                        <Link to='/docs' className="action-link">
                             <div className="action-card-modern action-orange">
                                 <div className="action-icon-circle">
                                     <FontAwesomeIcon icon={faFileAlt} />

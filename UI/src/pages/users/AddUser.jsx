@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { register } from "../../api/authService.js";
 import Loader from "../../components/Loader.jsx";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function AddUser() {
     const [telefonos, setTelefonos] = useState([]);
@@ -15,7 +16,11 @@ export default function AddUser() {
     const agregarTelefono = () => {
         const ultimo = telefonos[telefonos.length - 1];
         if (ultimo && (!ultimo.codigo || !ultimo.telefono || !ultimo.tipo)) {
-            alert("Completa el teléfono anterior primero 😉");
+            Swal.fire({
+                title: 'Completa el teléfono anterior primero 😉',
+                icon: 'warning',
+                timer: 2000
+            });
             return;
         };
         setTelefonos([...telefonos,
@@ -46,7 +51,7 @@ export default function AddUser() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        
+
         const form = e.currentTarget;
         const data = {
             Nombre: form.Nombre.value,
@@ -64,31 +69,49 @@ export default function AddUser() {
                 tipo: form[`Telefonos[${i}].Tipo`].value,
             }))
         };
-        if(data.Contraseña!==data.ConfirmarContraseña){
-            alert("Las contraseñas no coinciden");
+        if (data.Contraseña !== data.ConfirmarContraseña) {
+            Swal.fire({
+                title: 'Las contrasenas no coinciden',
+                icon: 'error',
+                timer: 2000
+            })
             setLoading(false);
             return;
         }
         try {
             const response = await register(data);
             if (response) {
-                alert("Usuario registrado exitosamente");
+                Swal.fire({
+                    title: 'Usuario registrado exitosamente',
+                    icon: 'succes',
+                    timer: 2000
+                })
                 form.reset();
                 setTelefonos([]);
                 setTipoIdentificacion("");
                 navigate("/users");
             } else {
-                alert("Error al registrar usuario: " + response.message);
+                Swal.fire({
+                    title: 'Error al registrar usuario',
+                    icon: 'error',
+                    timer: 2000
+                })
             }
         } catch (error) {
-            alert("Error al registrar usuario: " + error.message);
+            console.error(error.message);
+            Swal.fire({
+                title: 'Error al registrar usuario',
+                icon: 'error',
+                timer: 2000
+            })
+
         } finally {
             setLoading(false);
         }
 
     }
 
-    if(loading) return <Loader />;
+    if (loading) return <Loader />;
     return (
         <div className="au-main-container">
             <div className="au-register-card">

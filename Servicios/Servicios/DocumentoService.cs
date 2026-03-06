@@ -8,6 +8,7 @@ using Abstracciones.Servicios;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
+using Reglas;
 
 namespace Servicios.Servicios
 {
@@ -26,6 +27,13 @@ namespace Servicios.Servicios
         public async Task BorrarDocumento(int idDocumento)
         {
            await _documentos.BorrarDocumento(idDocumento);
+        }
+
+        public async Task<DocumentosDto> DescargarDocumento(int Id)
+        {
+            var doc =await _documentos.ObtenerDocumento(Id);
+            DocumentosReglas.ExisteDoc(doc!=null);
+            return doc;
         }
 
         public async Task<bool> EditarDocumento(int idDocumento, DocumentosDto documento)

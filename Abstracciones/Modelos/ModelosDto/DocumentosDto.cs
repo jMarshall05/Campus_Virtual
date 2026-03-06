@@ -25,8 +25,5 @@ namespace Abstracciones.Modelos.ModelosDto
 
         [DataType(DataType.DateTime)]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
-
-        [NotMapped]
-        public IFormFile Archivo { get; set; }
     }
 }

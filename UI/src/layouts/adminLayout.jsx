@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { EliminarToken, leerToken, validarToken } from "../utils/auth";
 import logo from '../assets/LogoInstitucion.png';
+import Swal from "sweetalert2";
 
 
 export default function Layout (){
@@ -13,7 +14,11 @@ export default function Layout (){
 
         const token = leerToken();
         if (!token || !validarToken()) {
-            alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
+             Swal.fire({
+                title : 'Sesión expirada. Por favor, inicia sesión nuevamente.',
+                icon : 'warning',
+                confirmButtonText : 'OK'
+            })
             navigate('/login');
             return;
         }
@@ -60,7 +65,7 @@ return (
                     </Link>
                 </li>
                 <li>
-                    <Link to="/documentos">
+                    <Link to="/docs">
                         <i className="fas fa-file-alt"></i> Documentos
                     </Link>
                 </li>
