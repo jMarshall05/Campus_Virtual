@@ -1,12 +1,12 @@
+import '../../content/docs/editDoc.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../../content/docs/addDoc.css"
-import { faAlignLeft,faFilePdf, faFileUpload, faHeading, faSave, faTag, faTimes } from "../../content/icons.js";
-import { useState } from "react";
-import { addDoc } from "../../api/docsService.js";
-import Swal from "sweetalert2";
-
-export default function AddDoc({ onClose }) {
-    const [loanding, setLoading] = useState(false);
+import { faEdit, faAlignLeft, faFilePdf, faFileUpload, faHeading, faSave, faTag, faTimes } from "../../content/icons.js";
+import { editDoc } from '../../api/docsService.js';
+import { useState } from 'react';
+import Loader from '../Loader.jsx';
+import Swal from 'sweetalert2';
+export default function EditDoc({ doc, onClose }) {
+    const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
@@ -17,11 +17,11 @@ export default function AddDoc({ onClose }) {
             formData.append('Descripcion', form.descripcionDocumento.value)
             formData.append('Categoria', form.categoriaDocumento.value)
             formData.append('Doc', form.archivoDocumento.files[0])
-            const response = await addDoc(formData);
+            const response = await editDoc(doc.id, formData);
             if (response) {
                 setLoading(false)
                 Swal.fire({
-                    title: 'Archivo subido con éxito',
+                    title: 'Archivo editado con éxito',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 })
@@ -39,17 +39,18 @@ export default function AddDoc({ onClose }) {
             console.error(error)
         }
     }
-
+    if (loading) return <Loader />
     return (
         <>
             <div className="modal-header">
-                <h5 className="modal-title" id="agregarDocumentoLabel">
-                    <FontAwesomeIcon icon={faFileUpload} className="me-2" />
-                    Agregar Nuevo Documento
+                <h5 className="modal-title" id="editarDocumentoLabel">
+                    <FontAwesomeIcon icon={faEdit} className="me-2" />
+                    Editar Documento
                 </h5>
                 <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
             </div>
-            <form id="formAgregarDocumento" onSubmit={handleSubmit}>
+
+            <form id="formEditarDocumento" onSubmit={handleSubmit}>
                 <div className="modal-body">
 
                     <div className="form-field-wrap mb-3">
@@ -62,6 +63,7 @@ export default function AddDoc({ onClose }) {
                             id="tituloDocumento"
                             name="Titulo"
                             required
+                            defaultValue={doc.titulo}
                             placeholder="Ej: Manual de Convivencia"
                         />
                     </div>
@@ -76,37 +78,33 @@ export default function AddDoc({ onClose }) {
                             name="Descripcion"
                             rows="3"
                             required
+                            defaultValue={doc.descripcion}
                             placeholder="Describe brevemente el contenido del documento"
                         ></textarea>
                     </div>
 
                     <div className="form-field-wrap mb-3">
                         <label htmlFor="archivoDocumento" className="form-label">
-                            <FontAwesomeIcon icon={faFileUpload} /> Archivo del Documento
+                            <FontAwesomeIcon icon={faFileUpload} /> Reemplazar Archivo
+                            <span className="badge-opcional">Opcional</span>
                         </label>
                         <input
                             type="file"
                             className="form-control"
                             id="archivoDocumento"
                             name="Archivo"
-                            required
                             accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
                             style={{ height: 'fit-content' }}
                         />
+                        {doc.nombreArchivo && (
+                            <div className="file-current mt-2">
+                                <FontAwesomeIcon icon={faFilePdf} className="file-current-icon" />
+                                <span className="file-current-name">{doc.nombreArchivo}</span>
+                                <span className="file-current-badge">Archivo actual</span>
+                            </div>
+                        )}
                         <div className="form-text">
                             Formatos permitidos: PDF, Word, Excel, PowerPoint (Máx. 10MB)
-                        </div>
-                        <div id="archivoPreview" className="file-preview mt-2" style={{ display: "none" }}>
-                            <div className="file-preview-item">
-                                <FontAwesomeIcon icon={faFilePdf} className="file-preview-icon" />
-                                <div className="file-preview-info">
-                                    <span className="file-preview-name"></span>
-                                    <span className="file-preview-size"></span>
-                                </div>
-                                <button type="button" className="btn-remove-file">
-                                    <FontAwesomeIcon icon={faTimes} />
-                                </button>
-                            </div>
                         </div>
                     </div>
 
@@ -114,7 +112,12 @@ export default function AddDoc({ onClose }) {
                         <label htmlFor="categoriaDocumento" className="form-label">
                             <FontAwesomeIcon icon={faTag} /> Categoría
                         </label>
-                        <select className="form-select" id="categoriaDocumento" name="Categoria">
+                        <select
+                            className="form-select"
+                            id="categoriaDocumento"
+                            name="Categoria"
+                            defaultValue={doc.categoria}
+                        >
                             <option value="Institucional">Institucional</option>
                             <option value="Normativa">Normativa</option>
                             <option value="Reglamento">Reglamento</option>
@@ -127,12 +130,13 @@ export default function AddDoc({ onClose }) {
                     </div>
 
                 </div>
+
                 <div className="modal-footer">
-                    <button type="button" onClick={onClose}  className="btn btn-secondary" >
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         <FontAwesomeIcon icon={faTimes} /> Cancelar
                     </button>
-                    <button type="submit" className="btn btn-primary">
-                        <FontAwesomeIcon icon={faSave} /> Guardar Documento
+                    <button type="submit" className="btn btn-primary btn-edit">
+                        <FontAwesomeIcon icon={faSave} /> Guardar Cambios
                     </button>
                 </div>
             </form>

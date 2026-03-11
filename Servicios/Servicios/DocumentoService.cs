@@ -15,18 +15,23 @@ namespace Servicios.Servicios
     public class DocumentoService : IDocumentoService
     {
         private readonly IDocumentosAD _documentos;
-        public DocumentoService(IDocumentosAD documentos)
+        private readonly IFileStorageService _fileStorage;
+        public DocumentoService(IDocumentosAD documentos, IFileStorageService fileStorage)
         {
             _documentos = documentos;
+            _fileStorage = fileStorage;
         }
         public async Task<int> AgregarDocumento(DocumentosDto documento)
         {
             return await _documentos.AgregarDocumento(documento.Adapt<DocumentosAD>());
         }
 
-        public async Task BorrarDocumento(int idDocumento)
+        public async Task BorrarDocumento(int idDocumento, DocumentosDto doc)
         {
-           await _documentos.BorrarDocumento(idDocumento);
+            DocumentosReglas.ExisteDoc(doc != null);
+            if(doc.RutaArchivo!=null)
+                await _fileStorage.DeleteAsync(doc.RutaArchivo);
+            await _documentos.BorrarDocumento(idDocumento);
         }
 
         public async Task<DocumentosDto> DescargarDocumento(int Id)
@@ -38,6 +43,13 @@ namespace Servicios.Servicios
 
         public async Task<bool> EditarDocumento(int idDocumento, DocumentosDto documento)
         {
+            var doc =await _documentos.ObtenerDocumento(idDocumento);
+            DocumentosReglas.ExisteDoc(doc!=null);
+            if (documento.Doc != null)
+            {
+                var url = await _fileStorage.SaveAsync(documento.Doc, "Docs");
+                documento.RutaArchivo = url;
+            }
             return await _documentos.EditarDocumento(idDocumento, documento.Adapt<DocumentosAD>());
         }
 
@@ -45,5 +57,11 @@ namespace Servicios.Servicios
         {
             return await _documentos.ListarDocumentos();
         }
+        public async Task<DocumentosDto> ObtenerDocumento(int Id)
+        {
+            var doc = await _documentos.ObtenerDocumento(Id);
+            return doc;
+        }
+
     }
 }

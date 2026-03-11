@@ -15,3 +15,15 @@ export function addDoc(data){
         body : data
     })
 }
+export function editDoc(id,data){
+     return apiFetchBlob(`docs/${id}`,{
+        method : 'PUT',
+        body : data
+    })
+}
+
+export function deleteDoc(id){
+    return apiFetchJson(`docs/${id}`,{
+        method : 'DELETE'
+    })
+}

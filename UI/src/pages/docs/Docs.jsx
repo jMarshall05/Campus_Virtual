@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { getDoc, getDocs } from "../../api/docsService";
+import { deleteDoc, getDoc, getDocs } from "../../api/docsService";
 import Loader from "../../components/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCalendar, faCertificate, faCirclePlus, faEdit, faEllipsisV, faExternalLinkAlt, faFileAlt, faFileContract, faFolder, faFolderOpen, faStar } from "../../content/icons.js";
 import "../../content/docs/docs.css"
 import AddDoc from "../../components/docs/AddDoc.jsx";
+import EditDoc from "../../components/docs/EditDoc.jsx";
 import Swal from "sweetalert2";
 
 
@@ -12,6 +13,7 @@ export default function Docs() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const [docs, setDocs] = useState([null]);
+	const [docModal, setDoc] = useState(null);
 	const [modalhidden, setModalHidden] = useState(true);
 	const [modalType, setModalType] = useState('');
 
@@ -44,6 +46,29 @@ export default function Docs() {
 			})
 		}
 		finally {
+			setLoading(false);
+		}
+	}
+
+	const Delete = async (id) => {
+		setLoading(true)
+		try {
+			const response = await deleteDoc(id);
+			if(response ===null){
+					Swal.fire({
+				title: "Archivo borrado con exito",
+				icon: 'success',
+				confirmButtonText: "OK"
+			})
+			cargarDatos();
+			}
+		} catch (error) {
+			Swal.fire({
+				title: "Algo a fallado intente de nuevo",
+				icon: 'error',
+				confirmButtonText: "OK"
+			})
+		}finally{
 			setLoading(false);
 		}
 	}
@@ -108,11 +133,11 @@ export default function Docs() {
 													<FontAwesomeIcon icon={faEllipsisV} />
 												</button>
 												<div className="menu-dropdown">
-													<a href="#" onClick={() => editarDocumento(doc.id)}>
+													<a onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
 														<FontAwesomeIcon icon={faEdit} />
 														Editar
 													</a>
-													<a href="#" onClick={() => editarDocumento(doc.id)}>
+													<a onClick={() => Delete(doc.id)}>
 														<FontAwesomeIcon icon={faTrash} />
 														Eliminar
 													</a>
@@ -200,11 +225,11 @@ export default function Docs() {
 														<FontAwesomeIcon icon={faEllipsisV} />
 													</button>
 													<div className="menu-dropdown">
-														<a href="#" onClick={() => editarDocumento(doc.id)}>
+														<a onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
 															<FontAwesomeIcon icon={faEdit} />
 															Editar
 														</a>
-														<a href="#" onClick={() => editarDocumento(doc.id)}>
+														<a onClick={() => Delete(doc.id)}>
 															<FontAwesomeIcon icon={faTrash} />
 															Eliminar
 														</a>

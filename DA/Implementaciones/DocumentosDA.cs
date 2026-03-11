@@ -32,9 +32,12 @@ namespace DA.Implementaciones
 
             documentoExistente.Titulo = documento.Titulo;
             documentoExistente.Descripcion = documento.Descripcion;
-            documentoExistente.RutaArchivo = documento.RutaArchivo;
+            if (documento.RutaArchivo != null)
+            {
+                documentoExistente.RutaArchivo = documento.RutaArchivo;
+            }
             documentoExistente.Categoria = documento.Categoria;
-            documentoExistente.FechaRegistro = documento.FechaRegistro;
+            //AgregarFecha de Modificacion
             var result = await _elContexto.SaveChangesAsync();
             return result != 0;
 

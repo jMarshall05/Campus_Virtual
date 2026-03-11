@@ -14,7 +14,7 @@ namespace Abstracciones.Api
     {
         Task<IActionResult> AgregarDocumento(AgregarDocumentoRequest data);
         Task<IActionResult> BorrarDocumento(int idDocumento);
-        Task<IActionResult> EditarDocumento(int idDocumento, DocumentosDto documento);
+        Task<IActionResult> EditarDocumento(int idDocumento, EditarDocumentoRequest documento);
         Task<IActionResult> ListarDocumentos();
         Task<IActionResult> DescargarDocumento(int Id);
 

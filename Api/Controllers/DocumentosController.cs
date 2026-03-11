@@ -5,6 +5,7 @@ using Abstracciones.Servicios;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Abstracciones.Modelos.Requests.DocumentosRequest;
 
 namespace Api.Controllers
@@ -54,10 +55,28 @@ namespace Api.Controllers
                 return StatusCode(500, "Ocurrió un error inesperado");
             }
         }
-        [HttpDelete]
-        public Task<IActionResult> BorrarDocumento(int idDocumento)
+        [HttpDelete("{idDocumento}")]
+        public async Task<IActionResult> BorrarDocumento(int idDocumento)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var doc = await _documentos.ObtenerDocumento(idDocumento);
+                if (doc == null)
+                    return BadRequest("Este documento no existe");
+                await _documentos.BorrarDocumento(idDocumento, doc);
+                return NoContent();
+            }
+            catch (BusinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al borrar Documento");
+                return StatusCode(500, "Ocurrió un error inesperado");
+            }
+
         }
 
         [HttpGet("download/{Id}")]
@@ -89,7 +108,7 @@ namespace Api.Controllers
 
                 return BadRequest(ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al Descargar Documento");
                 return StatusCode(500, "Ocurrió un error inesperado");
@@ -97,9 +116,27 @@ namespace Api.Controllers
         }
 
         [HttpPut("{idDocumento}")]
-        public Task<IActionResult> EditarDocumento(int idDocumento, DocumentosDto documento)
+        [Consumes("multipart/form-data")]
+        [Produces("application/json")]
+        public async Task<IActionResult> EditarDocumento(int idDocumento, [FromForm] EditarDocumentoRequest documento)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var dto = documento.Adapt<DocumentosDto>();
+                var response = await _documentos.EditarDocumento(idDocumento, dto);
+                return Ok();
+            }
+            catch (BusinessException ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al Descargar Documento");
+                return StatusCode(500, "Ocurrió un error inesperado");
+            }
+
         }
         [HttpGet]
         public async Task<IActionResult> ListarDocumentos()

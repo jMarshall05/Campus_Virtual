@@ -21,7 +21,19 @@ namespace Servicios.Servicios
 
         public Task DeleteAsync(string path)
         {
-            throw new NotImplementedException();
+            path = path.TrimStart('/');
+            var fullPath = Path.Combine(_rootPath, path);
+
+            if (!fullPath.StartsWith(_rootPath))
+                throw new UnauthorizedAccessException("Ruta no permitida");
+
+            if (!File.Exists(fullPath))
+                throw new FileNotFoundException($"No se encontró el archivo: {Path.GetFileName(path)}");
+            File.Delete(fullPath);
+
+            return Task.CompletedTask;
+
+
         }
 
         public Task<string> GetAsync(string path)

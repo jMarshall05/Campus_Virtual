@@ -16,5 +16,10 @@ namespace Abstracciones.Modelos.Requests
             public string Categoria { get; set; }
             public IFormFile Doc { get; set; }
         }
+        public class EditarDocumentoRequest : AgregarDocumentoRequest
+        {
+            public IFormFile? Doc { get; set; }
+
+        }
     }
 }
