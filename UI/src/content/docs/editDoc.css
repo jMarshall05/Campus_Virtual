@@ -1,0 +1,76 @@
+/* ── Editar: header variante ── */
+#editarDocumentoLabel ~ .modal-header,
+.modal-header:has(#editarDocumentoLabel) {
+    background: linear-gradient(135deg, #0D3B6E 0%, #1B5299 60%, #0F6FD7 100%);
+}
+
+/* ── Badge "Opcional" junto al label ── */
+.badge-opcional {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: var(--blue-accent);
+    background: var(--blue-light);
+    border: 1px solid var(--blue-border);
+    border-radius: 20px;
+    padding: 1px 7px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    vertical-align: middle;
+}
+
+/* ── Archivo actual (en edición) ── */
+.file-current {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: linear-gradient(135deg, #F0F7FF 0%, #E8F2FF 100%);
+    border: 1.5px solid var(--blue-border);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 0.85rem;
+    margin-top: 0.4rem;
+}
+
+.file-current-icon {
+    color: var(--blue-accent);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.file-current-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--blue-deep);
+    font-weight: 500;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-current-badge {
+    font-family: 'Sora', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #059669;
+    background: #D1FAE5;
+    border: 1px solid #A7F3D0;
+    border-radius: 20px;
+    padding: 1px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+/* ── Botón guardar cambios (editar) ── */
+.modal-footer .btn-primary.btn-edit {
+    background: linear-gradient(135deg, #0D9488 0%, #0F6FD7 100%);
+    box-shadow: 0 4px 18px rgba(13, 148, 136, 0.38);
+}
+
+.modal-footer .btn-primary.btn-edit:hover {
+    background: linear-gradient(135deg, #0B8076 0%, #0B52A8 100%);
+    box-shadow: 0 6px 24px rgba(13, 148, 136, 0.52);
+    transform: translateY(-2px);
+}

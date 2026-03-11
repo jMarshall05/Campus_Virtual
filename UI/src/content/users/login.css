@@ -1,0 +1,182 @@
+    body,
+    html,
+    #root {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .main-container {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .left-panel {
+        flex: 1;
+        background-color: #0d126e;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .left-panel img {
+        width: 300px;
+        height: auto;
+    }
+
+    .right-panel {
+        flex: 1;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-box {
+        width: 80%;
+        max-width: 400px;
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-box h2 {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: black;
+    }
+
+    .twofa-modal {
+        max-width: 700px;
+    }
+
+    .login-box form {
+        width: 100%;
+    }
+
+
+    .form-control {
+        height: 30px;
+        width: 80%;
+        display: flex;
+        margin: 0 auto;
+        border-radius: 10px;
+        border: 2px solid #1a1a40;
+        text-align: center;
+    }
+
+    .mb-3 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .btn-login {
+        width: 100%;
+        background-color: #2c4bc4;
+        border: none;
+        font-weight: bold;
+        border-radius: 20px;
+        padding: 10px;
+        color: white;
+        justify-content: center;
+    }
+
+    .btn-login:hover {
+        background-color: #143ccc;
+    }
+
+    .text-link {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9em;
+        color: black;
+    }
+
+    .text-link a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #2c4bc4;
+    }
+
+    .btn-twoFactor {
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        width: 80%;
+        padding: 10px 16px;
+
+        background-color: #fff;
+        color: #3c4043;
+        border: 1px solid #dadce0;
+        border-radius: 6px;
+
+        font-size: 14px;
+        font-weight: 500;
+
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-twoFactor:hover {
+        background-color: #f8f9fa;
+        box-shadow: 0 1px 3px rgba(60, 64, 67, 0.2);
+    }
+
+    .btn-twoFactor:active {
+        transform: scale(0.98);
+    }
+
+    .btn-twoFactor:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25);
+    }
+
+    .password-container {
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .text-danger {
+        color: red;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    /* 🎯 Responsivo para móviles */
+    @media (max-width: 768px) {
+        .main-container {
+            flex-direction: column;
+            /* apila los paneles */
+            height: auto;
+            /* permite scroll si es necesario */
+        }
+
+        .left-panel {
+            flex: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .left-panel img {
+            width: 170px;
+            /* logo más pequeño en móviles */
+        }
+
+        .right-panel {
+            flex: none;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            margin: 0 auto;
+        }
+    }

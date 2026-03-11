@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web;
+using Microsoft.AspNetCore.Http;
 
 namespace Abstracciones.Modelos.ModelosDto
 {
@@ -27,7 +26,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public int IdMateria { get; set; }
 
         [DisplayName("Archivo Adjunto")]
-        public string ArchivoAdjunto { get; set; }
+        public string? ArchivoAdjunto { get; set; }
 
         [DisplayName("Fecha de Modificación")]
         public DateTime? FechaModificacion { get; set; }
@@ -37,13 +36,13 @@ namespace Abstracciones.Modelos.ModelosDto
 
         [Required(ErrorMessage = "Debe seleccionar un grupo.")]
         [DisplayName("Grupo")]
-        public int Id_grupo { get; set; }
+        public int idGrupo { get; set; }
 
         [ForeignKey("id_grupo")]
         public virtual GruposDto Grupo { get; set; }
 
         [NotMapped]
-        public HttpPostedFileBase Archivo { get; set; }
+        public virtual IFormFile Archivo { get; set; }
 
         [NotMapped]
         [DisplayName("Grupo Asignado")]

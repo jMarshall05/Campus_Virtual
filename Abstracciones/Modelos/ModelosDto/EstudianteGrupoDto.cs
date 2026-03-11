@@ -6,7 +6,7 @@ namespace Abstracciones.Modelos.ModelosDto
     {
         public int IdEstudianteGrupo { get; set; }
         public string EstudianteId { get; set; }
-        public int? GrupoId { get; set; }
+        public int GrupoId { get; set; }
 
     }
 }

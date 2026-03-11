@@ -1,0 +1,603 @@
+/* ─── Reset & Base ───────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+:root {
+    --blue-50:  #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+    --bg:       #e8f0f9;
+    --surface:  #ffffff;
+    --text-primary:   #0f172a;
+    --text-secondary: #475569;
+    --text-muted:     #94a3b8;
+    --border:         #e2e8f0;
+    --border-focus:   var(--blue-500);
+    --radius-sm:  8px;
+    --radius-md:  14px;
+    --radius-lg:  22px;
+    --radius-xl:  28px;
+    --shadow-card: 0 24px 64px rgba(30, 58, 138, 0.18), 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-input: 0 0 0 3px rgba(37, 99, 235, 0.14);
+    --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    background: var(--bg);
+}
+
+/* ─── Layout ─────────────────────────────────────────────────────────── */
+.au-main-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background:
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(37,99,235,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(30,58,138,0.08) 0%, transparent 60%),
+        var(--bg);
+}
+
+.au-register-card {
+    display: flex;
+    max-width: 1120px;
+    width: 100%;
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+}
+
+/* ─── Left Panel ─────────────────────────────────────────────────────── */
+.au-left-panel {
+    flex: 0 0 360px;
+    background: linear-gradient(155deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.au-left-panel__orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+.au-left-panel__orb--top {
+    width: 340px;
+    height: 340px;
+    background: radial-gradient(circle, rgba(255,255,255,0.13) 0%, transparent 70%);
+    top: -120px;
+    right: -120px;
+}
+.au-left-panel__orb--bottom {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(255,255,255,0.09) 0%, transparent 70%);
+    bottom: -60px;
+    left: -60px;
+}
+
+.au-left-panel__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+}
+
+.au-left-panel__logo-wrap {
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    padding: 1.25rem;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(6px);
+}
+
+.au-left-panel__logo-wrap img {
+    width: 110px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+}
+
+.au-left-panel h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+}
+
+.au-left-panel p {
+    opacity: 0.85;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 240px;
+}
+
+.au-left-panel__divider {
+    width: 48px;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    margin: 0.25rem auto;
+}
+
+.au-left-panel__features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 200px;
+     margin-right: 1rem;
+}
+
+.au-left-panel__features li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    opacity: 0.88;
+    font-weight: 500;
+}
+
+.au-feature-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    flex-shrink: 0;
+}
+
+/* ─── Right Panel ────────────────────────────────────────────────────── */
+.au-right-panel {
+    flex: 1;
+    padding: 2.75rem 3rem;
+    overflow-y: auto;
+    max-height: 92vh;
+}
+
+.au-right-panel::-webkit-scrollbar       { width: 6px; }
+.au-right-panel::-webkit-scrollbar-track { background: var(--border); border-radius: 10px; }
+.au-right-panel::-webkit-scrollbar-thumb { background: var(--blue-400); border-radius: 10px; }
+
+/* ─── Register Box ───────────────────────────────────────────────────── */
+.au-register-box { width: 100%; }
+
+.au-register-box__header {
+    margin-bottom: 2rem;
+    padding-top: 2rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.au-register-box h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-primary);
+    font-weight: 800;
+    font-size: 1.85rem;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.35rem;
+}
+
+.au-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+}
+
+/* ─── Form Sections ──────────────────────────────────────────────────── */
+.au-form-section {
+    background: #f8fafc;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.au-form-section__title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--blue-600);
+    margin-bottom: 1.25rem;
+}
+
+/* ─── Form Row (2 cols) ──────────────────────────────────────────────── */
+.au-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+}
+
+/* ─── Fields ─────────────────────────────────────────────────────────── */
+.au-mb-3 { margin-bottom: 1.25rem; }
+
+.au-label, .au-h5 {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.au-input-wrapper {
+    position: relative;
+}
+
+.au-input-wrapper--no-icon .au-form-control {
+    padding-left: 15px;
+}
+
+.au-input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    z-index: 1;
+    font-size: 0.9rem;
+    transition: color var(--transition);
+}
+
+.au-form-control {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px 11px 42px;
+    font-size: 0.92rem;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-primary);
+    background: var(--surface);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.au-input-wrapper:focus-within .au-input-icon {
+    color: var(--blue-500);
+}
+
+.au-form-control:focus {
+    border-color: var(--border-focus);
+    box-shadow: var(--shadow-input);
+    outline: none;
+}
+
+.au-form-control::placeholder { color: var(--text-muted); }
+
+select.au-form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+/* ─── Phone Section ──────────────────────────────────────────────────── */
+.au-phone-section {
+    background: var(--blue-50);
+    border: 1.5px solid var(--blue-100);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.5rem;
+}
+
+.au-phone-section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.au-phone-section h5 {
+    color: var(--blue-900);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.au-phone-section__count {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--blue-600);
+    background: var(--blue-100);
+    border-radius: 20px;
+    padding: 2px 10px;
+}
+
+.au-telefonos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+/* ─── Telefono Item ──────────────────────────────────────────────────── */
+.au-telefono-item {
+    background: var(--surface);
+    border: 1.5px solid var(--blue-200);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1rem 1rem 3rem;
+    position: relative;
+    transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.au-telefono-item:hover {
+    border-color: var(--blue-400);
+    box-shadow: 0 2px 10px rgba(37,99,235,0.08);
+}
+
+.au-telefono-item__index {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    bottom: -1px;
+    width: 2.25rem;
+    background: linear-gradient(180deg, var(--blue-600), var(--blue-800));
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.au-tel-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.au-tel-field { display: flex; flex-direction: column; }
+.au-tel-code   { flex: 0 0 88px; }
+.au-tel-number { flex: 1; min-width: 110px; }
+.au-tel-type   { flex: 1; min-width: 110px; }
+.au-tel-status { flex: 0 0 72px; }
+.au-tel-action { flex: 0 0 44px; }
+
+.au-tel-field .au-form-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.au-tel-field .au-form-control {
+    padding: 9px 12px 9px 12px;
+    font-size: 0.88rem;
+    border-radius: 7px;
+}
+
+/* ─── Toggle ─────────────────────────────────────────────────────────── */
+.au-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    height: 38px;
+}
+
+.au-toggle-label {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.au-toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.au-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e0;
+    border-radius: 12px;
+    transition: background var(--transition);
+}
+
+.au-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform var(--transition);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+.au-toggle-input:checked + .au-toggle-slider { background: var(--blue-500); }
+.au-toggle-input:checked + .au-toggle-slider::before { transform: translateX(20px); }
+
+/* ─── Remove Button ──────────────────────────────────────────────────── */
+.au-btn-remove-tel {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1.5px solid #fecdd3;
+    border-radius: 7px;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    margin-top: 0;
+    align-self: flex-end;
+}
+
+.au-btn-remove-tel:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+    transform: scale(1.07);
+}
+
+/* ─── Empty State ────────────────────────────────────────────────────── */
+.au-empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 1.5rem 1rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    border: 1.5px dashed var(--blue-200);
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.6);
+}
+
+/* ─── Add Phone Button ───────────────────────────────────────────────── */
+#au-addTelefono {
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-800) 100%);
+    color: white;
+    border: none;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+#au-addTelefono:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+/* ─── Register Button ────────────────────────────────────────────────── */
+.au-btn-register {
+    width: 100%;
+    background: linear-gradient(135deg, var(--blue-700) 0%, var(--blue-500) 100%);
+    border: none;
+    color: white;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    margin-top: 0.5rem;
+}
+
+.au-btn-cancel {
+    width: 100%;
+    background: var(--text-secondary);
+    border: none;
+    color: white;
+    padding: 14px;
+    border-radius: var(--radius-sm);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition);
+    margin-top: 0.5rem;
+    display: inline-flex;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.au-btn-register:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(29, 78, 216, 0.38);
+}
+
+.au-btn-register:active {
+    transform: translateY(0);
+}
+
+/* ─── Misc ───────────────────────────────────────────────────────────── */
+.au-text-danger {
+    color: #dc2626;
+    font-size: 0.82rem;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+.au-validation-summary-errors {
+    background: var(--blue-50);
+    border: 1.5px solid var(--blue-200);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.au-validation-summary-errors li { color: var(--blue-900); font-size: 0.88rem; }
+
+.au-me-2 { margin-right: 0.5rem; }
+
+/* ─── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 968px) {
+    .au-register-card { flex-direction: column; }
+
+    .au-left-panel {
+        flex: none;
+        padding: 2.5rem 2rem;
+    }
+
+    .au-right-panel {
+        padding: 2rem;
+        max-height: none;
+    }
+
+    .au-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .au-main-container { padding: 1rem; }
+
+    .au-right-panel { padding: 1.5rem; }
+
+    .au-register-box h2 { font-size: 1.5rem; }
+
+    .au-tel-row { flex-wrap: wrap; }
+    .au-tel-code, .au-tel-number, .au-tel-type { flex: 1 1 45%; }
+    .au-tel-status, .au-tel-action { flex: 0 0 auto; }
+}

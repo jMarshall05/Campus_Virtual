@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "bootstrap": "^5.3.8"
+  }
+}

@@ -1,0 +1,66 @@
+﻿using Abstracciones.Modelos.ModelosDto;
+using DA.Entidades;
+using DA.Interfaces;
+using Mapster;
+using Microsoft.EntityFrameworkCore;
+
+namespace DA.Implementaciones
+{
+    public class MateriasDA : IMateriasDA
+    {
+        private readonly ApplicationDbContext _elContexto;
+        public MateriasDA(ApplicationDbContext elContexto)
+        {
+            _elContexto = elContexto;
+        }
+        public async Task<int> AgregarMateria(MateriasAD materia)
+        {
+            materia.Estado = true;
+            var entidad = await _elContexto.Materias.AddAsync(materia);
+            await _elContexto.SaveChangesAsync();
+            return entidad.Entity.IdMateria;
+        }
+
+        public async Task CambiarEstadoMateria(int materiaId)
+        {
+            var materiaExistente = await _elContexto.Materias.FindAsync(materiaId);
+            materiaExistente.Estado = !materiaExistente.Estado;
+            await _elContexto.SaveChangesAsync();
+        }
+
+        public async Task EditarMateria(int IdMateria, MateriasAD materia)
+        {
+            var materiaExistente = await _elContexto.Materias.FindAsync(IdMateria);
+            materiaExistente.Nombre = materia.Nombre;
+            await _elContexto.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<MateriaDto>> ListarMaterias()
+        {
+            var materias = await _elContexto.Materias.Select(m => new MateriaDto
+            {
+                IdMateria = m.IdMateria,
+                Nombre = m.Nombre,
+                Estado = m.Estado
+            }).ToListAsync();
+            return materias;
+        }
+
+        public async Task<MateriaDto> ObtenerMateriaPorId(int id)
+        {
+            var materia = await _elContexto.Materias.Where(t => t.IdMateria == id).Select(t => new MateriaDto
+            {
+                IdMateria = t.IdMateria,
+                Nombre = t.Nombre,
+                Estado = t.Estado
+            }).FirstOrDefaultAsync();
+            return materia;
+        }
+
+        public async Task<MateriaDto> ObtenerMateriaPorNombre(string materia)
+        {
+            var materiaEnBase = await _elContexto.Materias.Where(m => m.Nombre == materia).FirstOrDefaultAsync();
+            return materiaEnBase.Adapt<MateriaDto>();
+        }
+    }
+}
