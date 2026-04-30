@@ -58,10 +58,7 @@ export default function Groups() {
                             <p className="header-subtitle">Administra todos los grupos del sistema</p>
                         </div>
                     </div>
-                    <button className="btn-premium btn-Agregar-Grupo" onClick={() => { setModalType('add'); setModalHidden(false) }}>
-                        <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
-                        Nuevo Grupo
-                    </button>
+                    
                 </div>
 
                 <div className="stats-grid">
@@ -100,6 +97,10 @@ export default function Groups() {
                         <div className="filter-actions">
 
                         </div>
+                        <button className="btn-premium btn-Agregar-Grupo" onClick={() => { setModalType('add'); setModalHidden(false) }}>
+                        <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
+                        Nuevo Grupo
+                    </button>
                     </div>
                 </div>
 
@@ -229,30 +230,30 @@ export default function Groups() {
                 </div>
 
                 <div className="card-footer-premium">
-                <div className="pagination-info">
-                    Mostrando <strong>{gruposPaginados.length}</strong> de <strong>{filteredGroups.length}</strong> grupos
+                    <div className="pagination-info">
+                        Mostrando <strong>{gruposPaginados.length}</strong> de <strong>{filteredGroups.length}</strong> grupos
+                    </div>
+
+                    <div className="pagination-controls">
+                        <button
+                            className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
+                            disabled={pagina === 1}
+                            onClick={() => setPagina(p => Math.max(p - 1, 1))}
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+
+                        <span className="pagination-btn active">{pagina}</span>
+
+                        <button
+                            className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
+                            disabled={pagina === totalPaginas}
+                            onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}
+                        >
+                            <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                    </div>
                 </div>
-
-                <div className="pagination-controls">
-                    <button
-                        className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
-                        disabled={pagina === 1}
-                        onClick={() => setPagina(p => Math.max(p - 1, 1))}
-                    >
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                    </button>
-
-                    <span className="pagination-btn active">{pagina}</span>
-
-                    <button
-                        className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
-                        disabled={pagina === totalPaginas}
-                        onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}
-                    >
-                        <FontAwesomeIcon icon={faChevronRight} />
-                    </button>
-                </div>
-            </div>
             </div>
 
             {!modalhidden && (

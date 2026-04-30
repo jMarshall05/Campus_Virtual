@@ -1,28 +1,28 @@
 import { apiFetchBlob,apiFetchJson, urlBase } from "./apiClient";
 
-export function getDocs(){
+export async function getDocs(){
     return apiFetchJson('docs',{
         method : 'GET'
     })
 }
-export function getDoc(id){
+export async function getDoc(id){
     return (`${urlBase}/docs/download/${id}`)
 }
 
-export function addDoc(data){
+export async function addDoc(data){
      return apiFetchBlob('docs',{
         method : 'POST',
         body : data
     })
 }
-export function editDoc(id,data){
+export async function editDoc(id,data){
      return apiFetchBlob(`docs/${id}`,{
         method : 'PUT',
         body : data
     })
 }
 
-export function deleteDoc(id){
+export async function deleteDoc(id){
     return apiFetchJson(`docs/${id}`,{
         method : 'DELETE'
     })

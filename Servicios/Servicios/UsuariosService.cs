@@ -203,7 +203,7 @@ namespace Servicios.Servicios
         public async Task<string> VerifyTwoFa(string idusuario, string code)
         {
             var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
-            validarCodigo(code, user.GoogleAuthenticatorSecretTemp);
+            ValidarCodigo(code, user.GoogleAuthenticatorSecretTemp);
             var tokenRequest = await _usuariosDA.VerifyTwoFa(idusuario);
             var token = _TokenService.CrearToken(tokenRequest);
             return token;
@@ -211,12 +211,12 @@ namespace Servicios.Servicios
         public async Task<string> Login2fa(string idusuario, string code)
         {
             var user = await _usuariosDA.ObtenerUsuarioIdentityPorId(idusuario);
-            validarCodigo(code, user.GoogleAuthenticatorSecretKey);
+            ValidarCodigo(code, user.GoogleAuthenticatorSecretKey);
             var token = _TokenService.CrearToken(user.Adapt<TokenRequest>());
             return token;
         }
 
-        private void validarCodigo(string code, string key)
+        private void ValidarCodigo(string code, string key)
         {
             var secret = _secrets.Unprotect(key);
             var totp = new Totp(Base32Encoding.ToBytes(secret));

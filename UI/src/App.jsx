@@ -13,6 +13,7 @@ import AddUser from './pages/users/AddUser.jsx';
 import Users from './pages/users/Users.jsx';
 import Groups from './pages/groups/Groups.jsx';
 import Docs from './pages/docs/Docs.jsx';
+import Courses from './pages/courses/Courses.jsx';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -42,6 +43,10 @@ function App() {
           />
           <Route path="/users" element={<ProtectedRoute requiredRole="Administradores">
             <Users />
+          </ProtectedRoute>
+          } />
+          <Route path="/courses" element={<ProtectedRoute requiredRole="Administradores">
+            <Courses />
           </ProtectedRoute>
           } />
           <Route path="/groups" element={<ProtectedRoute requiredRole="Administradores">

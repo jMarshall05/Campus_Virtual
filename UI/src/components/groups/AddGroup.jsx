@@ -39,7 +39,7 @@ export default function AddGroup({ onClose }) {
     }
     if (loading) return <Loader />
     return (
-        <div className="edit-group-modal">
+        <>
             <div className="edit-header">
                 <div className="header-content">
                     <div className="header-icon">
@@ -110,6 +110,6 @@ export default function AddGroup({ onClose }) {
                 </div>
             </form>
 
-        </div>
+        </>
     );
 }

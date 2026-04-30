@@ -29,7 +29,7 @@ namespace DA.Implementaciones
 
         public async Task<TokenRequest> Login(LoginRequest login)
         {
-            var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario incorrecto");
+            var user = await _userManager.FindByEmailAsync(login.Email) ?? throw new BusinessException("Usuario o contraseña incorrectos");
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, login.Password);
             if (!isPasswordValid)
                 throw new BusinessException("Usuario o contraseña incorrectos");
@@ -187,13 +187,10 @@ namespace DA.Implementaciones
         }
         private static ApplicationUser CrearUsuario(UsuariosAD usuario)
         {
-            string numeroRamdon = Random.Shared.Next(0, 100).ToString("D2");
 
             return new ApplicationUser
             {
-                UserName = (usuario.Nombre.ToUpper().First() + usuario.Apellido.Trim() + numeroRamdon).Normalize(NormalizationForm.FormD)
-                .Where(c => char.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                .Aggregate("", (s, c) => s + c),
+                UserName = $"{usuario.Nombre} {usuario.Apellido}",
                 Email = usuario.Email,
                 FechaDeRegistro = DateTime.UtcNow
             };

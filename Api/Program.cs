@@ -100,6 +100,7 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero
         };
     });
+builder.Services.AddResponseCompression();
 
 //DA
 builder.Services.AddScoped<IUsuariosDA, UsuariosDA>();
@@ -131,6 +132,7 @@ builder.Services.AddScoped<IGruposHelper, GruposHelper>();
 builder.Services.AddScoped<SecretProtectorService>();
 builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
+builder.Services.AddScoped<ICursosService, CursosService>();
 builder.Services.AddScoped<IFileStorageService>(sp =>
 {
     var env = sp.GetRequiredService<IWebHostEnvironment>();
@@ -174,6 +176,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.UseResponseCompression();
 app.UseCors("AllowReact");
 app.UseAuthentication();
 app.UseAuthorization();

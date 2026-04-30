@@ -27,19 +27,21 @@ namespace Servicios.Servicios
             return request;
         }
 
-        public Task<IEnumerable<CursoDto>> ListarCursos()
+        public async Task<IEnumerable<CursoDto>> ListarCursos()
         {
-            throw new NotImplementedException();
+           var list =await _cursos.ListarCursos();
+            return list;
         }
 
-        public Task ModificarEstadoCurso(int idCurso)
+        public async Task ModificarEstadoCurso(int idCurso)
         {
-            throw new NotImplementedException();
+           await _cursos.ModificarEstadoCurso(idCurso);
         }
 
         public Task<CursoDto> ObtenerPorId(int idCurso)
         {
-            throw new NotImplementedException();
+           var curso = _cursos.ObtenerPorId(idCurso);
+            return curso;
         }
     }
 }

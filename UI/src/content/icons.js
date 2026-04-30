@@ -61,5 +61,7 @@ export {
   faFilePdf,
   faFileUpload,
   faHeading,
-  faTag
+  faTag,
+  faBookOpen,
+  
 } from "@fortawesome/free-solid-svg-icons";

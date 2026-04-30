@@ -30,7 +30,6 @@ export async function apiFetchJson(endpoint, options = {}) {
         throw new Error(errorMsg);
     }
 
-    // Si no hay contenido (204)
     if (response.status === 204) return null;
 
     const contentType = response.headers.get("content-type") || "";

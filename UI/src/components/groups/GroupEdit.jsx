@@ -43,7 +43,7 @@ export default function GroupEdit({ grupo, onClose }) {
         setLoading(false);
         Swal.fire({
             title: 'Grupo actualizado exitosamente',
-            icon: 'succes',
+            icon: 'success',
             timer: 2000
         })
         onClose();
@@ -51,17 +51,18 @@ export default function GroupEdit({ grupo, onClose }) {
 
     if (loading) return <Loader />;
     return (
-        <>            <div className="edit-header">
-            <div className="header-content">
-                <div className="header-icon">
-                    <FontAwesomeIcon icon={faEdit} />
-                </div>
-                <div>
-                    <h2 className="modal-title">Editar Grupo</h2>
-                    <p className="modal-subtitle">Actualiza la información del grupo</p>
+        <>
+            <div className="edit-header">
+                <div className="header-content">
+                    <div className="header-icon">
+                        <FontAwesomeIcon icon={faEdit} />
+                    </div>
+                    <div>
+                        <h2 className="modal-title">Editar Grupo</h2>
+                        <p className="modal-subtitle">Actualiza la información del grupo</p>
+                    </div>
                 </div>
             </div>
-        </div>
 
             <form className="edit-form" onSubmit={handleSubmit} id="groupEditForm">
                 <div className="edit-content">
@@ -155,5 +156,5 @@ export default function GroupEdit({ grupo, onClose }) {
                 </div>
             </form>
         </>
-        );
+    );
 }

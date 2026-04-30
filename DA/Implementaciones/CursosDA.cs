@@ -1,4 +1,5 @@
-﻿using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Excepciones;
+using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -42,7 +43,7 @@ namespace DA.Implementaciones
 
         public async Task ModificarEstadoCurso(int idCurso)
         {
-            var cursoExistente = await _elContexto.Cursos.FindAsync(idCurso);
+            var cursoExistente = await _elContexto.Cursos.FindAsync(idCurso) ?? throw new BusinessException("No existe el curso");
             cursoExistente.Estado = !cursoExistente.Estado;
             await _elContexto.SaveChangesAsync();
 
@@ -64,7 +65,8 @@ namespace DA.Implementaciones
                      NombreGrupo = curso.Grupo.Nombre,
                      NombreMateria = curso.Materia.Nombre,
                      Estado = curso.Estado
-                 }).FirstOrDefaultAsync();
+                 }).FirstOrDefaultAsync() ?? throw new BusinessException("No existe el curso");
+            
 
             return curso;
         }

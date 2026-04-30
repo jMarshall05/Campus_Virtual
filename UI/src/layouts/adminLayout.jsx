@@ -50,7 +50,7 @@ return (
                     </Link>
                 </li>
                 <li>
-                    <Link to="/cursos">
+                    <Link to="/courses">
                         <i className="fas fa-book"></i> Cursos
                     </Link>
                 </li>
