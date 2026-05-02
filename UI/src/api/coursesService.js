@@ -1,4 +1,4 @@
-import { apiFetchJson } from './apiClient.js';
+import { apiFetchJson, apiFetchBlob } from './apiClient.js';
 
 
 export async function getCourses(){
@@ -21,4 +21,10 @@ export async function changeCourseState(Id){
     return apiFetchJson(`courses/${Id}`,{
         method : 'PATCH',
     })
+}
+
+export async function exportCoursesPdf() {
+    return await apiFetchBlob(`courses/exportarPdf`, {
+        method: 'GET',
+    });
 }

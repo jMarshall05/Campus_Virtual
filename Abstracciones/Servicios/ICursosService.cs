@@ -14,5 +14,6 @@ namespace Abstracciones.Servicios
         Task<IEnumerable<CursoDto>> ListarCursos();
         Task<CursoDto> ObtenerPorId(int idCurso);
         Task ModificarEstadoCurso(int idCurso);
+        Task<byte[]> ExportarCursosPDF(string? rutaLogo);
     }
 }

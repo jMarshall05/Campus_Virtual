@@ -13,8 +13,11 @@ namespace Abstracciones.Modelos.ModelosDto
         [DisplayName("Profesor")]
         public string ProfesorId { get; set; }
 
+        [DisplayName("Profesor")]
         public string NombreProfesor { get; set; }
+        [DisplayName("Grupo")]
         public string NombreGrupo { get; set; }
+        [DisplayName("Materia")]
         public string NombreMateria { get; set; }
 
         [DisplayName("Estado")]

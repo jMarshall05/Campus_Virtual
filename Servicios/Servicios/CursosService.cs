@@ -1,5 +1,6 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
+using Abstracciones.Servicios.Helpers;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
@@ -10,10 +11,12 @@ namespace Servicios.Servicios
     public class CursosService : ICursosService
     {
         private readonly ICursosAD _cursos;
+        private readonly IExportService _exportar;
 
-        public CursosService(ICursosAD cursos)
+        public CursosService(ICursosAD cursos, IExportService exportar)
         {
             _cursos = cursos;
+            _exportar = exportar;
         }
         public async Task<int> AgregarCurso(AgregarCursoRequest curso)
         {
@@ -36,6 +39,12 @@ namespace Servicios.Servicios
         {
            var curso = _cursos.ObtenerPorId(idCurso);
             return curso;
+        }
+
+        public async Task<byte[]> ExportarCursosPDF(string? rutaLogo)
+        {
+            var cursos = await ListarCursos();
+            return _exportar.ExportarListaAPdf(cursos, "Reporte de Cursos", "Listado de Cursos", rutaLogo);
         }
     }
 }

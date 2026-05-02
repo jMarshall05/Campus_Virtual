@@ -15,5 +15,6 @@ namespace Abstracciones.Api
         Task<IActionResult> ListarCursos();
         Task<IActionResult> ObtenerPorId(int idCurso);
         Task<IActionResult> ModificarEstadoCurso(int idCurso);
+        Task<IActionResult> ExportarCursosPDF();
     }
 }

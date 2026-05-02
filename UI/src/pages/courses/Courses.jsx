@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { changeCourseState, getCourses } from "../../api/coursesService";
+import { changeCourseState, exportCoursesPdf, getCourses } from "../../api/coursesService";
 import Loader from "../../components/Loader";
 import "../../content/courses/courses.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -45,6 +45,15 @@ export default function Courses() {
             setLoading(false);
         }
     }
+    const Pdf = async () => {
+            try {
+                const response = await exportCoursesPdf();
+                const url = URL.createObjectURL(response);
+                window.open(url, "_blank");
+            } catch (error) {
+                console.error("Error al generar el PDF:", error);
+            }
+        };
 
     const filteredCourses = courses.filter(course => {
         const searchterm = search.toLowerCase();
@@ -127,7 +136,7 @@ export default function Courses() {
                                 Nuevo Curso
                             </button>
 
-                            <button className="btn-export btn-GenerarReporte">
+                            <button className="btn-export btn-GenerarReporte" onClick={Pdf}>
                                 <FontAwesomeIcon icon={faFileAlt} className="me-2" />
                                 Generar Reporte
                             </button>

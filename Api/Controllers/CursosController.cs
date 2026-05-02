@@ -91,5 +91,14 @@ namespace Api.Controllers
 
             }
         }
+
+        [HttpGet("exportarPdf")]
+        public async Task<IActionResult> ExportarCursosPDF()
+        {
+            var pdf = await _cursos.ExportarCursosPDF(null);
+            if (pdf != null)
+                return File(pdf, "application/pdf");
+            return NoContent();
+        }
     }
 }
