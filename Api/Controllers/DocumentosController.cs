@@ -5,7 +5,6 @@ using Abstracciones.Servicios;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Abstracciones.Modelos.Requests.DocumentosRequest;
 
 namespace Api.Controllers
@@ -30,7 +29,6 @@ namespace Api.Controllers
         {
             try
             {
-
                 if (data == null || data.Doc.Length == 0)
                     return BadRequest("Faltan Datos o el archivo");
 
@@ -60,7 +58,6 @@ namespace Api.Controllers
         {
             try
             {
-
                 var doc = await _documentos.ObtenerDocumento(idDocumento);
                 if (doc == null)
                     return BadRequest("Este documento no existe");

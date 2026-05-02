@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { enable2FA, verify2FA } from "../../api/authService";
-import { leerToken, GuardarToken, cambiarToken } from "../../utils/auth";
+import { leerToken } from "../../utils/auth";
 import Loader from "../Loader";
 
 

@@ -29,15 +29,13 @@ API docs available at `http://localhost:5099/scalar/v1` (Scalar UI, dev only).
 ### Frontend (React + Vite)
 ```bash
 # From UI/ directory
-cd UI
-npm install
+cd UI && npm install
 npm run dev      # Dev server on http://localhost:5173
-npm run build    # Production build to UI/dist
+npm run build    # Production build → UI/dist
 npm run lint     # ESLint
-npm run preview  # Preview production build
 ```
 
-The frontend base API URL is hardcoded in `UI/src/api/apiClient.js` (`http://localhost:5099/api`). Change it there when targeting a different environment.
+The frontend base API URL is hardcoded in `UI/src/api/apiClient.js`. Change `urlBase` there when targeting a different environment.
 
 ## Architecture
 
@@ -81,8 +79,7 @@ Controller → Service → [Reglas validation] → Repository (DA) → SQL Serve
 
 ```
 UI/src/
-├── api/           # One file per domain (authService, userService, groupService, …)
-│                  # All calls go through apiFetchJson / apiFetchBlob in apiClient.js
+├── api/           # One file per domain; all calls use apiFetchJson / apiFetchBlob from apiClient.js
 ├── pages/         # Route-level components grouped by domain (auth/, users/, groups/, courses/, docs/)
 ├── components/    # Reusable pieces (auth/ProtectedRoute, users/UserDetails, …)
 ├── layouts/       # Shell with sidebar/navbar (adminLayout.jsx wraps protected routes)

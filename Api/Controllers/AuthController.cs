@@ -61,8 +61,7 @@ namespace Api.Controllers
             {
                 return BadRequest("Algo ha fallado");
             }
-            return Ok($"Usuarios agregado con exito Id : { new {result}}");
-            
+            return Ok($"Usuarios agregado con exito Id : {new { result }}");
         }
         [HttpPost("2fa/disable")]
         public async Task<IActionResult> DisableAuthenticator(string IdUsuario)
@@ -70,7 +69,7 @@ namespace Api.Controllers
             try
             {
                 var token = await _usuarios.DisableAuthenticator(IdUsuario);
-                return Ok(new{ token });
+                return Ok(new { token });
             }
             catch (BusinessException ex)
             {

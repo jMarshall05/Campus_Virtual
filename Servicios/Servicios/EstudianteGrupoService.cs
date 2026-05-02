@@ -3,7 +3,6 @@ using Abstracciones.Servicios;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
-using MapsterMapper;
 using Reglas;
 
 namespace Servicios.Servicios
@@ -13,14 +12,12 @@ namespace Servicios.Servicios
         private readonly IEstudianteGrupoDA _estudianteGrupo;
         private readonly IUsuariosService _usuarios;
         private readonly IGruposDA _grupos;
-        private IMapper _mapper;
 
-        public EstudianteGrupoService(IEstudianteGrupoDA estudianteGrupoService, IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
+        public EstudianteGrupoService(IEstudianteGrupoDA estudianteGrupoService, IGruposDA grupos, IUsuariosService usuarios)
         {
             _estudianteGrupo = estudianteGrupoService;
             _usuarios = usuarios;
             _grupos = grupos;
-            _mapper = mapper;
         }
 
         public async Task ActualizarEstudianteGrupo(EstudianteGrupoDto estudiante)

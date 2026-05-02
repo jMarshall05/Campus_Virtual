@@ -309,12 +309,8 @@ export default function Courses() {
             {!modalhidden && (
                 <>
                     <div className="modal fade show d-block" tabIndex="-1">
-                        <div className="modal-dialog modal-dialog-centered modal-lg ">
-                            <div className="modal-content">
-                                <div className="modal-body">
-                                   <AddCourse onClose={() => { setModalHidden(true); cargarDatos(); }} />
-                                </div>
-                            </div>
+                        <div className="modal-dialog modal-dialog-centered">
+                            <AddCourse onClose={() => { setModalHidden(true); cargarDatos(); }} />
                         </div>
                     </div>
                     <div className="modal-backdrop fade show"></div>

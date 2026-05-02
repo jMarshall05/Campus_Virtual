@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Net;
+﻿using System.Net;
 using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
@@ -10,7 +9,6 @@ using DA.Interfaces;
 using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using OtpNet;
 using QRCoder;
@@ -18,7 +16,6 @@ using Reglas;
 using Servicios.Helpers;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 using static Abstracciones.Modelos.Responses.AuthResponses;
-using static QRCoder.PayloadGenerator;
 
 namespace Servicios.Servicios
 {

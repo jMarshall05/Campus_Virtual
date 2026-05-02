@@ -11,15 +11,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Servicios.Helpers;
 using Servicios.Servicios;
-using Microsoft.AspNetCore.Http;
-using Microsoft.OpenApi.Models;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,7 +45,7 @@ builder.Services.AddScoped<IMapper, ServiceMapper>();
 //Contexto Indentity
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BD"))
-); ;
+);
 
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole<string>>(options =>

@@ -263,7 +263,7 @@ namespace DA.Implementaciones
             user.GoogleAuthenticatorSecretKey = null;
             await _userManager.UpdateAsync(user);
             await _elContexto.SaveChangesAsync();
-            ;
+
         }
         public async Task<TokenRequest> DisableAuthenticator(string IdUsuario)
         {

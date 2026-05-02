@@ -20,6 +20,9 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    /* JS interop — proyecto actualmente en JS/JSX */
+    "allowJs": true,
+    "checkJs": false,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -29,8 +32,7 @@
     "noUncheckedSideEffectImports": true
   },
   "include": [
-    "src/**/*.jsx",
-    "src/**/*.js"
+    "src"
   ],
   "exclude": [
     "node_modules"

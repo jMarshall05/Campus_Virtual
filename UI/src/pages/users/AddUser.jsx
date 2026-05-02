@@ -2,10 +2,9 @@ import { faLock, faFingerprint, faIdCardAlt, faInfoCircle, faTrash, faUser, faUs
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import "../../content/users/addUser.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authService.js";
 import Loader from "../../components/Loader.jsx";
-import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function AddUser() {

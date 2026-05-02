@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -22,8 +21,6 @@ using Mapster;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using QRCoder;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using Border = iText.Layout.Borders.Border;
 using Color = System.Drawing.Color;
 using Image = iText.Layout.Element.Image;
@@ -291,22 +288,12 @@ namespace Servicios.Servicios
 
         private byte[] reporteGrupo(GruposDto grupo)
         {
-            using (var ms = new MemoryStream())
+            using var ms = new MemoryStream();
             {
                 PdfWriter writer = new PdfWriter(ms);
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf, iText.Kernel.Geom.PageSize.A4);
                 document.SetMargins(40, 40, 40, 40);
-
-                //try
-                //{
-                //    byte[] imageBytes = System.IO.File.ReadAllBytes(Server.MapPath("~/Content/logo_SantaAna.jpg"));
-                //    Image logo = new Image(iText.IO.Image.ImageDataFactory.Create(imageBytes));
-                //    logo.ScaleToFit(100, 100);
-                //    logo.SetHorizontalAlignment(HorizontalAlignment.CENTER);
-                //    document.Add(logo);
-                //}
-                //catch { }
 
                 PdfFont bold = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
                 Paragraph titulo = new Paragraph("Reporte del Grupo")

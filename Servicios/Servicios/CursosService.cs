@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abstracciones.Modelos.ModelosDto;
+﻿using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
-using MapsterMapper;
+using static Abstracciones.Modelos.Requests.CursosRequest;
 
 namespace Servicios.Servicios
 {
     public class CursosService : ICursosService
     {
         private readonly ICursosAD _cursos;
-        private readonly IMapper _mapper;
-        public CursosService(ICursosAD cursos, IMapper mapper)
+
+        public CursosService(ICursosAD cursos)
         {
             _cursos = cursos;
-            _mapper = mapper;
         }
-        public async Task<int> AgregarCurso(CursoDto curso)
+        public async Task<int> AgregarCurso(AgregarCursoRequest curso)
         {
             var request =await _cursos.AgregarCurso(curso.Adapt<CursosAD>());
             return request;

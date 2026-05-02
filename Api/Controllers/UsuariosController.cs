@@ -1,7 +1,6 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
-using iText.Layout.Element;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.UsuariosRequests;
 
@@ -39,7 +38,7 @@ namespace Api.Controllers
             }
         }
         [HttpPut("{IdUsuario}/admin")]
-        public async Task<IActionResult> EditarUsuarioAdmin(string IdUsuario, [FromBody]EditarUsuarioAdminRequest usuario,[FromQuery] int? idGrupo)
+        public async Task<IActionResult> EditarUsuarioAdmin(string IdUsuario, [FromBody] EditarUsuarioAdminRequest usuario, [FromQuery] int? idGrupo)
         {
             try
             {
@@ -117,7 +116,7 @@ namespace Api.Controllers
             }
             var link = Url.Action("ExportarUsuariosGeneralPDF", "Usuarios", null, Request.Scheme);
             var Qr = _usuario.QrExportar(link);
-            return File(Qr,"image/png");
+            return File(Qr, "image/png");
 
         }
     }

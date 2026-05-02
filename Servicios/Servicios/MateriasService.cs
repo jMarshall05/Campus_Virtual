@@ -4,7 +4,6 @@ using Abstracciones.Servicios;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
-using MapsterMapper;
 using Reglas;
 
 namespace Servicios.Servicios
@@ -12,11 +11,9 @@ namespace Servicios.Servicios
     public class MateriasService : IMateriasService
     {
         private readonly IMateriasDA _materias;
-        private readonly IMapper _mapper;
 
-        public MateriasService(IMapper mapper, IMateriasDA materias)
+        public MateriasService(IMateriasDA materias)
         {
-            _mapper = mapper;
             _materias = materias;
         }
 

@@ -1,20 +1,17 @@
 ﻿using Abstracciones.Modelos.ModelosDto;
 using DA.Entidades;
 using DA.Interfaces;
-using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DA.Implementaciones
 {
     public class GruposDA : IGruposDA
     {
         private readonly ApplicationDbContext _elContexto;
-        private readonly IMapper _mapper;
-        public GruposDA(ApplicationDbContext elContexto, IMapper mapper)
+
+        public GruposDA(ApplicationDbContext elContexto)
         {
             _elContexto = elContexto;
-            _mapper = mapper;
         }
         public async Task<int> AgregarGrupo(GruposAD grupo)
         {

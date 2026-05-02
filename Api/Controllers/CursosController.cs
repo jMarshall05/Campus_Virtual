@@ -3,6 +3,7 @@ using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Mvc;
+using static Abstracciones.Modelos.Requests.CursosRequest;
 
 namespace Api.Controllers
 {
@@ -21,11 +22,11 @@ namespace Api.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AgregarCurso(CursoDto curso)
+        public async Task<IActionResult> AgregarCurso(AgregarCursoRequest request)
         {
             try
             {
-                var response = await _cursos.AgregarCurso(curso);
+                var response = await _cursos.AgregarCurso(request);
                 return Ok($"Se a agrgado correctamente el curso , id: {response}");
             }
             catch (BusinessException ex)
