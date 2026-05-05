@@ -8,7 +8,6 @@ using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
 using MapsterMapper;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using OtpNet;
 using QRCoder;
@@ -255,9 +254,9 @@ namespace Servicios.Servicios
             return pdf;
         }
 
-        public async Task<byte[]> ExportarUsuarioPDF(string IdUsuario,string? rutaLogo)
+        public async Task<byte[]> ExportarUsuarioPDF(string IdUsuario, string? rutaLogo)
         {
-            var usuario =await ObtenerUsuarioPorId(IdUsuario);
+            var usuario = await ObtenerUsuarioPorId(IdUsuario);
             var pdf = _exportar.ExportarObjetoAPdf(usuario, "Reporte de Usuario", "Detalle del Usuario", null);
             return pdf;
         }

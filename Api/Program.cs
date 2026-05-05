@@ -129,6 +129,7 @@ builder.Services.AddScoped<SecretProtectorService>();
 builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 builder.Services.AddScoped<ICursosService, CursosService>();
+builder.Services.AddScoped<IAnunciosService, AnunciosService>();
 builder.Services.AddScoped<IFileStorageService>(sp =>
 {
     var env = sp.GetRequiredService<IWebHostEnvironment>();

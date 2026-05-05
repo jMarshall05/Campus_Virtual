@@ -234,7 +234,7 @@ namespace Servicios.Servicios
             string rutaLogo = null,
             Dictionary<string, string> encabezados = null)
         {
-            if(titulo == "Reporte de Grupo" && dato.GetType().Name =="GruposDto")
+            if (titulo == "Reporte de Grupo" && dato.GetType().Name == "GruposDto")
             {
                 var file = reporteGrupo(dato.Adapt<GruposDto>());
                 return file;
@@ -322,7 +322,7 @@ namespace Servicios.Servicios
 
                 }
                 AddRow("Fecha de Creación", grupo.FechaDeCreacion.ToString("dd/MM/yyyy HH:mm"));
-                if (grupo.modificado_por != null )
+                if (grupo.modificado_por != null)
                 {
                     AddRow("Ultima Modificacion", grupo.FechaDeModificacion?.ToString("dd/MM/yyyy HH:mm"));
 

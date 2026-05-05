@@ -20,24 +20,24 @@ namespace Servicios.Servicios
         }
         public async Task<int> AgregarCurso(AgregarCursoRequest curso)
         {
-            var request =await _cursos.AgregarCurso(curso.Adapt<CursosAD>());
+            var request = await _cursos.AgregarCurso(curso.Adapt<CursosAD>());
             return request;
         }
 
         public async Task<IEnumerable<CursoDto>> ListarCursos()
         {
-           var list =await _cursos.ListarCursos();
+            var list = await _cursos.ListarCursos();
             return list;
         }
 
         public async Task ModificarEstadoCurso(int idCurso)
         {
-           await _cursos.ModificarEstadoCurso(idCurso);
+            await _cursos.ModificarEstadoCurso(idCurso);
         }
 
         public Task<CursoDto> ObtenerPorId(int idCurso)
         {
-           var curso = _cursos.ObtenerPorId(idCurso);
+            var curso = _cursos.ObtenerPorId(idCurso);
             return curso;
         }
 

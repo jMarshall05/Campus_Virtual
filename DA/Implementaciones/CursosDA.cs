@@ -66,7 +66,7 @@ namespace DA.Implementaciones
                      NombreMateria = curso.Materia.Nombre,
                      Estado = curso.Estado
                  }).FirstOrDefaultAsync() ?? throw new BusinessException("No existe el curso");
-            
+
 
             return curso;
         }

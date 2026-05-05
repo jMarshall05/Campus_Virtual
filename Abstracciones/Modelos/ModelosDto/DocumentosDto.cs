@@ -26,6 +26,6 @@ namespace Abstracciones.Modelos.ModelosDto
         [DataType(DataType.DateTime)]
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
-        public virtual IFormFile? Doc {  get; set; }
+        public virtual IFormFile? Doc { get; set; }
     }
 }

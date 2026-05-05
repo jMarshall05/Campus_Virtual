@@ -24,22 +24,22 @@ namespace Servicios.Servicios
         public async Task BorrarDocumento(int idDocumento, DocumentosDto doc)
         {
             DocumentosReglas.ExisteDoc(doc != null);
-            if(doc.RutaArchivo!=null)
+            if (doc.RutaArchivo != null)
                 await _fileStorage.DeleteAsync(doc.RutaArchivo);
             await _documentos.BorrarDocumento(idDocumento);
         }
 
         public async Task<DocumentosDto> DescargarDocumento(int Id)
         {
-            var doc =await _documentos.ObtenerDocumento(Id);
-            DocumentosReglas.ExisteDoc(doc!=null);
+            var doc = await _documentos.ObtenerDocumento(Id);
+            DocumentosReglas.ExisteDoc(doc != null);
             return doc;
         }
 
         public async Task<bool> EditarDocumento(int idDocumento, DocumentosDto documento)
         {
-            var doc =await _documentos.ObtenerDocumento(idDocumento);
-            DocumentosReglas.ExisteDoc(doc!=null);
+            var doc = await _documentos.ObtenerDocumento(idDocumento);
+            DocumentosReglas.ExisteDoc(doc != null);
             if (documento.Doc != null)
             {
                 var url = await _fileStorage.SaveAsync(documento.Doc, "Docs");

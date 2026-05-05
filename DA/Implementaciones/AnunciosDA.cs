@@ -33,7 +33,7 @@ namespace DA.Implementaciones
 
         public async Task EditarAnuncio(AnunciosAD anuncio)
         {
-            var anuncioExistente = await _elContexto.Anuncios.FindAsync(anuncio);
+            var anuncioExistente = await _elContexto.Anuncios.FindAsync(anuncio.IdAnuncio);
             if (anuncioExistente != null)
             {
                 anuncioExistente.Titulo = anuncio.Titulo;

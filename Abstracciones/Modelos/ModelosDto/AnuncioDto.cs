@@ -29,7 +29,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public DateTime FechaPublicacion { get; set; }
 
         [DisplayName("Imagen del Anuncio")]
-        public string ImagenRuta { get; set; }
+        public string? ImagenRuta { get; set; }
         [DisplayName("Estado")]
         public bool Estado { get; set; }
 

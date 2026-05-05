@@ -35,7 +35,7 @@ namespace DA.Implementaciones
                 throw new BusinessException("Usuario o contraseña incorrectos");
             var respuesta = user.Adapt<TokenRequest>();
             respuesta.Rol = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-            respuesta.Estado =await ObtenerEstadoUsuario(user.Id);
+            respuesta.Estado = await ObtenerEstadoUsuario(user.Id);
             return respuesta;
         }
 

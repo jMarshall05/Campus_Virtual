@@ -13,6 +13,7 @@ import Users from './pages/users/Users.jsx';
 import Groups from './pages/groups/Groups.jsx';
 import Docs from './pages/docs/Docs.jsx';
 import Courses from './pages/courses/Courses.jsx';
+import Announcements from './pages/announcements/Announcements.jsx';
 
 function App() {
   const token = validarToken();
@@ -73,6 +74,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/announcements"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Announcements />
+              </ProtectedRoute>
+            }
+          />
+          
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

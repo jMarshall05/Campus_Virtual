@@ -15,7 +15,7 @@ namespace Servicios.Servicios
         private readonly IUsuariosService _usuarios;
         private readonly IMapper _mapper;
         private readonly IExportService _exportar;
-        public GruposService(IExportService exportar,IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
+        public GruposService(IExportService exportar, IGruposDA grupos, IUsuariosService usuarios, IMapper mapper)
         {
             _grupos = grupos;
             _usuarios = usuarios;
@@ -55,7 +55,7 @@ namespace Servicios.Servicios
 
         public async Task<IEnumerable<GruposDto>> ListarGrupos()
         {
-            var grupos =await _grupos.ListarGrupos();
+            var grupos = await _grupos.ListarGrupos();
             return grupos;
         }
         public byte[] QrExportar(string url)

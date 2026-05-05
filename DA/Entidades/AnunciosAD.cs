@@ -28,7 +28,7 @@ namespace DA.Entidades
         public DateTime FechaPublicacion { get; set; }
         [Column("imagen_ruta")]
 
-        public string ImagenRuta { get; set; }
+        public string? ImagenRuta { get; set; }
         [Column("estado")]
         public bool Estado { get; set; }
     }

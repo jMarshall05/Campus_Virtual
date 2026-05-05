@@ -18,7 +18,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public DateTime? FechaDeModificacion { get; set; }
         public string? modificado_por { get; set; }
 
-        public virtual ICollection<UsuariosDto>? Estudiantes {get; set;}
+        public virtual ICollection<UsuariosDto>? Estudiantes { get; set; }
 
     }
 }

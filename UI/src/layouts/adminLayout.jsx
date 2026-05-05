@@ -54,7 +54,7 @@ export default function Layout() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/anuncios">
+                        <Link to="/announcements">
                             <i className="fas fa-bullhorn"></i> Anuncios
                         </Link>
                     </li>

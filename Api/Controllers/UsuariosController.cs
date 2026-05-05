@@ -93,7 +93,7 @@ namespace Api.Controllers
             var pdf = await _usuario.ExportarUsuarioPDF(IdUsuario, null);//no paso logo
             if (pdf != null)
                 return File(pdf, "application/pdf");
-        
+
             return NotFound($"No se encontró el usuario de ID: {IdUsuario}");
         }
         [HttpGet("exportarPdf")]
