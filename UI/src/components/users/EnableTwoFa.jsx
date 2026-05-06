@@ -21,7 +21,7 @@ export default function Enable2FA({ onClose,onEnabled }) {
                 setQr(QrSecret.qr);
                 setSecret(QrSecret.secretKey);
                 setId(userId);
-            } catch (err) {
+            } catch {
                 setError("Error al cargar el código QR. Intenta de nuevo.");
             } finally {
                 setLoading(false);

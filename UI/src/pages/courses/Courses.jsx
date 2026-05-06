@@ -27,7 +27,7 @@ export default function Courses() {
     const changeState = async (Id) => {
         try {
             setLoading(true);
-            const request = await changeCourseState(Id);
+            await changeCourseState(Id);
             Swal.fire({
                 title: "Se a cambiado el estado del curso",
                 icon: 'success',
@@ -211,10 +211,10 @@ export default function Courses() {
 
                                         return (
                                             <tr key={course.idCurso} className="course-row">
-                                                <td className="course-id-cell">
+                                                <td className="course-id-cell" data-label="ID">
                                                     <span className="id-badge">#{course.idCurso}</span>
                                                 </td>
-                                                <td className="materia-cell">
+                                                <td className="materia-cell" data-label="Materia">
                                                     <div className="materia-info">
                                                         <div className="materia-icon">
                                                             <FontAwesomeIcon icon={faBook} />
@@ -225,7 +225,7 @@ export default function Courses() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="grupo-cell">
+                                                <td className="grupo-cell" data-label="Grupo">
                                                     <div className="grupo-info">
                                                         <div className="grupo-icon">
                                                             <i className="fas fa-users"></i>
@@ -236,7 +236,7 @@ export default function Courses() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="profesor-cell">
+                                                <td className="profesor-cell" data-label="Profesor">
                                                     <div className="profesor-info">
                                                         <div className="profesor-avatar">
                                                             <span className="avatar-text">{iniciales}</span>
@@ -247,7 +247,7 @@ export default function Courses() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="actions-cell">
+                                                <td className="actions-cell" data-label="Estado">
                                                     <div className="d-flex justify-content-center gap-2">
                                                         {course.estado ? (
                                                             <span className="status-badge active">Activo</span>
@@ -256,7 +256,7 @@ export default function Courses() {
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="actions-cell">
+                                                <td className="actions-cell" data-label="Acciones">
                                                     <div className="d-flex justify-content-center gap-2">
                                                         {course.estado ? (
                                                             <button

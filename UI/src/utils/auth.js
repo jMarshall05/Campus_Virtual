@@ -14,7 +14,7 @@ export function leerToken() {
   try {
     const payload = jwtDecode(token);
     return payload;
-  } catch (err) {
+  } catch {
     console.error("Token inválido");
     return null;
   }

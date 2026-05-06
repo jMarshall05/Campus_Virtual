@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { deleteDoc, getDoc, getDocs } from "../../api/docsService";
 import Loader from "../../components/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCalendar, faCertificate, faCirclePlus, faEdit, faEllipsisV, faExternalLinkAlt, faFileAlt, faFileContract, faFolder, faFolderOpen, faStar } from "../../content/icons.js";
+import { faTrash, faCalendar, faCirclePlus, faEdit, faEllipsisV, faExternalLinkAlt, faFileAlt, faFileContract, faFolder, faFolderOpen, faStar } from "../../content/icons.js";
 import "../../content/docs/docs.css"
 import AddDoc from "../../components/docs/AddDoc.jsx";
 import EditDoc from "../../components/docs/EditDoc.jsx";
@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 
 export default function Docs() {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState();
+	const [, setError] = useState();
 	const [docs, setDocs] = useState([null]);
 	const [docModal, setDoc] = useState(null);
 	const [modalhidden, setModalHidden] = useState(true);
@@ -38,7 +38,7 @@ export default function Docs() {
 		try {
 			const url = getDoc(id);
 			window.open(url, "_blank");
-		} catch (error) {
+		} catch {
 			Swal.fire({
 				title: "Algo a fallado intente de nuevo",
 				icon: 'error',
@@ -62,7 +62,7 @@ export default function Docs() {
 			})
 			cargarDatos();
 			}
-		} catch (error) {
+		} catch {
 			Swal.fire({
 				title: "Algo a fallado intente de nuevo",
 				icon: 'error',

@@ -8,6 +8,9 @@ import {
 import { getAnnouncements } from "../../api/announcementsService.js";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader.jsx";
+import AnnouncementDetails from "../../components/announcements/AnnouncementDetails.jsx";
+import AnnouncementEdit from "../../components/announcements/AnnouncementEdit.jsx";
+import AddAnnouncement from "../../components/announcements/AddAnnouncement.jsx";
 
 const formatDate = (dateStr) =>
     dateStr
@@ -69,10 +72,7 @@ export default function Announcements() {
                             <p className="header-subtitle">Gestiona y visualiza todos los anuncios del sistema</p>
                         </div>
                     </div>
-                    <button className="btn-premium btn-Crear-Anuncio" onClick={() => { setModalType("add"); setModalHidden(false); }}>
-                        <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
-                        Nuevo Anuncio
-                    </button>
+
                 </div>
 
                 <div className="stats-grid">
@@ -110,7 +110,11 @@ export default function Announcements() {
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
-                        <div className="filter-actions"></div>
+                        <div className="filter-actions">
+                            <button className="btn-premium btn-Crear-Anuncio" onClick={() => { setModalType("add"); setModalHidden(false); }}>
+                                <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
+                                Nuevo Anuncio
+                            </button></div>
                     </div>
                 </div>
 
@@ -162,7 +166,7 @@ export default function Announcements() {
                                 ) : (
                                     paginados.map((anuncio) => (
                                         <tr className="group-row" key={anuncio.idAnuncio}>
-                                            <td className="name-cell">
+                                            <td className="name-cell" data-label="Título">
                                                 <div className="group-info">
                                                     <div className="group-icon">
                                                         <FontAwesomeIcon icon={faBullhorn} />
@@ -172,16 +176,16 @@ export default function Announcements() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="desc-cell">
+                                            <td className="desc-cell" data-label="Descripción">
                                                 <span className="group-description">{anuncio.descripcion}</span>
                                             </td>
-                                            <td className="desc-cell">
+                                            <td className="desc-cell" data-label="Fecha evento">
                                                 <span className="badge-date">{formatDate(anuncio.fechaEvento)}</span>
                                             </td>
-                                            <td className="desc-cell">
+                                            <td className="desc-cell" data-label="Publicación">
                                                 <span className="badge-date">{formatDate(anuncio.fechaPublicacion)}</span>
                                             </td>
-                                            <td className="actions-cell">
+                                            <td className="actions-cell" data-label="Acciones">
                                                 <div className="d-flex justify-content-center gap-2">
                                                     <button
                                                         className="btn btn-outline-primary btn-sm"
@@ -234,11 +238,17 @@ export default function Announcements() {
             {!modalhidden && (
                 <>
                     <div className="modal fade show d-block" tabIndex="-1">
-                        <div className="modal-dialog modal-dialog-centered modal-lg">
+                        <div className="modal-dialog modal-dialog-centered ">
                             <div className="modal-content">
-                                <div className="modal-body">
-                                    {/* AnnouncementDetails / AnnouncementEdit / AddAnnouncement van aquí */}
-                                </div>
+                                {
+                                    modalType === "details" && <AnnouncementDetails anuncio={announcementModal} onClose={() => setModalHidden(true)} />
+                                }
+                                {
+                                    modalType === "edit" && <AnnouncementEdit anuncio={announcementModal} onClose={() => { setModalHidden(true); cargarDatos(); }} />
+                                }
+                                {
+                                    modalType === "add" && <AddAnnouncement onClose={() => { setModalHidden(true); cargarDatos(); }} />
+                                }
                             </div>
                         </div>
                     </div>

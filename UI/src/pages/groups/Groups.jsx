@@ -160,7 +160,7 @@ export default function Groups() {
 
                                         return (
                                             <tr className="group-row" key={group.idGrupo}>
-                                                <td className="name-cell">
+                                                <td className="name-cell" data-label="Nombre">
                                                     <div className="group-info">
                                                         <div className="group-icon">
                                                             <FontAwesomeIcon icon={faUsers} />
@@ -172,11 +172,11 @@ export default function Groups() {
                                                     </div>
                                                 </td>
 
-                                                <td className="desc-cell">
+                                                <td className="desc-cell" data-label="Descripción">
                                                     <span className="group-description">{group.descripcion}</span>
                                                 </td>
 
-                                                <td className="creator-cell">
+                                                <td className="creator-cell" data-label="Creado por">
                                                     <div className="creator-info">
                                                         <div className="creator-avatar">
                                                             <span className="avatar-text">{iniciales}</span>
@@ -185,13 +185,13 @@ export default function Groups() {
                                                     </div>
                                                 </td>
 
-                                                <td className="status-cell">
+                                                <td className="status-cell" data-label="Estado">
                                                     <span className={`status-badge ${group.estado ? "active" : "inactive"}`}>
                                                         {group.estado ? "Activo" : "Inactivo"}
                                                     </span>
                                                 </td>
 
-                                                <td className="actions-cell">
+                                                <td className="actions-cell" data-label="Acciones">
                                                     <div className="d-flex justify-content-center gap-2">
                                                         <button
                                                             className="btn btn-outline-primary btn-sm btn-Editar-Grupo"

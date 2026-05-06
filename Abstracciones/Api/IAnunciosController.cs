@@ -15,5 +15,6 @@ namespace Abstracciones.Api
         Task<IActionResult> EliminarAnuncio(int anuncioId);
         Task<IActionResult> ListarAnuncios();
         Task<IActionResult> ObtenerAnuncioPorId(int id);
+        Task<IActionResult> ObtenerImagen(int id);
     }
 }

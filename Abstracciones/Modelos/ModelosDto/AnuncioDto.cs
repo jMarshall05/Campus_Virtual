@@ -31,10 +31,13 @@ namespace Abstracciones.Modelos.ModelosDto
         [DisplayName("Imagen del Anuncio")]
         public string? ImagenRuta { get; set; }
         [DisplayName("Estado")]
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         [NotMapped]
         [DisplayName("Subir Imagen")]
-        public IFormFile Imagen { get; set; }
+        public IFormFile? Imagen { get; set; }
+
+        [NotMapped]
+        public bool QuitarImagen { get; set; }
     }
 }

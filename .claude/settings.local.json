@@ -3,7 +3,19 @@
     "allow": [
       "Bash(dotnet build *)",
       "Bash(dotnet format *)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(npm run *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(cat eslint.config.js)",
+      "Bash(cat .eslintrc.js)",
+      "Bash(cat .eslintrc.json)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({**d.get\\('devDependencies',{}\\), **d.get\\('dependencies',{}\\)}, indent=2\\)\\)\")",
+      "Bash(sed -n '38,42p' src/components/courses/AddCourse.jsx)",
+      "Bash(sed -n '7,12p' src/components/docs/AddDoc.jsx)",
+      "Bash(sed -n '19,23p' src/components/groups/AddGroup.jsx)",
+      "Bash(sed -n '22,26p' src/components/users/EnableTwoFa.jsx)",
+      "Bash(sed -n '28,32p' src/pages/courses/Courses.jsx)"
     ]
   }
 }

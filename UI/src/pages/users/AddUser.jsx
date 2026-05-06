@@ -338,7 +338,7 @@ export default function AddUser() {
                                 <div className="au-mb-3">
                                     <label>Fecha de Nacimiento</label>
                                     <div className="au-input-wrapper au-input-wrapper--no-icon">
-                                        <input className="au-form-control" type="date" name="FechaDeNacimiento" required />
+                                        <input className="au-form-control" type="date" name="FechaDeNacimiento" max={new Date().toISOString().split("T")[0]} required />
                                     </div>
                                 </div>
                             </div>

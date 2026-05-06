@@ -31,3 +31,9 @@ export async function toggleAnnouncementStatus(id) {
         method: 'PATCH'
     });
 }
+
+export async function getImage(id) {
+    return apiFetchBlob(`announcements/${id}/image`, {
+        method: 'GET'
+    });
+}

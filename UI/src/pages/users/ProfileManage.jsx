@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../content/users/profileManage.css"
 import Loader from "../../components/Loader";
 import { leerToken, disable2Factor, cambiarToken } from "../../utils/auth";
-import { getUserById } from "../../api/userService";
+import { getUserById, editUser } from "../../api/userService";
 import { Link } from "react-router-dom";
 import EnableTwoFa from "../../components/users/EnableTwoFa";
 import { jwtDecode } from "jwt-decode";
@@ -22,7 +22,7 @@ export default function Profile() {
         }]
     });
     const [loading, setLoading] = useState(true)
-    const [form, setForm] = useState({
+    const [form] = useState({
         nombre: "",
         apellido: "",
         telefonos: [{
@@ -73,24 +73,6 @@ export default function Profile() {
 
     if (loading) return <Loader />;
 
-
-    const handleTelefonoChange = (index, field, value) => {
-        const nuevosTelefonos = [...form.telefonos];
-        nuevosTelefonos[index][field] = value;
-
-        setForm({
-            ...form,
-            telefonos: nuevosTelefonos
-        });
-    };
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-
-        setForm({
-            ...form,
-            [name]: type === "checkbox" ? checked : value
-        });
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();

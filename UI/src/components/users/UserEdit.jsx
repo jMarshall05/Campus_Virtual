@@ -335,6 +335,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                 name="FechaDeNacimiento"
                                                 id="FechaDeNacimiento"
                                                 required={true}
+                                                max={new Date().toISOString().split("T")[0]}
                                                 defaultValue={usuario?.fechaDeNacimiento
                                                     ? new Date(usuario.fechaDeNacimiento).toISOString().split("T")[0]
                                                     : ""}

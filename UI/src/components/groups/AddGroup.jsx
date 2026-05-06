@@ -18,7 +18,7 @@ export default function AddGroup({ onClose }) {
         }
         const token = leerToken();
         try {
-            const response = await createGroup(token.sub, data)
+            await createGroup(token.sub, data)
             setLoading(false);
             Swal.fire({
                 title: 'Grupo creado con exito!',

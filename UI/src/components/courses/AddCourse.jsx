@@ -37,7 +37,7 @@ export default function AddCourse({ onClose }) {
       idProfesor: e.target[2].value
     };
     try {
-      const response = await addCourse(data);
+      await addCourse(data);
       setLoading(false);
       Swal.fire({
         title: 'Curso creado con éxito!',

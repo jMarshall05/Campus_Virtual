@@ -1,0 +1,71 @@
+.toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggle-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    gap: 10px;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 50px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.toggle-slider::before {
+    content: "";
+    position: absolute;
+    width: 21px;
+    height: 21px;
+    left: 2px;
+    top: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.toggle-input:checked + .toggle-slider {
+    background-color: #10b981;
+}
+
+.toggle-input:checked + .toggle-slider::before {
+    transform: translateX(25px);
+}
+
+.toggle-text {
+    font-weight: 600;
+    color: #1e293b;
+    min-width: 70px;
+}
+
+.current-image-container {
+    border-radius: 12px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.current-image-container img {
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-muted {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* Hereda los estilos base del modal de addAnnouncement.css */

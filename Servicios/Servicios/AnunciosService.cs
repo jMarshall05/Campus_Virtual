@@ -29,11 +29,15 @@ namespace Servicios.Servicios
 
         public async Task EditarAnuncio(AnuncioDto anuncio)
         {
-            var existe = await _anuncios.ObtenerAnuncioPorId(anuncio.IdAnuncio) != null;
-            AnunciosReglas.ExisteAnuncio(existe);
+            var existente = await _anuncios.ObtenerAnuncioPorId(anuncio.IdAnuncio);
+            AnunciosReglas.ExisteAnuncio(existente != null);
 
-            if (anuncio.Imagen != null)
+            if (anuncio.QuitarImagen)
+                anuncio.ImagenRuta = null;
+            else if (anuncio.Imagen != null)
                 anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios");
+            else
+                anuncio.ImagenRuta = existente.ImagenRuta;
 
             await _anuncios.EditarAnuncio(anuncio.Adapt<AnunciosAD>());
         }

@@ -6,7 +6,7 @@ import { addDoc } from "../../api/docsService.js";
 import Swal from "sweetalert2";
 
 export default function AddDoc({ onClose }) {
-    const [loanding, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)

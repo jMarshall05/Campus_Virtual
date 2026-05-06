@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 export default function Layout() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         const token = leerToken();
@@ -22,6 +23,8 @@ export default function Layout() {
         setUsername(token.name);
     }, [navigate]);
 
+    const closeSidebar = () => setSidebarOpen(false);
+
     const Logout = () => {
         EliminarToken();
         navigate('/login');
@@ -29,9 +32,13 @@ export default function Layout() {
 
     return (
         <div className="admin-wrapper">
-            <aside className="sidebar-admin">
+            {sidebarOpen && (
+                <div className="sidebar-overlay" onClick={closeSidebar} />
+            )}
+
+            <aside className={`sidebar-admin${sidebarOpen ? ' show' : ''}`}>
                 <div className="logo">
-                    <Link to="/Dashboard">
+                    <Link to="/Dashboard" onClick={closeSidebar}>
                         <img src={logo} alt="Logo" height="90px" />
                     </Link>
                     <h4>Panel Administrador</h4>
@@ -39,37 +46,37 @@ export default function Layout() {
 
                 <ul className="menu">
                     <li>
-                        <Link to="/users">
+                        <Link to="/users" onClick={closeSidebar}>
                             <i className="fas fa-user"></i> Usuarios
                         </Link>
                     </li>
                     <li>
-                        <Link to="/courses">
+                        <Link to="/courses" onClick={closeSidebar}>
                             <i className="fas fa-book"></i> Cursos
                         </Link>
                     </li>
                     <li>
-                        <Link to="/groups">
+                        <Link to="/groups" onClick={closeSidebar}>
                             <i className="fas fa-users"></i> Grupos
                         </Link>
                     </li>
                     <li>
-                        <Link to="/announcements">
+                        <Link to="/announcements" onClick={closeSidebar}>
                             <i className="fas fa-bullhorn"></i> Anuncios
                         </Link>
                     </li>
                     <li>
-                        <Link to="/docs">
+                        <Link to="/docs" onClick={closeSidebar}>
                             <i className="fas fa-file-alt"></i> Documentos
                         </Link>
                     </li>
                     <li>
-                        <Link to="/contactos">
+                        <Link to="/contactos" onClick={closeSidebar}>
                             <i className="fas fa-phone"></i> Contactos
                         </Link>
                     </li>
                     <li>
-                        <Link to="/calendario">
+                        <Link to="/calendario" onClick={closeSidebar}>
                             <i className="fas fa-calendar"></i> Calendario
                         </Link>
                     </li>
@@ -86,8 +93,17 @@ export default function Layout() {
                     <div className="container-fluid py-3">
                         <div className="row align-items-center">
                             <div className="col">
-                                <div className="d-flex align-items-center">
-                                    <div className="user-avatar me-3">
+                                <div className="d-flex align-items-center gap-3">
+                                    <button
+                                        className=" sidebar-toggle d-lg-none"
+                                        type="button"
+                                        onClick={() => setSidebarOpen(prev => !prev)}
+                                        aria-label="Abrir menú"
+                                    >
+                                        <i className="fas fa-bars"></i>
+                                    </button>
+
+                                    <div className="user-avatar">
                                         <Link
                                             to="/dashboard"
                                             className="avatar-circle bg-primary text-white d-flex align-items-center justify-content-center"
