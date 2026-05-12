@@ -17,21 +17,21 @@ export default function AnnouncementDetails({ anuncio, onClose }) {
 
     useEffect(() => {
         if (!anuncio.imagenRuta) return;
-
-        let objectUrl = null;
         setLoading(true);
+        setImgUrl(anuncio.imagenRuta);
+        setLoading(false);
+        // getImage(anuncio.idAnuncio)
+        //   .then((blob) => {
+        //     objectUrl = URL.createObjectURL(blob);
+        //   setImgUrl(objectUrl);
+        //}
+        //)
+        //.catch((err) => console.error("Error al cargar la imagen del anuncio:", err))
+        //.finally(() => setLoading(false));
 
-        getImage(anuncio.idAnuncio)
-            .then((blob) => {
-                objectUrl = URL.createObjectURL(blob);
-                setImgUrl(objectUrl);
-            })
-            .catch((err) => console.error("Error al cargar la imagen del anuncio:", err))
-            .finally(() => setLoading(false));
-
-        return () => {
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
-        };
+        //  return () => {
+        //    if (objectUrl) URL.revokeObjectURL(objectUrl);
+        //};
     }, [anuncio]);
     if (loading) return <Loader />;
 

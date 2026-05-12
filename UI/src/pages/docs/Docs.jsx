@@ -33,34 +33,34 @@ export default function Docs() {
 		cargarDatos();
 	}, []);
 
-	const Download = async (id) => {
-		setLoading(true)
-		try {
-			const url = getDoc(id);
-			window.open(url, "_blank");
-		} catch {
-			Swal.fire({
-				title: "Algo a fallado intente de nuevo",
-				icon: 'error',
-				confirmButtonText: "OK"
-			})
-		}
-		finally {
-			setLoading(false);
-		}
-	}
+	//const Download = async (id) => {
+	//	setLoading(true)
+	//	try {
+	//		const url = getDoc(id);
+	//		window.open(url, "_blank");
+	//	} catch {
+	//		Swal.fire({
+	//			title: "Algo a fallado intente de nuevo",
+	//			icon: 'error',
+	//			confirmButtonText: "OK"
+	//		})
+	//	}
+	//	finally {
+	//		setLoading(false);
+	//	}
+	//}
 
 	const Delete = async (id) => {
 		setLoading(true)
 		try {
 			const response = await deleteDoc(id);
-			if(response ===null){
-					Swal.fire({
-				title: "Archivo borrado con exito",
-				icon: 'success',
-				confirmButtonText: "OK"
-			})
-			cargarDatos();
+			if (response === null) {
+				Swal.fire({
+					title: "Archivo borrado con exito",
+					icon: 'success',
+					confirmButtonText: "OK"
+				})
+				cargarDatos();
 			}
 		} catch {
 			Swal.fire({
@@ -68,7 +68,7 @@ export default function Docs() {
 				icon: 'error',
 				confirmButtonText: "OK"
 			})
-		}finally{
+		} finally {
 			setLoading(false);
 		}
 	}
@@ -161,9 +161,10 @@ export default function Docs() {
 											<div className="document-footer">
 												<div className="document-actions full-width">
 													<a
-														onClick={() => Download(doc.id)}
 														className="btn-document btn-primary"
-
+														href={doc.rutaArchivo}
+														target="_blank"
+														rel="noopener noreferrer"
 													>
 														<FontAwesomeIcon icon={faExternalLinkAlt} />
 														Ver Documento
@@ -243,7 +244,9 @@ export default function Docs() {
 												<div className="document-actions full-width">
 													<a
 														className="btn-document btn-primary"
-														onClick={() => Download(doc.id)}
+														href={doc.rutaArchivo}
+														target="_blank"
+														rel="noopener noreferrer"
 													>
 														<FontAwesomeIcon icon={faExternalLinkAlt} />
 														Obtener Documento

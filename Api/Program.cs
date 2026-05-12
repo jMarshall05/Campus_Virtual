@@ -2,6 +2,7 @@ using System.Text;
 using Abstracciones.Excepciones;
 using Abstracciones.Servicios;
 using Abstracciones.Servicios.Helpers;
+using CloudinaryDotNet;
 using DA;
 using DA.Implementaciones;
 using DA.Interfaces;
@@ -130,11 +131,19 @@ builder.Services.AddScoped<IExportService, ExportService>();
 builder.Services.AddScoped<IDocumentoService, DocumentoService>();
 builder.Services.AddScoped<ICursosService, CursosService>();
 builder.Services.AddScoped<IAnunciosService, AnunciosService>();
-builder.Services.AddScoped<IFileStorageService>(sp =>
-{
-    var env = sp.GetRequiredService<IWebHostEnvironment>();
-    return new FileStorageService(env.ContentRootPath);
-});
+var cloudinary = new Cloudinary(new Account(
+    builder.Configuration["Cloudinary:CloudName"],
+    builder.Configuration["Cloudinary:ApiKey"],
+    builder.Configuration["Cloudinary:ApiSecret"]
+));
+builder.Services.AddSingleton(cloudinary);
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
+//builder.Services.AddScoped<IFileStorageService>(sp =>
+//{
+//    var env = sp.GetRequiredService<IWebHostEnvironment>();
+//    return new FileStorageService(env.ContentRootPath);
+//});
 
 builder.Services.AddAuthorization();
 
