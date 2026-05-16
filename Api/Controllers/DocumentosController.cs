@@ -32,7 +32,7 @@ namespace Api.Controllers
                 if (data == null || data.Doc.Length == 0)
                     return BadRequest("Faltan Datos o el archivo");
 
-                var url = await _fileStorage.SaveAsync(data.Doc, "Docs");
+                var url = await _fileStorage.SaveAsync(data.Doc, "Docs",true);
                 var dto = data.Adapt<DocumentosDto>();
                 dto.RutaArchivo = url;
                 var respuesta = await _documentos.AgregarDocumento(dto);

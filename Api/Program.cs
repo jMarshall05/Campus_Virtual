@@ -59,7 +59,7 @@ builder.Services
     .AddDefaultTokenProviders();
 
 
-//builder.WebHost.UseUrls("http://0.0.0.0:5000");
+//builder.WebHost.UseUrls("https://localhost:5001");
 
 builder.Services.AddCors(options =>
 {
@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5173")
+                .WithOrigins("http://localhost:5173", "https://rehydrate-trump-bling.ngrok-free.dev")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });

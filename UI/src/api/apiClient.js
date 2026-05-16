@@ -1,5 +1,6 @@
 export const urlBase = "http://localhost:5099/api";
-// const urlBase = "http://192.168.100.116:5000/api"
+//export const urlBase = "http://192.168.100.116:5000/api"
+//export const urlBase = "/api";  
 
 export async function apiFetchJson(endpoint, options = {}) {
     const url = `${urlBase}/${endpoint}`;

@@ -42,7 +42,7 @@ namespace Servicios.Servicios
             DocumentosReglas.ExisteDoc(doc != null);
             if (documento.Doc != null)
             {
-                var url = await _fileStorage.SaveAsync(documento.Doc, "Docs");
+                var url = await _fileStorage.SaveAsync(documento.Doc, "Docs",true);
                 documento.RutaArchivo = url;
             }
             return await _documentos.EditarDocumento(idDocumento, documento.Adapt<DocumentosAD>());

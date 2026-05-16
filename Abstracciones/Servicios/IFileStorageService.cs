@@ -9,7 +9,7 @@ namespace Abstracciones.Servicios
 {
     public interface IFileStorageService
     {
-        Task<string> SaveAsync(IFormFile file, string folder);
+        Task<string> SaveAsync(IFormFile file, string folder, bool esPrivado);
         Task<string> GetAsync(string path);
         Task DeleteAsync(string path);
     }

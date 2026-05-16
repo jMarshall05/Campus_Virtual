@@ -76,10 +76,6 @@ export default function Users() {
                             <p className="header-subtitle">Administra todos los usuarios del sistema</p>
                         </div>
                     </div>
-                    <Link to="/addUser" className="btn-premium">
-                        <FontAwesomeIcon icon={faPlusCircle} />
-                        Nuevo Usuario
-                    </Link>
                 </div>
 
                 <div className="stats-grid">
@@ -118,7 +114,10 @@ export default function Users() {
                             />
                         </div>
                         <div className="filter-actions">
-
+                            <Link to="/addUser" className="btn-premium">
+                                <FontAwesomeIcon icon={faPlusCircle} />
+                                Nuevo Usuario
+                            </Link>
                             <button onClick={Pdf} className="btn-export" >
                                 <FontAwesomeIcon icon={faDownload} />
                                 Exportar

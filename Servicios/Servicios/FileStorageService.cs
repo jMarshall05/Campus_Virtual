@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Servicios.Servicios
 {
+    //configurar archivos privados mas adelante
     public class FileStorageService : IFileStorageService
     {
         // private readonly string _rootPath;
@@ -73,7 +74,7 @@ namespace Servicios.Servicios
             return Task.FromResult(path);
         }
 
-        public async Task<string> SaveAsync(IFormFile file, string folder)
+        public async Task<string> SaveAsync(IFormFile file, string folder, bool esPrivado=false)
         {
             //var uploadsPath = Path.Combine(_rootPath, "Uploads", folder);
             //Directory.CreateDirectory(uploadsPath);
@@ -88,19 +89,37 @@ namespace Servicios.Servicios
 
             using var stream = file.OpenReadStream();
 
-            var uploadParams = new RawUploadParams
-            {
-                File = new FileDescription(file.FileName, stream),
-                Folder = $"uploads/{folder}",
-                PublicId = $"{Guid.NewGuid()}_{Path.GetFileNameWithoutExtension(file.FileName)}"
-            };
+            var publicId = $"{Guid.NewGuid()}_{Path.GetFileNameWithoutExtension(file.FileName)}";
+            var accessMode = esPrivado ? "authenticated" : "public";
 
-            var result = await _cloudinary.UploadAsync(uploadParams);
+            UploadResult result;
+
+            if (file.ContentType.StartsWith("image/"))
+            {
+                result = await _cloudinary.UploadAsync(new ImageUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Folder = $"uploads/{folder}",
+                    PublicId = publicId,
+                    AccessMode = accessMode
+                });
+            }
+            else
+            {
+                result = await _cloudinary.UploadAsync(new RawUploadParams
+                {
+                    File = new FileDescription(file.FileName, stream),
+                    Folder = $"uploads/{folder}",
+                    PublicId = publicId,
+                    AccessMode = accessMode
+                });
+            }
 
             if (result.Error != null)
                 throw new Exception($"Error al subir archivo: {result.Error.Message}");
-
             return result.SecureUrl.ToString();
+
+
         }
     }
 }

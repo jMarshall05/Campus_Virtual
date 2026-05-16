@@ -17,19 +17,19 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
 
     useEffect(() => {
         if (!anuncio.imagenRuta) return;
+        setImgUrl(anuncio.imagenRuta);
+        //  getImage(anuncio.idAnuncio)
+        //    .then((blob) => {
+        //      const url = URL.createObjectURL(blob);
+        //    imgUrlRef.current = url;
+        //   setImgUrl(url);
+        //})
+        //.catch((err) => console.error("Error al cargar imagen:", err));
 
-        getImage(anuncio.idAnuncio)
-            .then((blob) => {
-                const url = URL.createObjectURL(blob);
-                imgUrlRef.current = url;
-                setImgUrl(url);
-            })
-            .catch((err) => console.error("Error al cargar imagen:", err));
-
-        return () => {
-            if (imgUrlRef.current) URL.revokeObjectURL(imgUrlRef.current);
-            if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
-        };
+        //        return () => {
+        //          if (imgUrlRef.current) URL.revokeObjectURL(imgUrlRef.current);
+        //        if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+        //  };
     }, [anuncio]);
 
     const handleFileChange = (e) => {
@@ -65,7 +65,7 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
         formData.append('fechaEvento', form.fechaEvento.value);
         formData.append('estado', estado);
         formData.append('quitarImagen', quitarImagen);
-        if (form.imagen.files[0]) {
+        if (form.imagen.files[0] != null) {
             formData.append('imagen', form.imagen.files[0]);
         }
         const response = await editAnnouncement(formData);
@@ -188,10 +188,10 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
                             </div>
                         )}
 
-                        {!quitarImagen && (
+                        
                             <div className="form-group">
                                 <label className="form-label" htmlFor="imagen">
-                                    {imagenActual ? "Reemplazar imagen" : "Subir imagen"}
+                                  {!imagenActual ? "Subir imagen" : "Remplazar imagen (opcional)"}
                                 </label>
                                 <div className="input-group">
                                     <span className="input-icon"><FontAwesomeIcon icon={faFileUpload} /></span>
@@ -206,7 +206,7 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
                                 </div>
                                 <small className="text-muted d-block mt-1">Formatos permitidos: .jpg / .jpeg / .png / .gif</small>
                             </div>
-                        )}
+                        
                     </div>
 
                     <div className="form-group">

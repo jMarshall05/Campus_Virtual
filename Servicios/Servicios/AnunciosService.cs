@@ -21,7 +21,7 @@ namespace Servicios.Servicios
         public async Task<int> AgregarAnuncio(AnuncioDto anuncio)
         {
             if (anuncio.Imagen != null)
-                anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios");
+                anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios",false);
 
             anuncio.FechaPublicacion = DateTime.Now;
             return await _anuncios.AgregarAnuncio(anuncio.Adapt<AnunciosAD>());
@@ -35,7 +35,7 @@ namespace Servicios.Servicios
             if (anuncio.QuitarImagen)
                 anuncio.ImagenRuta = null;
             else if (anuncio.Imagen != null)
-                anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios");
+                anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios",false);
             else
                 anuncio.ImagenRuta = existente.ImagenRuta;
 
