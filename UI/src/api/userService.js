@@ -16,13 +16,13 @@ export async function getUsersByRole(rol) {
     );
 }
 
-export async function editUser(userId, userData) {
-    return await apiFetchJson(`user/${userId}`), {
-        method: 'PATCH',
-        body: JSON.stringify(userData),
-    }
-
-}
+// UNUSED — replaced by editUserAdmin
+// export async function editUser(userId, userData) {
+//     return await apiFetchJson(`user/${userId}`), {
+//         method: 'PATCH',
+//         body: JSON.stringify(userData),
+//     }
+// }
 export async function editUserAdmin(userId, userData, grupo) {
     if (grupo) {
         return await apiFetchJson(`users/${userId}/admin?grupo=${grupo}`, {

@@ -27,6 +27,12 @@ export default function Announcements() {
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         try {
             const data = await getAnnouncements();
@@ -41,10 +47,6 @@ export default function Announcements() {
     useEffect(() => {
         cargarDatos();
     }, []);
-
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     const filtrados = announcements.filter(a => {
         const texto = search.toLowerCase();
@@ -107,7 +109,7 @@ export default function Announcements() {
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar anuncios..."
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
                         <div className="filter-actions">

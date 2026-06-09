@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTasks, faSave } from "../../content/icons.js";
 import { editTarea } from "../../api/tareasService.js";
@@ -19,6 +19,7 @@ export default function EditTask({ tarea, onClose }) {
             ? new Date(tarea.fechaEntrega).toISOString().slice(0, 16)
             : "",
     });
+    const nowDate = useMemo(() => new Date(), []);
 
     useEffect(() => {
         const cargarDatos = async () => {
@@ -89,6 +90,7 @@ export default function EditTask({ tarea, onClose }) {
                 <button type="button"
                     className="btn"
                     onClick={onClose}
+                    aria-label="Cerrar"
                     style={{ color: "white", background: "rgba(255,255,255,0.2)", borderRadius: "8px" }}
                 >
                     <FontAwesomeIcon icon={faTimes} />
@@ -172,7 +174,8 @@ export default function EditTask({ tarea, onClose }) {
                         name="FechaEntrega"
                         value={form.FechaEntrega}
                         onChange={handleChange}
-                        min={new Date().toISOString().slice(0, 16)}
+                        min={nowDate.toISOString().slice(0, 16)}
+                        aria-label="Fecha de entrega"
                         required
                         style={{ borderRadius: "10px" }}
                     />

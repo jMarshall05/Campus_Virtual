@@ -14,17 +14,15 @@ export async function getCalificaciones() {
     return [];
 }
 
-export async function getCalificacionById() {
-    // TODO: Descomentar cuando el backend esté listo
-    // return await apiFetchJson(`calificaciones/${id}`, { method: 'GET' });
-    return null;
-}
+// UNUSED — TODO: Descomentar cuando el backend esté listo
+// export async function getCalificacionById() {
+//     return await apiFetchJson(`calificaciones/${id}`, { method: 'GET' });
+// }
 
-export async function getMisCalificaciones() {
-    // TODO: Descomentar cuando el backend esté listo
-    // return await apiFetchJson('calificaciones/mis-calificaciones', { method: 'GET' });
-    return [];
-}
+// UNUSED — TODO: Descomentar cuando el backend esté listo
+// export async function getMisCalificaciones() {
+//     return await apiFetchJson('calificaciones/mis-calificaciones', { method: 'GET' });
+// }
 
 export async function createCalificacion(data) {
     // TODO: Descomentar cuando el backend esté listo

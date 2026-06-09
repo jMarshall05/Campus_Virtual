@@ -33,7 +33,7 @@ export default function Layout() {
     return (
         <div className="admin-wrapper">
             {sidebarOpen && (
-                <div className="sidebar-overlay" onClick={closeSidebar} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') closeSidebar(); }} role="button" tabIndex={0} aria-label="Cerrar menú" />
+                <button type="button" className="sidebar-overlay" onClick={closeSidebar} tabIndex={0} aria-label="Cerrar menú" />
             )}
 
             <aside className={`sidebar-admin${sidebarOpen ? ' show' : ''}`}>

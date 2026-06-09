@@ -1,4 +1,4 @@
-export const urlBase = "http://localhost:5099/api";
+const urlBase = "http://localhost:5099/api";
 //export const urlBase = "http://192.168.100.116:5000/api"
 //export const urlBase = "/api";  
 

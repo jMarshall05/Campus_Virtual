@@ -6,17 +6,19 @@ export async function getTareas() {
     });
 }
 
-export async function getTareaById(id) {
-    return await apiFetchJson(`tareas/${id}`, {
-        method: 'GET',
-    });
-}
+// UNUSED
+// export async function getTareaById(id) {
+//     return await apiFetchJson(`tareas/${id}`,{
+//         method: 'GET',
+//     });
+// }
 
-export async function getTareasByGrupo(idGrupo) {
-    return await apiFetchJson(`tareas/grupo/${idGrupo}`, {
-        method: 'GET',
-    });
-}
+// UNUSED
+// export async function getTareasByGrupo(idGrupo) {
+//     return await apiFetchJson(`tareas/grupo/${idGrupo}`,{
+//         method: 'GET',
+//     });
+// }
 
 export async function createTarea(data) {
     return await apiFetchJson('tareas', {

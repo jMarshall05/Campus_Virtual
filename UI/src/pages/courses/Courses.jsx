@@ -26,6 +26,12 @@ export default function Courses() {
     const [modalhidden,setModalHidden] =useState(true);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         const data = await getCourses();
         setCourses(data);
@@ -69,9 +75,6 @@ export default function Courses() {
     const inicio = (pagina - 1) * porPagina;
     const fin = inicio + porPagina;
     const cursosPaginados = filteredCourses.slice(inicio, fin);
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     if (loading) return <Loader />
 
@@ -126,7 +129,7 @@ export default function Courses() {
                                 type="text"
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar cursos..."
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
 

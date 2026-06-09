@@ -2,11 +2,19 @@ import { faUser, faEnvelope, faPlusCircle, faTrash, faInfoCircle, faIdCardAlt, f
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../content/users/userEdit.css";
 import { faAddressBook } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Loader from "../Loader.jsx";
 import { getGroups } from "../../api/groupService.js";
 import { editUserAdmin } from "../../api/userService.js";
 import Swal from "sweetalert2";
+
+const soloNumeros = (e, max) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, max);
+};
+
+const alfaNumerico = (e, max) => {
+    e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
+};
 
 export default function UserEdit({ usuario, onClose }) {
 
@@ -16,6 +24,7 @@ export default function UserEdit({ usuario, onClose }) {
     const [telefonos, setTelefonos] = useState(usuario?.telefonos || []);
     const [tipoIdentificacion, setTipoIdentificacion] = useState(usuario?.tipoIdentificacion || "");
     const [userState, setUserState] = useState(usuario.estado)
+    const nowDate = useMemo(() => new Date(), []);
     useEffect(() => {
         const cargarGrupos = async () => {
             try {
@@ -60,14 +69,6 @@ export default function UserEdit({ usuario, onClose }) {
     const tipoIdentificacionChange = (tipo) => {
         setTipoIdentificacion(tipo);
     };
-    const soloNumeros = (e, max) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, max);
-    };
-
-    const alfaNumerico = (e, max) => {
-        e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
@@ -231,6 +232,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                 className="form-control"
                                                 name="TipoIdentificacion"
                                                 id="tipoIdentificacion"
+                                                aria-label="Tipo de identificación"
                                                 defaultValue={usuario?.tipoIdentificacion}
                                                 onChange={(e) => tipoIdentificacionChange(e.target.value)}
                                                 required
@@ -260,6 +262,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                     id="numeroIdentificacion"
                                                     defaultValue={usuario?.identificacion}
                                                     placeholder="Ej: 123456789"
+                                                    aria-label="Nómero de identificación"
                                                     minLength={9}
                                                     maxLength={9}
                                                     inputMode="numeric"
@@ -274,6 +277,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                     id="numeroIdentificacion"
                                                     defaultValue={usuario?.identificacion}
                                                     placeholder="Ej: 12345678901"
+                                                    aria-label="Número de identificación DIMEX"
                                                     minLength={11}
                                                     maxLength={12}
                                                     inputMode="numeric"
@@ -288,6 +292,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                     id="numeroIdentificacion"
                                                     defaultValue={usuario?.identificacion}
                                                     placeholder="Ej: A1234567"
+                                                    aria-label="Número de pasaporte"
                                                     minLength={6}
                                                     maxLength={12}
                                                     pattern="[A-Za-z0-9]{6,12}"
@@ -325,8 +330,9 @@ export default function UserEdit({ usuario, onClose }) {
                                                 type="date"
                                                 name="FechaDeNacimiento"
                                                 id="FechaDeNacimiento"
+                                                aria-label="Fecha de nacimiento"
                                                 required={true}
-                                                max={new Date().toISOString().split("T")[0]}
+                                                max={nowDate.toISOString().split("T")[0]}
                                                 defaultValue={usuario?.fechaDeNacimiento
                                                     ? new Date(usuario.fechaDeNacimiento).toISOString().split("T")[0]
                                                     : ""}
@@ -344,6 +350,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                 className="form-control"
                                                 name="Rol"
                                                 id="rolSelector"
+                                                aria-label="Rol del usuario"
                                                 defaultValue={usuario?.rol}
                                                 required
                                             >
@@ -386,7 +393,7 @@ export default function UserEdit({ usuario, onClose }) {
                             <div id="telefonosContainer" className="telefonos-list">
                                 {telefonos.length > 0 ? (
                                     telefonos.map((tel, i) => (
-                                        <div className="telefono-item" key={i}>
+                                        <div className="telefono-item" key={tel.id || `new-${i}`}>
                                             <input type="hidden" name={`Telefonos[${i}].Id`} id={`Telefonos[${i}].Id`} defaultValue={tel.id} />
 
                                             <div className="tel-row">
@@ -459,8 +466,8 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-action">
-                                                    <label className="form-label" htmlFor={`removePhone-${i}`}>&nbsp;</label>
-                                                    <button type="button" id={`removePhone-${i}`} className="btn btn-remove-tel btn-remove-telefono" aria-label="Eliminar teléfono" onClick={() => eliminarTelefono(i)}>
+                                                    <span className="form-label" aria-hidden="true">&nbsp;</span>
+                                                    <button type="button" className="btn btn-remove-tel btn-remove-telefono" aria-label="Eliminar teléfono" onClick={() => eliminarTelefono(i)}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>

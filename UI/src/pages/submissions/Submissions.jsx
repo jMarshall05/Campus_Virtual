@@ -26,6 +26,12 @@ export default function Submissions() {
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         try {
             const data = await getEntregas();
@@ -38,7 +44,6 @@ export default function Submissions() {
     };
 
     useEffect(() => { cargarDatos(); }, []);
-    useEffect(() => { setPagina(1); }, [search]);
 
     const filtradas = entregas.filter((e) => {
         const texto = search.toLowerCase();
@@ -108,7 +113,7 @@ export default function Submissions() {
                         <div className="search-container">
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
                             <input type="text" className="search-input" id="searchInput" aria-label="Buscar" placeholder="Buscar entregas..."
-                                value={search} onChange={(e) => setSearch(e.target.value)} />
+                                value={search} onChange={handleSearchChange} />
                         </div>
                         <div className="filter-actions">
                             <button type="button" className="btn-premium" onClick={() => { setModalType("add"); setModalHidden(false); }}>

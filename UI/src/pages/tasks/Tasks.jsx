@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getTareas, toggleTareaState } from "../../api/tareasService.js";
 import Loader from "../../components/Loader.jsx";
 import "../../content/tasks/tasks.css";
@@ -32,6 +32,13 @@ export default function Tasks() {
     const [tareaModal, setTareaModal] = useState(null);
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
+    const nowDate = useMemo(() => new Date(), []);
+
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
 
     const cargarDatos = async () => {
         try {
@@ -47,10 +54,6 @@ export default function Tasks() {
     useEffect(() => {
         cargarDatos();
     }, []);
-
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     const filtradas = tareas.filter((t) => {
         const texto = search.toLowerCase();
@@ -134,7 +137,7 @@ export default function Tasks() {
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar tareas..."
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
                         <div className="filter-actions">
@@ -219,7 +222,7 @@ export default function Tasks() {
                                                 <span className="id-badge">{tarea.nombreGrupo || "N/A"}</span>
                                             </td>
                                             <td data-label="Fecha Entrega">
-                                                <span className={`badge-date ${new Date(tarea.fechaEntrega) < new Date() ? "overdue" : ""}`}>
+                                                <span className={`badge-date ${new Date(tarea.fechaEntrega) < nowDate ? "overdue" : ""}`}>
                                                     {formatDate(tarea.fechaEntrega)}
                                                 </span>
                                             </td>

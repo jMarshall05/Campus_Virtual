@@ -6,11 +6,12 @@ export async function getAnnouncements() {
     });
 }
 
-export async function getAnnouncementById(id) {
-    return apiFetchJson(`announcements/${id}`, {
-        method: 'GET'
-    });
-}
+// UNUSED
+// export async function getAnnouncementById(id) {
+//     return apiFetchJson(`announcements/${id}`,{
+//         method: 'GET'
+//     });
+// }
 
 export async function addAnnouncement(formData) {
     return apiFetchBlob('announcements', {
@@ -26,14 +27,16 @@ export async function editAnnouncement(formData) {
     });
 }
 
-export async function toggleAnnouncementStatus(id) {
-    return apiFetchJson(`announcements/${id}`, {
-        method: 'PATCH'
-    });
-}
+// UNUSED
+// export async function toggleAnnouncementStatus(id) {
+//     return apiFetchJson(`announcements/${id}`,{
+//         method: 'PATCH'
+//     });
+// }
 
-export async function getImage(id) {
-    return apiFetchBlob(`announcements/${id}/image`, {
-        method: 'GET'
-    });
-}
+// UNUSED
+// export async function getImage(id) {
+//     return apiFetchBlob(`announcements/${id}/image`,{
+//         method: 'GET'
+//     });
+// }

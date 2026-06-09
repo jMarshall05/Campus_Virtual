@@ -14,17 +14,15 @@ export async function getEntregas() {
     return [];
 }
 
-export async function getEntregaById() {
-    // TODO: Descomentar cuando el backend esté listo
-    // return await apiFetchJson(`entregas/${id}`, { method: 'GET' });
-    return null;
-}
+// UNUSED — TODO: Descomentar cuando el backend esté listo
+// export async function getEntregaById() {
+//     return await apiFetchJson(`entregas/${id}`, { method: 'GET' });
+// }
 
-export async function getMisEntregas() {
-    // TODO: Descomentar cuando el backend esté listo
-    // return await apiFetchJson('entregas/mis-entregas', { method: 'GET' });
-    return [];
-}
+// UNUSED — TODO: Descomentar cuando el backend esté listo
+// export async function getMisEntregas() {
+//     return await apiFetchJson('entregas/mis-entregas', { method: 'GET' });
+// }
 
 export async function subirEntrega(formData) {
     // TODO: Descomentar cuando el backend esté listo
@@ -35,14 +33,13 @@ export async function subirEntrega(formData) {
     console.log('TODO: subirEntrega', formData);
 }
 
-export async function editEntrega(id, data) {
-    // TODO: Descomentar cuando el backend esté listo
-    // return await apiFetchJson(`entregas/${id}`, {
-    //     method: 'PUT',
-    //     body: JSON.stringify(data),
-    // });
-    console.log('TODO: editEntrega', id, data);
-}
+// UNUSED — TODO: Descomentar cuando el backend esté listo
+// export async function editEntrega(id, data) {
+//     return await apiFetchJson(`entregas/${id}`,{
+//         method: 'PUT',
+//         body: JSON.stringify(data),
+//     });
+// }
 
 export async function toggleEntregaEstado(id) {
     // TODO: Descomentar cuando el backend esté listo

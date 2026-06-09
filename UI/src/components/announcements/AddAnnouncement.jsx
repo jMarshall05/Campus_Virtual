@@ -3,16 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faTag, faPen, faCalendarAlt, faFileUpload, faTimes, faSave } from "../../content/icons.js";
 import { addAnnouncement } from "../../api/announcementsService.js";
 import Swal from "sweetalert2";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 export default function AddAnnouncement({ onClose }) {
     const [previewUrl, setPreviewUrl] = useState(null);
     const previewUrlRef = useRef(null);
+    const nowDate = useMemo(() => new Date(), []);
 
     useEffect(() => {
         return () => {
             if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleFileChange = (e) => {
@@ -125,7 +127,7 @@ export default function AddAnnouncement({ onClose }) {
                                     className="form-control"
                                     id="fechaEvento"
                                     name="fechaEvento"
-                                    min={new Date(new Date().setSeconds(0, 0)).toISOString().slice(0, 16)}
+                                    min={(() => { const d = new Date(nowDate); d.setSeconds(0, 0); return d.toISOString().slice(0, 16); })()}
                                     required
                                 />
                             </div>

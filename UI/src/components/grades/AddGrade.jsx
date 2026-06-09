@@ -35,7 +35,7 @@ export default function AddGrade({ onClose }) {
             <form onSubmit={handleSubmit} className="p-4">
                 <div className="mb-3">
                     <label htmlFor="calificación" className="form-label fw-semibold">Calificación (0-100)</label>
-                    <input type="number" id="calificación0100" className="form-control" name="calificacion"
+                    <input type="number" id="calificacion0100" className="form-control" name="calificacion" aria-label="Calificación"
                         value={form.calificacion} onChange={handleChange}
                         min="0" max="100" step="0.01" required style={{ borderRadius: "10px" }} />
                 </div>

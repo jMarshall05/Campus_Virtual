@@ -48,10 +48,10 @@ export default function UserDetails({ usuario, onClose }) {
         cargarQr();
     }, [usuario]);
 
-    const togglePhone = (index) => {
+    const togglePhone = (id) => {
         setVisibles((prev) => ({
             ...prev,
-            [index]: !prev[index],
+            [id]: !prev[id],
         }));
     };
     return (
@@ -93,17 +93,16 @@ export default function UserDetails({ usuario, onClose }) {
                                     {usuario.telefonos && usuario.telefonos.length > 0 ? (
 
                                         <ul className="list-unstyled mb-0">
-                                            {usuario?.telefonos?.map((telefono, index) => {
+                                            {usuario?.telefonos?.map((telefono) => {
                                                 const telefonoStr = telefono.telefono.toString();
                                                 const telefonoFormateado =
                                                     telefonoStr.substring(0, 4) + "-" + telefonoStr.substring(4);
                                                 const telefonoOculto =
                                                     "****-" + telefonoStr.substring(telefonoStr.length - 4);
-
-                                                const visible = visibles[index];
+                                                const visible = visibles[telefono.id];
 
                                                 return (
-                                                    <li className="mb-2 phone-item" key={index}>
+                                                    <li className="mb-2 phone-item" key={telefono.id}>
                                                         <div className="phone-content-wrapper">
                                                             <div className="phone-info">
                                                                 <FontAwesomeIcon icon={faPhone} className="me-2 text-success" />
@@ -121,7 +120,7 @@ export default function UserDetails({ usuario, onClose }) {
                                                                     className="btn-toggle-phone"
                                                                     type="button"
                                                                     title="Mostrar/Ocultar teléfono"
-                                                                    onClick={() => togglePhone(index)}
+                                                                    onClick={() => togglePhone(telefono.id)}
                                                                 >
                                                                     <FontAwesomeIcon icon={visible ? faEyeSlash : faEye} className="text-primary" style={{color : "black"}} />
                                                                 </button>

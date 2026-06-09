@@ -28,6 +28,12 @@ export default function Users() {
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         try {
             var users = await getUsers();
@@ -58,9 +64,6 @@ export default function Users() {
     const inicio = (pagina - 1) * porPagina;
     const fin = inicio + porPagina;
     const usuariosPaginados = usuariosFiltrados.slice(inicio, fin);
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     if (loading) return <Loader />;
     return (
@@ -109,7 +112,7 @@ export default function Users() {
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar usuarios..."
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
                         <div className="filter-actions">

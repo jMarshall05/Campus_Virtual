@@ -13,6 +13,12 @@ import AddGrade from "../../components/grades/AddGrade.jsx";
 import EditGrade from "../../components/grades/EditGrade.jsx";
 import Swal from "sweetalert2";
 
+const getScoreClass = (score) => {
+    if (score >= 80) return "high";
+    if (score >= 60) return "medium";
+    return "low";
+};
+
 export default function Grades() {
     const [loading, setLoading] = useState(true);
     const [calificaciones, setCalificaciones] = useState([]);
@@ -22,6 +28,12 @@ export default function Grades() {
     const [gradeModal, setGradeModal] = useState(null);
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
+
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
 
     const cargarDatos = async () => {
         try {
@@ -37,10 +49,6 @@ export default function Grades() {
     useEffect(() => {
         cargarDatos();
     }, []);
-
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     const filtradas = calificaciones.filter((c) => {
         const texto = search.toLowerCase();
@@ -67,12 +75,6 @@ export default function Grades() {
             console.error(error);
             Swal.fire({ title: "Error", icon: "error", confirmButtonText: "OK" });
         }
-    };
-
-    const getScoreClass = (score) => {
-        if (score >= 80) return "high";
-        if (score >= 60) return "medium";
-        return "low";
     };
 
     if (loading) return <Loader />;
@@ -124,7 +126,7 @@ export default function Grades() {
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar calificaciones..."
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
                         <div className="filter-actions">

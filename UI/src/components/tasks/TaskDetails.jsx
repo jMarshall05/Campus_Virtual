@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faTasks, faCalendarAlt, faPaperclip, faUsers, faBook } from "../../content/icons.js";
 
@@ -14,6 +15,8 @@ import { faTimes, faTasks, faCalendarAlt, faPaperclip, faUsers, faBook } from ".
 
 export default function TaskDetails({ tarea, onClose }) {
         
+
+    const nowDate = useMemo(() => new Date(), []);
 
     return (
         <div className="modal-content" style={{ borderRadius: "16px", border: "none" }}>
@@ -72,7 +75,7 @@ export default function TaskDetails({ tarea, onClose }) {
                             <td>
                                 <span
                                     className={`badge ${
-                                        new Date(tarea.fechaEntrega) < new Date()
+                                        new Date(tarea.fechaEntrega) < nowDate
                                             ? "bg-danger"
                                             : "bg-primary"
                                     }`}

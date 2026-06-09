@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import "../../content/tasks/tasks.css";
 import Loader from "../../components/Loader.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,7 +69,7 @@ export default function MyTasks() {
             ) : (
                 <div className="row g-4">
                     {tareas.map((tarea) => {
-                        const fechaVencida = new Date(tarea.fechaEntrega) < new Date();
+                        const fechaVencida = new Date(tarea.fechaEntrega) < nowDate;
                         const tieneEntrega = tarea.calificacion?.entrega != null && 
                             tarea.calificacion.entrega.archivo_entregado;
 

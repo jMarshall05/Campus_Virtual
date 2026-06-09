@@ -1,6 +1,6 @@
 import { faLock, faFingerprint, faIdCardAlt, faInfoCircle, faTrash, faUser, faUserTag, faEnvelope, faPhone, faPlus } from "../../content/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "../../content/users/addUser.css";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authService.js";
@@ -20,6 +20,7 @@ export default function AddUser() {
     const [tipoIdentificacion, setTipoIdentificacion] = useState("");
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const nowDate = useMemo(() => new Date(), []);
     const agregarTelefono = () => {
         const ultimo = telefonos[telefonos.length - 1];
         if (ultimo && (!ultimo.codigo || !ultimo.telefono || !ultimo.tipo)) {
@@ -33,6 +34,7 @@ export default function AddUser() {
         setTelefonos([...telefonos,
         {
             id: 0,
+            _key: crypto.randomUUID(),
             codigo: "",
             telefono: "",
             tipo: "",
@@ -160,7 +162,7 @@ export default function AddUser() {
                                 </div>
 
                                 <div className="au-mb-3">
-                                    <label htmlFor="correoelectrónico">Correo Electrónico</label>
+                                    <label htmlFor="correoElectrónico">Correo Electrónico</label>
                                     <div className="au-input-wrapper">
                                         <FontAwesomeIcon icon={faEnvelope} className="au-input-icon" />
                                         <input id="correoElectrónico" className="au-form-control" name="Email" placeholder="correo@ejemplo.com" type="email" required />
@@ -178,14 +180,15 @@ export default function AddUser() {
                                 <div id="au-telefonosContainer" className="au-telefonos-list">
                                     {telefonos.length > 0 ? (
                                         telefonos.map((tel, i) => (
-                                            <div className="au-telefono-item" key={i}>
+                                            <div className="au-telefono-item" key={tel._key || `new-${i}`}>
                                                 <div className="au-telefono-item__index">{i + 1}</div>
                                                 <input type="hidden" name={`Telefonos[${i}].Id`} defaultValue={tel.id} />
                                                 <div className="au-tel-row">
                                                     <div className="au-tel-field au-tel-code">
-                                                        <label htmlFor="código" className="au-form-label">Código</label>
-                                                        <input id="código"
+                                                        <label htmlFor={`telefono-codigo-${i}`} className="au-form-label">Código</label>
+                                                        <input id={`telefono-codigo-${i}`}
                                                             className="au-form-control"
+                                                            aria-label="Código del teléfono"
                                                             name={`Telefonos[${i}].Codigo`}
                                                             defaultValue={tel.codigo}
                                                             placeholder="+506"
@@ -197,9 +200,10 @@ export default function AddUser() {
                                                         />
                                                     </div>
                                                     <div className="au-tel-field au-tel-number">
-                                                        <label htmlFor="número" className="au-form-label">Número</label>
-                                                        <input id="número"
+                                                        <label htmlFor={`telefono-numero-${i}`} className="au-form-label">Número</label>
+                                                        <input id={`telefono-numero-${i}`}
                                                             className="au-form-control"
+                                                            aria-label="Número del teléfono"
                                                             name={`Telefonos[${i}].Telefono`}
                                                             defaultValue={tel.telefono}
                                                             placeholder="12345678"
@@ -212,8 +216,8 @@ export default function AddUser() {
                                                         />
                                                     </div>
                                                     <div className="au-tel-field au-tel-type">
-                                                        <label htmlFor="tipo" className="au-form-label">Tipo</label>
-                                                        <select id="tipo" className="au-form-control" name={`Telefonos[${i}].Tipo`} defaultValue={tel.tipo} required>
+                                                        <label htmlFor={`telefono-tipo-${i}`} className="au-form-label">Tipo</label>
+                                                        <select id={`telefono-tipo-${i}`} className="au-form-control" aria-label="Tipo de teléfono" name={`Telefonos[${i}].Tipo`} defaultValue={tel.tipo} required>
                                                             <option value="">Tipo</option>
                                                             <option value="Personal">Personal</option>
                                                             <option value="Trabajo">Trabajo</option>
@@ -223,8 +227,8 @@ export default function AddUser() {
                                                         </select>
                                                     </div>
                                                     <div className="au-tel-field au-tel-action">
-                                                        <label className="au-form-label">&nbsp;</label>
-                                                        <button type="button" className="au-btn-remove-tel" onClick={() => eliminarTelefono(i)}>
+                                                        <span className="au-form-label" aria-hidden="true">&nbsp;</span>
+                                                        <button type="button" className="au-btn-remove-tel" aria-label="Eliminar teléfono" onClick={() => eliminarTelefono(i)}>
                                                             <FontAwesomeIcon icon={faTrash} />
                                                         </button>
                                                     </div>
@@ -249,7 +253,7 @@ export default function AddUser() {
 
                                 <div className="au-form-row">
                                     <div className="au-mb-3">
-                                        <label htmlFor="tipodeidentificación">Tipo de Identificación</label>
+                                        <label htmlFor="tipoDeIdentificación">Tipo de Identificación</label>
                                         <div className="au-input-wrapper">
                                             <span className="au-input-icon"><FontAwesomeIcon icon={faIdCardAlt} /></span>
                                             <select id="tipoDeIdentificación" className="au-form-control"
@@ -264,7 +268,7 @@ export default function AddUser() {
                                         </div>
                                     </div>
                                     <div className="au-mb-3">
-                                        <label htmlFor="númerodeidentificación">Número de Identificación</label>
+                                        <label htmlFor="númeroDeIdentificación">Número de Identificación</label>
                                         {tipoIdentificacion === "Fisica" ? (
                                             <div className="au-input-wrapper">
                                                 <FontAwesomeIcon icon={faFingerprint} className="au-input-icon" />
@@ -290,6 +294,7 @@ export default function AddUser() {
                                                     className="au-form-control"
                                                     name="Identificacion"
                                                     placeholder="Ej: 12345678901"
+                                                    aria-label="Número de identificación DIMEX"
                                                     minLength={11}
                                                     maxLength={12}
                                                     inputMode="numeric"
@@ -308,6 +313,7 @@ export default function AddUser() {
                                                     className="au-form-control"
                                                     name="Identificacion"
                                                     placeholder="Ej: A1234567"
+                                                    aria-label="Número de pasaporte"
                                                     minLength={6}
                                                     maxLength={12}
                                                     pattern="[A-Za-z0-9]{6,12}"
@@ -320,11 +326,12 @@ export default function AddUser() {
                                             </div>
                                         ) : (
                                             <div className="au-input-wrapper">
-                                                <FontAwesomeIcon icon={faFingerprint} className="au-input-icon" />
-                                                <input
+                                                <FontAwesomeIcon icon={faFingerprint} className="au-input-icon" />                                                                <input
                                                     className="au-form-control"
+                                                    id="númeroDeIdentificación"
                                                     name="Identificacion"
                                                     placeholder="Seleccione tipo de identificación"
+                                                    aria-label="Número de identificación"
                                                     disabled
                                                     required
                                                 />
@@ -335,9 +342,9 @@ export default function AddUser() {
                                 </div>
 
                                 <div className="au-mb-3">
-                                    <label htmlFor="fechadenacimiento">Fecha de Nacimiento</label>
+                                    <label htmlFor="fechaDeNacimiento">Fecha de Nacimiento</label>
                                     <div className="au-input-wrapper au-input-wrapper--no-icon">
-                                        <input id="fechaDeNacimiento" className="au-form-control" type="date" name="FechaDeNacimiento" max={new Date().toISOString().split("T")[0]} required />
+                                        <input id="fechaDeNacimiento" className="au-form-control" type="date" name="FechaDeNacimiento" max={nowDate.toISOString().split("T")[0]} required />
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +383,7 @@ export default function AddUser() {
                             </div>
 
                             <div className="au-mb-3">
-                                <input type="submit" value="Registrarse" className="au-btn-register" />
+                                <button type="submit" className="au-btn-register">Registrarse</button>
                             </div>
                             <div className="au-mb-3">
                                 <Link to="/users" className="au-btn-cancel">Cancelar</Link>

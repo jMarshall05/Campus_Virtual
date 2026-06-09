@@ -18,6 +18,12 @@ export default function Groups() {
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         const response = await getGroups();
         setGroups(response);
@@ -40,9 +46,6 @@ export default function Groups() {
     const inicio = (pagina - 1) * porPagina;
     const fin = inicio + porPagina;
     const gruposPaginados = filteredGroups.slice(inicio, fin);
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     if (loading) return <Loader />;
     return (
@@ -91,7 +94,7 @@ export default function Groups() {
                             <input type="text"
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar grupos..."
-                                onChange={(e) => setSearch(e.target.value)} />
+                                onChange={handleSearchChange} />
                         </div>
                         <div className="filter-actions">
 

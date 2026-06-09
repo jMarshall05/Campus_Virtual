@@ -42,6 +42,12 @@ export default function Calendar() {
     const [pagina, setPagina] = useState(1);
     const porPagina = 10;
 
+
+    const handleSearchChange = (e) => {
+        setSearch(e.target.value);
+        setPagina(1);
+    };
+
     const cargarDatos = async () => {
         try {
             // TODO: Descomentar cuando EventosController esté listo
@@ -58,10 +64,6 @@ export default function Calendar() {
     useEffect(() => {
         cargarDatos();
     }, []);
-
-    useEffect(() => {
-        setPagina(1);
-    }, [search]);
 
     // Transformar eventos para FullCalendar
     const calendarEvents = eventos.map((e) => ({
@@ -155,12 +157,12 @@ export default function Calendar() {
                                 className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar eventos..."
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={handleSearchChange}
                             />
                         </div>
                         <div className="filter-actions">
                             {/* Toggle vista calendario / tabla */}
-                            <div className="btn-group me-2" role="group">
+                            <div className="btn-group me-2" aria-label="Vista">
                                 <button
                                     type="button"
                                     className={`btn btn-sm ${vistaActual === "calendar" ? "btn-primary" : "btn-outline-primary"}`}

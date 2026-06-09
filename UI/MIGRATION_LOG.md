@@ -3,8 +3,8 @@
 > **Fecha de inicio:** 8 de junio, 2026  
 > **Proyecto fuente:** `Campus_SantaAna/Campus.UI` (ASP.NET MVC + Razor)  
 > **Proyecto destino:** `Campus_Virtual/UI` (React 19 + Vite)  
-> **Última actualización:** 8 de junio, 2026  
-> **Último fix:** react-doctor — score 37→43, issues 276→98 (-178), bugs 136→2 (-134), accessibility 102→35 (-67)
+> **Última actualización:** 9 de junio, 2026  
+> **Último fix:** react-doctor — score 37→59, issues 276→35 (-241), accessibility 102→5 (-97)
 
 ---
 
@@ -157,18 +157,18 @@ PATCH /api/{entity}/{id}/estado →  Cambia estado (true↔false) [Tareas]
 ## 🔍 React Doctor — Historial de Fixes
 
 **Herramienta:** `react-doctor` v0.4.2 (millionco)  
-**Score final:** 37/100 → 43/100 (+6)  
-**Issues finales:** 276 → 98 (-178 total)
+**Score final:** 37/100 → 58/100 (+21)  
+**Issues finales:** 276 → 52 (-224 total)
 
 ### Resumen por categoría
 
-| Categoría | Inicio | R3 | Final | Reducción |
-|-----------|--------|----|-------|-----------|
-| Bugs | 136 | 57 | 2 | -134 |
-| Accessibility | 102 | 63 | 35 | -67 |
-| Maintainability | 32 | 24 | 24 | -8 |
-| Performance | 6 | 3 | 3 | -3 |
-| **Total** | **276** | **147** | **98** | **-178** |
+| Categoría | Inicio | R3 | R5 | R7 | Final | Reducción |
+|-----------|--------|----|----|-----|-------|-----------|
+| Bugs | 136 | 57 | 47 | 30 | 19 | -117 |
+| Accessibility | 102 | 63 | 21 | 16 | 5 | -97 |
+| Maintainability | 32 | 24 | 23 | 20 | 8 | -24 |
+| Performance | 6 | 3 | 3 | 3 | 2 | -4 |
+| **Total** | **276** | **147** | **94** | **69** | **35** | **-241** |
 
 ### Ronda 1: Errores críticos (8 de 8)
 
@@ -235,23 +235,72 @@ PATCH /api/{entity}/{id}/estado →  Cambia estado (true↔false) [Tareas]
 
 > **Nota:** react-doctor sigue reportando 3 warnings de performance — el tool puede estar detectando patrones diferentes (e.g., `qr` state via useEffect en UserDetails.jsx, wrapper `tipoIdentificacionChange` en AddUser.jsx). Los fixes son válidos independientemente.
 
-### Ronda 5: Performance (3 intentos, react-doctor detecta patrones distintos)
+### Ronda 6: Derived-state-in-effect + Accessibility + Maintainabilidad (94→69, 46→51/100)
 
-| Fix | Archivo | Descripción |
-|-----|---------|-------------|
-| `useMemo` para derivación de props | `UserDetails.jsx` | `getTipoIdInfo(usuario.tipoIdentificacion)` envuelto en `useMemo` |
-| Dead state eliminado | `ProfileManage.jsx` | Removido `useState` de `form` (nunca se actualiza), removido `handleSubmit` muerto, removido bloque `error` JSX |
-| Pure functions a module scope | `AddUser.jsx` | `soloNumeros` y `alfaNumerico` movidos fuera del componente |
+| Fix | Archivos | Issues |
+|-----|----------|--------|
+| `useEffect(() => setPagina(1), [search])` → `handleSearchChange` | Users.jsx, Groups.jsx, Courses.jsx, Announcements.jsx, Tasks.jsx, Grades.jsx, Submissions.jsx, Calendar.jsx | 16 (derived-state + state-chained-through-effects) |
+| Label `htmlFor` ↔ input `id` associations corregidos | AddUser.jsx, UserEdit.jsx | 6 |
+| `aria-label` agregado a inputs/selects sin label | AddUser.jsx, UserEdit.jsx, EditTask.jsx, AddTask.jsx, AddGrade.jsx, EditGrade.jsx | 10 |
+| `role="button"` → `<button>` semántico | adminLayout.jsx | 1 |
+| Pure functions movidas a module scope | UserEdit.jsx (`soloNumeros`/`alfaNumerico`), Grades.jsx (`getScoreClass`) | 2 |
+| `<input type="submit">` → `<button type="submit">` | AddUser.jsx | 1 |
 
-> **Nota:** react-doctor sigue reportando 3 warnings de performance — el tool puede estar detectando patrones diferentes (e.g., `qr` state via useEffect en UserDetails.jsx, wrapper `tipoIdentificacionChange` en AddUser.jsx). Los fixes son válidos independientemente.
+### Ronda 7: Accessibility + Performance (69→63, 51→52/100)
+
+| Fix | Archivos | Issues |
+|-----|----------|--------|
+| `aria-label` agregado a inputs DIMEX/Pasaporte/Fecha/Rol | AddUser.jsx, UserEdit.jsx | 5 |
+| `aria-label` agregado a datetime-local inputs | AddTask.jsx, EditTask.jsx | 2 |
+| `htmlFor` corregido (capitalización `númeroDeIdentificación`) | AddUser.jsx | 1 |
+| `quitarImagen` useState → useRef (solo usado en handlers) | AnnouncementEdit.jsx | 1 |
+
+### Ronda 10: Array index as key — stable keys (54→52, 56→58/100)
+
+| Fix | Archivos | Issues |
+|-----|----------|--------|
+| `key={index}` → `key={telefono.id}` + `visibles[telefono.id]` | UserDetails.jsx | 1 |
+| `key={i}` → `key={tel.id \|\| 'new-' + i}` | UserEdit.jsx | 1 |
+| `key={i}` → `key={tel._key \|\| 'new-' + i}` con `crypto.randomUUID()` | AddUser.jsx | 1 |
+
+### Ronda 9: new Date() hydration — useMemo (63→54, 52→56/100)
+
+| Fix | Archivos | Issues |
+|-----|----------|--------|
+| `useMemo(() => new Date(), [])` como `nowDate` reemplaza `new Date()` en JSX | AddUser.jsx, UserEdit.jsx, AddTask.jsx, EditTask.jsx, AddAnnouncement.jsx, AnnouncementEdit.jsx, Tasks.jsx, MyTasks.jsx, TaskDetails.jsx | 9 |
+
+### Ronda 8: Accessibility final — stale htmlFor + role (63→~57, 52→53/100)
+
+| Fix | Archivos | Issues |
+|-----|----------|--------|
+| `aria-label="Eliminar teléfono"` agregado al botón de borrar teléfono | AddUser.jsx | 1 |
+| `id="númeroDeIdentificación"` agregado al input disabled para match label | AddUser.jsx | 1 |
+| Typo corregido `Nómero`→`Número` en aria-label | AddUser.jsx | 1 |
+| Stale `htmlFor` removido de label "Estado" (apuntaba a checkbox, no form control) | UserEdit.jsx | 1 |
+| Stale `htmlFor` removido de label "remove phone" (apuntaba a button, no form control) | UserEdit.jsx | 1 |
+| `role="group"` → `aria-label="Vista"` en btn-group | Calendar.jsx | 1 |
+
+### Ronda 11: Unused exports commented out (52→41, maintainability -11)
+
+| Fix | Archivo | Issues |
+|-----|---------|--------|
+| `editUser` comentado (reemplazado por `editUserAdmin`) | `userService.js` | 1 |
+| `getTareaById`, `getTareasByGrupo` comentados | `tareasService.js` | 2 |
+| `getAnnouncementById`, `toggleAnnouncementStatus`, `getImage` comentados | `announcementsService.js` | 3 |
+| `getCalificacionById`, `getMisCalificaciones` comentados (stub) | `calificacionesService.js` | 2 |
+| `getEntregaById`, `getMisEntregas`, `editEntrega` comentados (stub) | `entregasService.js` | 3 |
 
 ### Pendiente (pre-existente, requiere refactor mayor)
-- `Docs.jsx`: `handleDeleteDoc` deps de `useCallback` incluyen `cargarDatos`
-- `UserEdit.jsx:34`: State synced to prop inside useEffect (requiere refactor del patrón de carga de datos)
-- `GroupEdit.jsx`: Prop derived into useState (requiere refactor del patrón de carga de datos)
-- 13 archivos con `Many related useState calls` (candidatos a `useReducer`)
-- 16 archivos con `State initialized from mount effect` (patrón estándar de carga de datos)
-- 11 exports no utilizados restantes en servicios API
+- 13 archivos con `Many related useState calls` (candidatos a `useReducer`) — 13 issues
+- 3 archivos con `Prop derived into useState` (GroupEdit, UserEdit, AnnouncementEdit) — 3 issues
+- 2 archivos con `State only used in handlers` → `useRef` (EnableTwoFa `copied`, ProfileManage `modalhidden` — ambos usados en JSX, no convertibles) — 2 issues
+- ✅ Resueltos en Ronda 10: 3 archivos con `Array index as key` — corregidos con keys estables (`telefono.id`, `crypto.randomUUID()`)
+- ✅ Resueltos en Ronda 11: 11 exports no utilizados en servicios API — comentados con notas TODO/UNUSED
+- 1 archivo con `Missing effect dependencies` (AddAnnouncement.jsx) — 1 issue
+- 1 archivo con `Uncontrolled input value` (AddUser.jsx DIMEX/Pasaporte) — 1 issue
+- 2 archivos sin alcance (`eventsService.js`, `stress-test.js`) — 2 issues
+
+> **Nota:** `EnableTwoFa.copied` y `ProfileManage.modalhidden` se mantienen como `useState` porque se usan en JSX para renderizado condicional/estilos. react-doctor los reporta erróneamente como "solo en handlers".
 
 ---
 

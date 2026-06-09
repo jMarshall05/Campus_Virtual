@@ -2,7 +2,7 @@ import "../../content/announcements/addAnnouncement.css";
 import "../../content/announcements/announcementEdit.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faInfoCircle, faTag, faAlignLeft, faPen, faCalendarAlt, faFileUpload, faTimes, faSave, faTrash } from "../../content/icons.js";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { editAnnouncement } from "../../api/announcementsService.js";
 import Swal from "sweetalert2";
 
@@ -10,7 +10,8 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
     const [estado, setEstado] = useState(anuncio.estado);
     const [imgUrl, setImgUrl] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
-    const [quitarImagen, setQuitarImagen] = useState(false);
+    const quitarImagenRef = useRef(false);
+    const nowDate = useMemo(() => new Date(), []);
 
     const imgUrlRef = useRef(null);
     const previewUrlRef = useRef(null);
@@ -18,18 +19,6 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
     useEffect(() => {
         if (!anuncio.imagenRuta) return;
         setImgUrl(anuncio.imagenRuta);
-        //  getImage(anuncio.idAnuncio)
-        //    .then((blob) => {
-        //      const url = URL.createObjectURL(blob);
-        //    imgUrlRef.current = url;
-        //   setImgUrl(url);
-        //})
-        //.catch((err) => console.error("Error al cargar imagen:", err));
-
-        //        return () => {
-        //          if (imgUrlRef.current) URL.revokeObjectURL(imgUrlRef.current);
-        //        if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
-        //  };
     }, [anuncio]);
 
     const handleFileChange = (e) => {
@@ -52,7 +41,7 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
         previewUrlRef.current = null;
         setImgUrl(null);
         setPreviewUrl(null);
-        setQuitarImagen(true);
+        quitarImagenRef.current = true;
     };
 
     const handleSubmit = async (e) => {
@@ -64,7 +53,7 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
         formData.append('descripcion', form.descripcion.value);
         formData.append('fechaEvento', form.fechaEvento.value);
         formData.append('estado', estado);
-        formData.append('quitarImagen', quitarImagen);
+        formData.append('quitarImagen', quitarImagenRef.current);
         if (form.imagen.files[0] != null) {
             formData.append('imagen', form.imagen.files[0]);
         }
@@ -156,7 +145,7 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
                                     id="fechaEvento"
                                     name="fechaEvento"
                                     defaultValue={anuncio.fechaEvento?.slice(0, 16)}
-                                    min={new Date(new Date().setSeconds(0, 0)).toISOString().slice(0, 16)}
+                                    min={(() => { const d = new Date(nowDate); d.setSeconds(0, 0); return d.toISOString().slice(0, 16); })()}
                                     required
                                 />
                             </div>
