@@ -20,40 +20,23 @@ export function leerToken() {
   }
 }
 export function getUserRole() {
-  try {
-    const token = localStorage.getItem("token");
-
-    if (!token || typeof token !== "string") return null;
-
-    const payload = jwtDecode(token);
-
-    return payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
-  } catch (error) {
-    console.error("Error decodificando JWT:", error);
-    return null;
-  }
+  const payload = leerToken();
+  if (!payload) return null;
+  return payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ?? null;
 }
 
 export function validarToken() {
-  const token = localStorage.getItem("token");
-  if (!token || typeof token !== "string") return false;
-  try {
-    const payload = jwtDecode(token);
-    const now = Date.now() / 1000;
-
-    if (payload.exp < now) {
-      localStorage.removeItem("token");
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Token invalido:", error);
+  const payload = leerToken();
+  if (!payload) return false;
+  const now = Date.now() / 1000;
+  if (payload.exp < now) {
+    localStorage.removeItem("token");
     return false;
   }
-
+  return true;
 }
 
+// TODO: Revisar si disable2Factor sigue siendo necesario — se puede refactorizar a llamar disable2FA directamente
 export async function disable2Factor(IdUsuario) {
   const tokenNuevo = await disable2FA(IdUsuario);
   return tokenNuevo;

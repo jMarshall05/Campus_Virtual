@@ -8,6 +8,16 @@ import { faBook, faBookOpen, faChalkboardTeacher, faCheckCircle, faChevronLeft, 
 import Swal from "sweetalert2";
 import AddCourse from "../../components/courses/AddCourse.jsx";
 
+const handleExportCoursesPdf = async () => {
+    try {
+        const response = await exportCoursesPdf();
+        const url = URL.createObjectURL(response);
+        window.open(url, "_blank");
+    } catch (error) {
+        console.error("Error al generar el PDF:", error);
+    }
+};
+
 export default function Courses() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -45,16 +55,6 @@ export default function Courses() {
             setLoading(false);
         }
     }
-    const Pdf = async () => {
-            try {
-                const response = await exportCoursesPdf();
-                const url = URL.createObjectURL(response);
-                window.open(url, "_blank");
-            } catch (error) {
-                console.error("Error al generar el PDF:", error);
-            }
-        };
-
     const filteredCourses = courses.filter(course => {
         const searchterm = search.toLowerCase();
         return (
@@ -124,19 +124,19 @@ export default function Courses() {
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
                             <input
                                 type="text"
-                                className="search-input"
+                                className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar cursos..."
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
 
                         <div className="buttons-group">
-                            <button className="btn-premium btn-Agregar-Curso" onClick={()=> setModalHidden(false)}>
+                            <button type="button" className="btn-premium btn-Agregar-Curso" onClick={()=> setModalHidden(false)}>
                                 <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
                                 Nuevo Curso
                             </button>
 
-                            <button className="btn-export btn-GenerarReporte" onClick={Pdf}>
+                            <button type="button" className="btn-export btn-GenerarReporte" onClick={handleExportCoursesPdf}>
                                 <FontAwesomeIcon icon={faFileAlt} className="me-2" />
                                 Generar Reporte
                             </button>
@@ -295,7 +295,7 @@ export default function Courses() {
                     </div>
 
                     <div className="pagination-controls">
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
                             disabled={pagina === 1}
                             onClick={() => setPagina(p => Math.max(p - 1, 1))}
@@ -305,7 +305,7 @@ export default function Courses() {
 
                         <span className="pagination-btn active">{pagina}</span>
 
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
                             disabled={pagina === totalPaginas}
                             onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}

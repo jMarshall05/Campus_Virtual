@@ -14,6 +14,13 @@ import Groups from './pages/groups/Groups.jsx';
 import Docs from './pages/docs/Docs.jsx';
 import Courses from './pages/courses/Courses.jsx';
 import Announcements from './pages/announcements/Announcements.jsx';
+import Tasks from './pages/tasks/Tasks.jsx';
+import MyTasks from './pages/tasks/MyTasks.jsx';
+import Contacts from './pages/contacts/Contacts.jsx';
+import Grades from './pages/grades/Grades.jsx';
+import Submissions from './pages/submissions/Submissions.jsx';
+import Calendar from './pages/calendar/Calendar.jsx';
+import ChangePassword from './pages/users/ChangePassword.jsx';
 
 function App() {
   const token = validarToken();
@@ -82,7 +89,55 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+          <Route
+            path="/tasks"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Tasks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-tasks"
+            element={
+              <ProtectedRoute requiredRole="Estudiantes">
+                <MyTasks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Contacts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/grades"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Grades />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/submissions"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Submissions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <ProtectedRoute requiredRole="Administradores">
+                <Calendar />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>

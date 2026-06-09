@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../content/users/profileManage.css"
 import Loader from "../../components/Loader";
 import { leerToken, disable2Factor, cambiarToken } from "../../utils/auth";
-import { getUserById, editUser } from "../../api/userService";
+import { getUserById } from "../../api/userService";
 import { Link } from "react-router-dom";
 import EnableTwoFa from "../../components/users/EnableTwoFa";
 import { jwtDecode } from "jwt-decode";
@@ -22,22 +22,8 @@ export default function Profile() {
         }]
     });
     const [loading, setLoading] = useState(true)
-    const [form] = useState({
-        nombre: "",
-        apellido: "",
-        telefonos: [{
-            id: null,
-            idUsuario: null,
-            codigo: "",
-            telefono: "",
-            tipo: "",
-            estado: true
-        }]
-    })
-    const [error, setError] = useState("");
     const [twoFactorEnabled, setTwoFactor] = useState(false)
     const [modalhidden, setModalHidden] = useState(true)
-
 
     const inactivar2fa = async () => {
         try {
@@ -70,30 +56,7 @@ export default function Profile() {
         cargarDatos();
     }, []);
 
-
     if (loading) return <Loader />;
-
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
-        setLoading(true);
-
-        try {
-            const payload = {
-                nombre: form.nombre,
-                apellido: form.apellido,
-                telefonos: form.telefonos
-            }
-            await editUser(userId, payload);
-        } catch (err) {
-            setError(`${err.message}`);
-        } finally {
-            setLoading(false)
-        }
-    };
-
-
 
     return (
         <div className="container-fluid">
@@ -105,14 +68,6 @@ export default function Profile() {
                         Mi cuenta
                     </h2>
 
-                    {error && (
-                        <div className="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-                            <i className="bi bi-x-circle-fill me-2"></i>
-                            {error}
-                            <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    )}
-
                     <div className="card shadow-lg mb-4 border-0 rounded-4">
                         <div className="card-header border-0 rounded-top-4 d-flex align-items-center">
                             <h5 className="mb-0 fw-bold text-dark">
@@ -121,7 +76,7 @@ export default function Profile() {
                             </h5>
                         </div>
                         <div className="card-body p-4 p-sm-3 p-md-4">
-                            <form onSubmit={handleSubmit}>
+                            <form>
                                 {/* Vista de tabla para pantallas medianas y grandes */}
                                 <div className="d-none d-md-block">
                                     <table className="table table-bordered table-striped align-middle premium-table">

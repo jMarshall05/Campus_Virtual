@@ -52,7 +52,6 @@ export default function AddGroup({ onClose }) {
                 </div>
             </div>
 
-
             <form id="Group-Form" onSubmit={handleSubmit}>
                 <div className="edit-content">
 

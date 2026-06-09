@@ -1,0 +1,71 @@
+/* Estilos específicos de la página Calificaciones */
+
+.grades-icon {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Filas de tabla */
+.grade-row:hover {
+    background: #f8fafc;
+}
+
+/* Celda de calificación */
+.grade-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.grade-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.grade-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.grade-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.grade-id {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.grade-score {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.grade-score.high { color: #16a34a; }
+.grade-score.medium { color: #d97706; }
+.grade-score.low { color: #dc2626; }
+
+.grade-comment {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Ajustes mobile */
+@media (max-width: 768px) {
+    .grade-info {
+        justify-content: flex-end;
+    }
+}

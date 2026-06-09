@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 export default function GroupEdit({ grupo, onClose }) {
     const [loading, setLoading] = useState(false);
-    const [groupState, setState] = useState(grupo.estado);
+    const [groupState, setGroupState] = useState(grupo.estado);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -127,7 +127,7 @@ export default function GroupEdit({ grupo, onClose }) {
                                     name="estado"
                                     id="estado"
                                     defaultChecked={groupState}
-                                    onChange={() => setState(!groupState)}
+                                    onChange={() => setGroupState(!groupState)}
                                 />
                                 <span className="toggle-slider-large"></span>
                                 <span className="toggle-text">

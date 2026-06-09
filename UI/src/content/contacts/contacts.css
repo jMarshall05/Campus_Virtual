@@ -1,0 +1,98 @@
+/* Estilos específicos de la página Contactos */
+
+.contacts-icon {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+/* Filas de tabla */
+.contact-row:hover {
+    background: #f8fafc;
+}
+
+/* Anchuras mínimas de columnas en desktop */
+.contact-name-col,
+.contact-email-col,
+.contact-role-col,
+.contact-id-col,
+.contact-status-col {
+    min-width: 140px;
+}
+
+/* Celda de contacto */
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.contact-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.contact-role {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.contact-email-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.contact-phone-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+/* Badges de rol */
+.role-badge {
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.role-badge.profesor {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.role-badge.administrador {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* Ajustes mobile */
+@media (max-width: 768px) {
+    .contact-info {
+        justify-content: flex-end;
+    }
+}

@@ -2,9 +2,13 @@ export const urlBase = "http://localhost:5099/api";
 //export const urlBase = "http://192.168.100.116:5000/api"
 //export const urlBase = "/api";  
 
+function getToken() {
+    return localStorage.getItem('token');
+}
+
 export async function apiFetchJson(endpoint, options = {}) {
     const url = `${urlBase}/${endpoint}`;
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
     const response = await fetch(url, {
         method: options.method || 'GET',
@@ -44,7 +48,7 @@ export async function apiFetchJson(endpoint, options = {}) {
 
 export async function apiFetchBlob(endpoint, options = {}) {
     const url = `${urlBase}/${endpoint}`;
-    const token = localStorage.getItem('token');
+    const token = getToken();
 
     const response = await fetch(url, {
         method: options.method || 'GET',

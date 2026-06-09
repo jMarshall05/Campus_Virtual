@@ -1,0 +1,52 @@
+/* Estilos específicos de la página Entregas */
+
+.submissions-icon {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+/* Filas de tabla */
+.submission-row:hover {
+    background: #f8fafc;
+}
+
+/* Celda de entrega */
+.submission-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.submission-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.submission-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.submission-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.submission-id {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+/* Ajustes mobile */
+@media (max-width: 768px) {
+    .submission-info {
+        justify-content: flex-end;
+    }
+}

@@ -19,7 +19,6 @@ import {
     faUsers
 } from '../../content/icons.js'
 
-
 export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [Estudiantes, setEstudiantes] = useState([]);
@@ -182,7 +181,6 @@ export default function Dashboard() {
                 </div >
             </div >
         </div >
-
 
     )
 }

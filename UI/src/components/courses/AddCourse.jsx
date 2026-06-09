@@ -15,9 +15,9 @@ export default function AddCourse({ onClose }) {
   const [grupos, setGrupos] = useState([]);
   const [loading, setLoading] = useState(false);
   const cargarDatos = async () => {
-    const users = await getUsers();
-    const materiasData = await getMaterias();
-    const gruposData = await getGroups();
+    const [users, materiasData, gruposData] = await Promise.all([
+        getUsers(), getMaterias(), getGroups()
+    ]);
     setMaterias(materiasData);
     setGrupos(gruposData);
     const teachers = users.filter(user => user.rol === "Profesores")
@@ -45,7 +45,6 @@ export default function AddCourse({ onClose }) {
         confirmButtonText: 'OK'
       });
       onClose();
-
 
     } catch (error) {
       setLoading(false);

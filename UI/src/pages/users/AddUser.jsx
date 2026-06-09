@@ -7,6 +7,14 @@ import { register } from "../../api/authService.js";
 import Loader from "../../components/Loader.jsx";
 import Swal from "sweetalert2";
 
+const soloNumeros = (e, max) => {
+    e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, max);
+};
+
+const alfaNumerico = (e, max) => {
+    e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
+};
+
 export default function AddUser() {
     const [telefonos, setTelefonos] = useState([]);
     const [tipoIdentificacion, setTipoIdentificacion] = useState("");
@@ -39,14 +47,6 @@ export default function AddUser() {
     const tipoIdentificacionChange = (tipo) => {
         setTipoIdentificacion(tipo);
     };
-    const soloNumeros = (e, max) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, "").slice(0, max);
-    };
-
-    const alfaNumerico = (e, max) => {
-        e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -144,26 +144,26 @@ export default function AddUser() {
 
                                 <div className="au-form-row">
                                     <div className="au-mb-3">
-                                        <label>Nombre</label>
+                                        <label htmlFor="nombre">Nombre</label>
                                         <div className="au-input-wrapper">
                                             <FontAwesomeIcon icon={faUser} className="au-input-icon" />
-                                            <input className="au-form-control" name="Nombre" placeholder="Nombre" required />
+                                            <input id="nombre" className="au-form-control" name="Nombre" placeholder="Nombre" required />
                                         </div>
                                     </div>
                                     <div className="au-mb-3">
-                                        <label>Apellido</label>
+                                        <label htmlFor="apellido">Apellido</label>
                                         <div className="au-input-wrapper">
                                             <FontAwesomeIcon icon={faUser} className="au-input-icon" />
-                                            <input className="au-form-control" name="Apellido" placeholder="Apellido" required />
+                                            <input id="apellido" className="au-form-control" name="Apellido" placeholder="Apellido" required />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="au-mb-3">
-                                    <label>Correo Electrónico</label>
+                                    <label htmlFor="correoelectrónico">Correo Electrónico</label>
                                     <div className="au-input-wrapper">
                                         <FontAwesomeIcon icon={faEnvelope} className="au-input-icon" />
-                                        <input className="au-form-control" name="Email" placeholder="correo@ejemplo.com" type="email" required />
+                                        <input id="correoElectrónico" className="au-form-control" name="Email" placeholder="correo@ejemplo.com" type="email" required />
                                     </div>
                                 </div>
                             </div>
@@ -183,8 +183,8 @@ export default function AddUser() {
                                                 <input type="hidden" name={`Telefonos[${i}].Id`} defaultValue={tel.id} />
                                                 <div className="au-tel-row">
                                                     <div className="au-tel-field au-tel-code">
-                                                        <label className="au-form-label">Código</label>
-                                                        <input
+                                                        <label htmlFor="código" className="au-form-label">Código</label>
+                                                        <input id="código"
                                                             className="au-form-control"
                                                             name={`Telefonos[${i}].Codigo`}
                                                             defaultValue={tel.codigo}
@@ -197,8 +197,8 @@ export default function AddUser() {
                                                         />
                                                     </div>
                                                     <div className="au-tel-field au-tel-number">
-                                                        <label className="au-form-label">Número</label>
-                                                        <input
+                                                        <label htmlFor="número" className="au-form-label">Número</label>
+                                                        <input id="número"
                                                             className="au-form-control"
                                                             name={`Telefonos[${i}].Telefono`}
                                                             defaultValue={tel.telefono}
@@ -212,8 +212,8 @@ export default function AddUser() {
                                                         />
                                                     </div>
                                                     <div className="au-tel-field au-tel-type">
-                                                        <label className="au-form-label">Tipo</label>
-                                                        <select className="au-form-control" name={`Telefonos[${i}].Tipo`} defaultValue={tel.tipo} required>
+                                                        <label htmlFor="tipo" className="au-form-label">Tipo</label>
+                                                        <select id="tipo" className="au-form-control" name={`Telefonos[${i}].Tipo`} defaultValue={tel.tipo} required>
                                                             <option value="">Tipo</option>
                                                             <option value="Personal">Personal</option>
                                                             <option value="Trabajo">Trabajo</option>
@@ -249,12 +249,11 @@ export default function AddUser() {
 
                                 <div className="au-form-row">
                                     <div className="au-mb-3">
-                                        <label>Tipo de Identificación</label>
+                                        <label htmlFor="tipodeidentificación">Tipo de Identificación</label>
                                         <div className="au-input-wrapper">
                                             <span className="au-input-icon"><FontAwesomeIcon icon={faIdCardAlt} /></span>
-                                            <select className="au-form-control"
+                                            <select id="tipoDeIdentificación" className="au-form-control"
                                                 name="TipoIdentificacion"
-                                                id="tipoIdentificacion"
                                                 onChange={(e) => tipoIdentificacionChange(e.target.value)}
                                                 required>
                                                 <option value="">Seleccione tipo</option>
@@ -265,11 +264,11 @@ export default function AddUser() {
                                         </div>
                                     </div>
                                     <div className="au-mb-3">
-                                        <label>Número de Identificación</label>
+                                        <label htmlFor="númerodeidentificación">Número de Identificación</label>
                                         {tipoIdentificacion === "Fisica" ? (
                                             <div className="au-input-wrapper">
                                                 <FontAwesomeIcon icon={faFingerprint} className="au-input-icon" />
-                                                <input
+                                                <input id="númeroDeIdentificación"
                                                     className="au-form-control"
                                                     name="Identificacion"
                                                     placeholder="Ej: 123456789"
@@ -336,9 +335,9 @@ export default function AddUser() {
                                 </div>
 
                                 <div className="au-mb-3">
-                                    <label>Fecha de Nacimiento</label>
+                                    <label htmlFor="fechadenacimiento">Fecha de Nacimiento</label>
                                     <div className="au-input-wrapper au-input-wrapper--no-icon">
-                                        <input className="au-form-control" type="date" name="FechaDeNacimiento" max={new Date().toISOString().split("T")[0]} required />
+                                        <input id="fechaDeNacimiento" className="au-form-control" type="date" name="FechaDeNacimiento" max={new Date().toISOString().split("T")[0]} required />
                                     </div>
                                 </div>
                             </div>
@@ -347,7 +346,7 @@ export default function AddUser() {
                                 <div className="au-form-section__title">Acceso y Rol</div>
 
                                 <div className="au-mb-3">
-                                    <label>Rol</label>
+                                    <label htmlFor="rol">Rol</label>
                                     <div className="au-input-wrapper">
                                         <FontAwesomeIcon icon={faUserTag} className="au-input-icon" />
                                         <select className="au-form-control" name="Rol" id="rolSelector" required>
@@ -360,17 +359,17 @@ export default function AddUser() {
 
                                 <div className="au-form-row">
                                     <div className="au-mb-3">
-                                        <label>Contraseña</label>
+                                        <label htmlFor="contraseña">Contraseña</label>
                                         <div className="au-input-wrapper">
                                             <FontAwesomeIcon icon={faLock} className="au-input-icon" />
-                                            <input className="au-form-control" type="password" name="password" required placeholder="••••••••" />
+                                            <input id="contraseña" className="au-form-control" type="password" name="password" required placeholder="••••••••" />
                                         </div>
                                     </div>
                                     <div className="au-mb-3">
-                                        <label>Confirmar Contraseña</label>
+                                        <label htmlFor="confirmarcontraseña">Confirmar Contraseña</label>
                                         <div className="au-input-wrapper">
                                             <FontAwesomeIcon icon={faLock} className="au-input-icon" />
-                                            <input className="au-form-control" type="password" name="confirmPassword" required placeholder="••••••••" />
+                                            <input id="confirmarContraseña" className="au-form-control" type="password" name="confirmPassword" required placeholder="••••••••" />
                                         </div>
                                     </div>
                                 </div>

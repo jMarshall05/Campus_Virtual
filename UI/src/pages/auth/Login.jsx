@@ -8,15 +8,12 @@ import "../../content/users/login.css"
 import { jwtDecode } from "jwt-decode";
 import Swal from 'sweetalert2'
 
-
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -62,6 +59,7 @@ export default function Login() {
                 id="userEmail"
                 className="form-control"
                 placeholder="Correo Electrónico"
+                aria-label="Correo Electrónico"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -73,6 +71,7 @@ export default function Login() {
                 id="userPassword"
                 className="form-control"
                 placeholder="Contraseña"
+                aria-label="Contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -88,7 +87,7 @@ export default function Login() {
             </div>
           </form>
           {/* <div className="text-center">
-            <button className="btn btn-twoFactor" onClick={() => setModalHidden(false)}>Inicia sesion con google</button>
+            <button type="button" className="btn btn-twoFactor" onClick={() => setModalHidden(false)}>Inicia sesion con google</button>
           </div> */}
           <div className="text-link">
             ¿Olvidaste tu contraseña? <Link to="/#">Restablecela</Link>
@@ -114,5 +113,4 @@ export default function Login() {
     </div>
   );
 }
-
 

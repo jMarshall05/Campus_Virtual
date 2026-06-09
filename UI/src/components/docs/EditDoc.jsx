@@ -47,7 +47,7 @@ export default function EditDoc({ doc, onClose }) {
                     <FontAwesomeIcon icon={faEdit} className="me-2" />
                     Editar Documento
                 </h5>
-                <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
+                <button type="button" className="btn-close" aria-label="Cerrar" onClick={onClose}></button>
             </div>
 
             <form id="formEditarDocumento" onSubmit={handleSubmit}>

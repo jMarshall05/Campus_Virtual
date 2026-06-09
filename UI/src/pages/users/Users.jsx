@@ -8,6 +8,16 @@ import UserDetails from "../../components/users/UserDetails.jsx";
 import UserEdit from "../../components/users/UserEdit.jsx";
 import { Link } from "react-router-dom";
 
+const handleExportUsersPdf = async () => {
+    try {
+        const response = await exportUsersPdf();
+        const url = URL.createObjectURL(response);
+        window.open(url, "_blank");
+    } catch (error) {
+        console.error("Error al generar el PDF:", error);
+    }
+};
+
 export default function Users() {
     const [loading, setLoading] = useState(true);
     const [usuarios, setUsuarios] = useState([]);
@@ -51,16 +61,6 @@ export default function Users() {
     useEffect(() => {
         setPagina(1);
     }, [search]);
-
-    const Pdf = async () => {
-        try {
-            const response = await exportUsersPdf();
-            const url = URL.createObjectURL(response);
-            window.open(url, "_blank");
-        } catch (error) {
-            console.error("Error al generar el PDF:", error);
-        }
-    };
 
     if (loading) return <Loader />;
     return (
@@ -106,9 +106,8 @@ export default function Users() {
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
                             <input
                                 type="text"
-                                className="search-input"
+                                className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar usuarios..."
-                                id="searchInput"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
@@ -118,7 +117,7 @@ export default function Users() {
                                 <FontAwesomeIcon icon={faPlusCircle} />
                                 Nuevo Usuario
                             </Link>
-                            <button onClick={Pdf} className="btn-export" >
+                            <button type="button" onClick={handleExportUsersPdf} className="btn-export" >
                                 <FontAwesomeIcon icon={faDownload} />
                                 Exportar
                             </button>
@@ -141,7 +140,7 @@ export default function Users() {
                             <tbody>
                                 {usuariosFiltrados.length === 0 ? (
                                     <tr>
-                                        <td colspan="6" className="text-center text-muted py-4">
+                                        <td colSpan="6" className="text-center text-muted py-4">
                                             <FontAwesomeIcon icon={faUsers} />
                                             <p>
                                                 No hay usuarios registrados con el dato especificado
@@ -181,7 +180,7 @@ export default function Users() {
                                             <td className="actions-cell" data-label="Acciones">
                                                 <div className="actions-container">
 
-                                                    <button className="btn btn-outline-dark btn-sm btn-Detalles"
+                                                    <button type="button" className="btn btn-outline-dark btn-sm btn-Detalles"
                                                         data-bs-toggle="tooltip"
                                                         title="Ver Detalles"
                                                         onClick={() => {
@@ -193,7 +192,7 @@ export default function Users() {
                                                         <span className="action-text">Detalles</span>
                                                     </button>
 
-                                                    <button className="btn btn-outline-primary btn-sm btn-Editar"
+                                                    <button type="button" className="btn btn-outline-primary btn-sm btn-Editar"
                                                         data-bs-toggle="tooltip"
                                                         title="Editar"
                                                         onClick={() => {
@@ -222,7 +221,7 @@ export default function Users() {
                 </div>
 
                 <div className="pagination-controls">
-                    <button
+                    <button type="button"
                         className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
                         disabled={pagina === 1}
                         onClick={() => setPagina(p => Math.max(p - 1, 1))}
@@ -232,7 +231,7 @@ export default function Users() {
 
                     <span className="pagination-btn active">{pagina}</span>
 
-                    <button
+                    <button type="button"
                         className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
                         disabled={pagina === totalPaginas}
                         onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}

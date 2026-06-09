@@ -153,7 +153,7 @@ export default function AddAnnouncement({ onClose }) {
                         </div>
                         {previewUrl && (
                             <div className="image-preview-container mt-3">
-                                <label className="form-label">Vista previa</label>
+                                <span className="form-label">Vista previa</span>
                                 <img src={previewUrl} className="img-fluid rounded shadow-sm" alt="Vista previa" />
                             </div>
                         )}

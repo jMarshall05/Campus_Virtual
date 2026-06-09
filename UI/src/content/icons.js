@@ -63,5 +63,9 @@ export {
   faHeading,
   faTag,
   faBookOpen,
+  faShieldAlt,
+  faPaperclip,
+  faUpload,
+  faComments
   
 } from "@fortawesome/free-solid-svg-icons";

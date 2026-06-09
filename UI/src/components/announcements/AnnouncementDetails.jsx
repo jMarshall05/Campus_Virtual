@@ -2,39 +2,15 @@ import "../../content/announcements/addAnnouncement.css";
 import "../../content/announcements/announcementDetails.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faCalendarAlt, faTimes } from "../../content/icons.js";
-import Loader from "../Loader.jsx";
-import { getImage } from "../../api/announcementsService.js";
-import { useEffect, useState } from "react";
+
+      
+
 
 const formatDate = (dateStr) =>
-    dateStr
-        ? new Date(dateStr).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
+    dateStr  ? new Date(dateStr).toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
         : "N/A";
 
 export default function AnnouncementDetails({ anuncio, onClose }) {
-    const [loading, setLoading] = useState(false);
-    const [imgUrl, setImgUrl] = useState(null);
-
-    useEffect(() => {
-        if (!anuncio.imagenRuta) return;
-        setLoading(true);
-        setImgUrl(anuncio.imagenRuta);
-        setLoading(false);
-        // getImage(anuncio.idAnuncio)
-        //   .then((blob) => {
-        //     objectUrl = URL.createObjectURL(blob);
-        //   setImgUrl(objectUrl);
-        //}
-        //)
-        //.catch((err) => console.error("Error al cargar la imagen del anuncio:", err))
-        //.finally(() => setLoading(false));
-
-        //  return () => {
-        //    if (objectUrl) URL.revokeObjectURL(objectUrl);
-        //};
-    }, [anuncio]);
-    if (loading) return <Loader />;
-
     return (
         <div className="edit-group-modal">
             <div className="edit-header">
@@ -87,7 +63,7 @@ export default function AnnouncementDetails({ anuncio, onClose }) {
                     <div className="form-section">
                         <h3 className="section-title">Imagen del Evento</h3>
                         <div className="ad-image-container">
-                            <img src={imgUrl} alt={`Imagen del evento ${anuncio.titulo}`} />
+                            <img src={anuncio.imagenRuta} alt={`Imagen del evento ${anuncio.titulo}`} />
                         </div>
                     </div>
                 )}
@@ -95,7 +71,7 @@ export default function AnnouncementDetails({ anuncio, onClose }) {
             </div>
 
             <div className="edit-footer">
-                <button className="btn btn-secondary" onClick={onClose}>
+                <button type="button" className="btn btn-secondary" onClick={onClose}>
                     <FontAwesomeIcon icon={faTimes} className="me-2" />Cerrar
                 </button>
             </div>

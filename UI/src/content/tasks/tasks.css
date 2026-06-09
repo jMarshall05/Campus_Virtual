@@ -1,0 +1,133 @@
+/* Estilos específicos de la página Tareas */
+
+.tasks-icon {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.teachers-icon {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+/* Filas de tabla */
+.task-row:hover {
+    background: #f8fafc;
+}
+
+/* Anchuras mínimas de columnas en desktop */
+.task-title-col,
+.task-group-col,
+.task-date-col,
+.task-attachment-col,
+.task-status-col {
+    min-width: 140px;
+}
+
+.actions-col {
+    min-width: 160px;
+}
+
+/* Celda de tarea */
+.task-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.task-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    flex-shrink: 0;
+}
+
+.task-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.task-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+.task-id {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.task-description {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Badges de fecha */
+.badge-date {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.badge-date.overdue {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.badge-date.upcoming {
+    background: #fefce8;
+    color: #ca8a04;
+}
+
+/* Badge de archivo */
+.badge-attachment {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-attachment.has-file {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.badge-attachment.no-file {
+    background: #f8fafc;
+    color: #94a3b8;
+}
+
+/* Hover card para vistas de cards */
+.hover-card {
+    border-radius: 12px;
+    transition: transform 0.2s, box-shadow 0.25s;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa);
+}
+
+.hover-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+}
+
+/* Ajustes mobile */
+@media (max-width: 768px) {
+    .task-info {
+        justify-content: flex-end;
+    }
+}

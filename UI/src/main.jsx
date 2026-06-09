@@ -9,12 +9,6 @@ import './content/auth/unauthorized.css';
 import './content/loader.css';
 import './content/users/adminlayout.css'
 
-
-
-
-
-
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />

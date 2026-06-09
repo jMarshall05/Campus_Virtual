@@ -3,7 +3,6 @@ import { enable2FA, verify2FA } from "../../api/authService";
 import { leerToken } from "../../utils/auth";
 import Loader from "../Loader";
 
-
 export default function Enable2FA({ onClose,onEnabled }) {
     const [qr, setQr] = useState("");
     const [code, setCode] = useState("");
@@ -107,7 +106,7 @@ export default function Enable2FA({ onClose,onEnabled }) {
                             <input
                                 type="text"
                                 className="form-control font-monospace text-center fs-5"
-                                id="secretKey"
+                                id="secretKey" aria-label="Clave secreta de autenticación"
                                 value={secretKey}
                                 readOnly
                             />
@@ -162,7 +161,6 @@ export default function Enable2FA({ onClose,onEnabled }) {
                                 pattern="[0-9]{6}"
                                 required
                                 autoComplete="off"
-                                autoFocus
                             />
                             <div className="invalid-feedback">
                                 Por favor, introduce un código de 6 dígitos válido.

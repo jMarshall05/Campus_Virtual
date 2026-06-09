@@ -89,15 +89,14 @@ export default function Groups() {
                         <div className="search-container">
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
                             <input type="text"
-                                className="search-input"
+                                className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar grupos..."
-                                id="searchInput"
                                 onChange={(e) => setSearch(e.target.value)} />
                         </div>
                         <div className="filter-actions">
 
                         </div>
-                        <button className="btn-premium btn-Agregar-Grupo" onClick={() => { setModalType('add'); setModalHidden(false) }}>
+                        <button type="button" className="btn-premium btn-Agregar-Grupo" onClick={() => { setModalType('add'); setModalHidden(false) }}>
                         <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
                         Nuevo Grupo
                     </button>
@@ -193,7 +192,7 @@ export default function Groups() {
 
                                                 <td className="actions-cell" data-label="Acciones">
                                                     <div className="d-flex justify-content-center gap-2">
-                                                        <button
+                                                        <button type="button"
                                                             className="btn btn-outline-primary btn-sm btn-Editar-Grupo"
                                                             data-id={group.idGrupo}
                                                             title="Editar Grupo"
@@ -206,7 +205,7 @@ export default function Groups() {
                                                             <FontAwesomeIcon icon={faEdit} />
                                                         </button>
 
-                                                        <button
+                                                        <button type="button"
                                                             className="btn btn-outline-dark btn-sm btn-Detalles-Grupo"
                                                             data-id={group.idGrupo}
                                                             title="Ver Detalles"
@@ -235,7 +234,7 @@ export default function Groups() {
                     </div>
 
                     <div className="pagination-controls">
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
                             disabled={pagina === 1}
                             onClick={() => setPagina(p => Math.max(p - 1, 1))}
@@ -245,7 +244,7 @@ export default function Groups() {
 
                         <span className="pagination-btn active">{pagina}</span>
 
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina === totalPaginas ? "disabled" : ""}`}
                             disabled={pagina === totalPaginas}
                             onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}

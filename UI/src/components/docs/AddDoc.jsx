@@ -47,7 +47,7 @@ export default function AddDoc({ onClose }) {
                     <FontAwesomeIcon icon={faFileUpload} className="me-2" />
                     Agregar Nuevo Documento
                 </h5>
-                <button type="button" className="btn-close" onClick={onClose} aria-label="Close"></button>
+                <button type="button" className="btn-close" aria-label="Cerrar" onClick={onClose}></button>
             </div>
             <form id="formAgregarDocumento" onSubmit={handleSubmit}>
                 <div className="modal-body">

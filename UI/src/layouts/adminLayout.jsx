@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { EliminarToken, leerToken, validarToken } from "../utils/auth";
+import { EliminarToken, leerToken, validarToken, getUserRole } from "../utils/auth";
 import logo from '../assets/LogoInstitucion.png';
 import Swal from "sweetalert2";
 
@@ -25,15 +25,15 @@ export default function Layout() {
 
     const closeSidebar = () => setSidebarOpen(false);
 
-    const Logout = () => {
+    const handleLogout = useCallback(() => {
         EliminarToken();
         navigate('/login');
-    };
+    }, [navigate]);
 
     return (
         <div className="admin-wrapper">
             {sidebarOpen && (
-                <div className="sidebar-overlay" onClick={closeSidebar} />
+                <div className="sidebar-overlay" onClick={closeSidebar} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') closeSidebar(); }} role="button" tabIndex={0} aria-label="Cerrar menú" />
             )}
 
             <aside className={`sidebar-admin${sidebarOpen ? ' show' : ''}`}>
@@ -71,17 +71,39 @@ export default function Layout() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/contactos" onClick={closeSidebar}>
+                        <Link to="/tasks" onClick={closeSidebar}>
+                            <i className="fas fa-tasks"></i> Tareas
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/contacts" onClick={closeSidebar}>
                             <i className="fas fa-phone"></i> Contactos
                         </Link>
                     </li>
                     <li>
-                        <Link to="/calendario" onClick={closeSidebar}>
+                        <Link to="/grades" onClick={closeSidebar}>
+                            <i className="fas fa-star"></i> Calificaciones
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/submissions" onClick={closeSidebar}>
+                            <i className="fas fa-file-upload"></i> Entregas
+                        </Link>
+                    </li>
+                    {getUserRole() === 'Estudiantes' && (
+                        <li>
+                            <Link to="/my-tasks" onClick={closeSidebar}>
+                                <i className="fas fa-clipboard-list"></i> Mis Tareas
+                            </Link>
+                        </li>
+                    )}
+                    <li>
+                        <Link to="/calendar" onClick={closeSidebar}>
                             <i className="fas fa-calendar"></i> Calendario
                         </Link>
                     </li>
                     <li>
-                        <button type="button" onClick={Logout} className="logout-btn">
+                        <button type="button" onClick={handleLogout} className="logout-btn">
                             <i className="fas fa-sign-out-alt"></i> Cerrar sesión
                         </button>
                     </li>
@@ -139,14 +161,14 @@ export default function Layout() {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link to="/cambiar-contrasena" className="dropdown-item">
+                                            <Link to="/change-password" className="dropdown-item">
                                                 <i className="bi bi-key-fill me-2"></i>
                                                 Cambiar contraseña
                                             </Link>
                                         </li>
                                         <li><hr className="dropdown-divider" /></li>
                                         <li>
-                                            <button type="button" className="dropdown-item text-danger" onClick={Logout}>
+                                            <button type="button" className="dropdown-item text-danger" onClick={handleLogout}>
                                                 <i className="bi bi-box-arrow-right me-2"></i>
                                                 Cerrar sesión
                                             </button>

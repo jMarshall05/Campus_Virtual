@@ -1,13 +1,14 @@
-import { apiFetchBlob,apiFetchJson, urlBase } from "./apiClient";
+import { apiFetchBlob, apiFetchJson } from "./apiClient";
 
 export async function getDocs(){
     return apiFetchJson('docs',{
         method : 'GET'
     })
 }
-export async function getDoc(id){
-    return (`${urlBase}/docs/download/${id}`)
-}
+// async function getDoc(id) // UNUSED
+// {
+//     return (`${urlBase}/docs/download/${id}`)
+// }
 
 export async function addDoc(data){
      return apiFetchBlob('docs',{

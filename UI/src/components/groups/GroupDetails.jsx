@@ -29,7 +29,6 @@ export default function GroupDetails({ grupo, onClose }) {
         }
     };
 
-
     return (
         <div className="group-detail-modal">
             <div className="detail-header">
@@ -136,7 +135,7 @@ export default function GroupDetails({ grupo, onClose }) {
                             <FontAwesomeIcon icon={faQrcode} className="me-2" />Reporte Digital
                         </h3>
                         <div className="qr-section">
-                            <a onClick={groupPdf} className="qr-link" target="_blank">
+                            <button type="button" onClick={groupPdf} className="qr-link btn" style={{background: 'none', border: 'none', padding: 0}}>
                                 <div className="qr-container">
                                     <img src={`${qr}`}
                                         alt="Código QR"
@@ -146,7 +145,7 @@ export default function GroupDetails({ grupo, onClose }) {
                                         <span>Descargar Reporte</span>
                                     </div>
                                 </div>
-                            </a>
+                            </button>
                             <p className="qr-description">Haz click en el QR o escanéalo para descargar el reporte completo del grupo</p>
                         </div>
                     </div>

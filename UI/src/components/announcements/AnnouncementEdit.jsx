@@ -3,7 +3,7 @@ import "../../content/announcements/announcementEdit.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faInfoCircle, faTag, faAlignLeft, faPen, faCalendarAlt, faFileUpload, faTimes, faSave, faTrash } from "../../content/icons.js";
 import { useState, useEffect, useRef } from "react";
-import { editAnnouncement, getImage } from "../../api/announcementsService.js";
+import { editAnnouncement } from "../../api/announcementsService.js";
 import Swal from "sweetalert2";
 
 export default function AnnouncementEdit({ anuncio, onClose }) {
@@ -210,13 +210,12 @@ export default function AnnouncementEdit({ anuncio, onClose }) {
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">Estado</label>
+                        <label htmlFor="estado" className="form-label">Estado</label>
                         <div className="toggle-group">
-                            <label className="toggle-label">
-                                <input
+                            <label htmlFor="setestadoestadoestadoactivoinactivo" className="toggle-label">
+                                <input id="estadoToggle"
                                     type="checkbox"
                                     className="toggle-input"
-                                    id="estado"
                                     checked={estado}
                                     onChange={() => setEstado(!estado)}
                                 />

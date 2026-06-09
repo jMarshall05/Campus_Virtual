@@ -13,9 +13,9 @@ export default function UserEdit({ usuario, onClose }) {
     const [grupos, setGrupos] = useState([]);
     const [loadingGrupos, setLoadingGrupos] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [telefonos, setTelefonos] = useState([]);
+    const [telefonos, setTelefonos] = useState(usuario?.telefonos || []);
     const [tipoIdentificacion, setTipoIdentificacion] = useState(usuario?.tipoIdentificacion || "");
-    const [userState, setState] = useState(usuario.estado)
+    const [userState, setUserState] = useState(usuario.estado)
     useEffect(() => {
         const cargarGrupos = async () => {
             try {
@@ -32,9 +32,6 @@ export default function UserEdit({ usuario, onClose }) {
 
         };
         cargarGrupos();
-        if (usuario.telefonos) {
-            setTelefonos(usuario.telefonos);
-        }
     }, [usuario]);
 
     const agregarTelefono = () => {
@@ -71,8 +68,6 @@ export default function UserEdit({ usuario, onClose }) {
         e.target.value = e.target.value.replace(/[^a-zA-Z0-9]/g, "").slice(0, max);
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSaving(true);
@@ -95,7 +90,6 @@ export default function UserEdit({ usuario, onClose }) {
                 Tipo: form[`Telefonos[${i}].Tipo`].value,
                 Estado: form[`Telefonos[${i}].Estado`]?.checked ?? false,
             }))
-
 
         };
 
@@ -135,8 +129,6 @@ export default function UserEdit({ usuario, onClose }) {
         }
     }
 
-
-
     if (loadingGrupos) return <Loader />
     return (
 <>  
@@ -157,7 +149,6 @@ export default function UserEdit({ usuario, onClose }) {
                     </div>
 
                     <div className="edit-body">
-
 
                         <div className="two-col-grid">
 
@@ -215,7 +206,7 @@ export default function UserEdit({ usuario, onClose }) {
                                             id="Email"
                                             type="email"
                                             defaultValue={usuario?.email}
-                                            autoComplete="true"
+                                            autoComplete="email"
                                             placeholder="correo@ejemplo.com"
                                             required
                                         />
@@ -468,8 +459,8 @@ export default function UserEdit({ usuario, onClose }) {
                                                 </div>
 
                                                 <div className="tel-field tel-action">
-                                                    <label className="form-label" htmlFor="removePhone">&nbsp;</label>
-                                                    <button type="button" id="removePhone" className="btn btn-remove-tel btn-remove-telefono" onClick={() => eliminarTelefono(i)}>
+                                                    <label className="form-label" htmlFor={`removePhone-${i}`}>&nbsp;</label>
+                                                    <button type="button" id={`removePhone-${i}`} className="btn btn-remove-tel btn-remove-telefono" aria-label="Eliminar teléfono" onClick={() => eliminarTelefono(i)}>
                                                         <FontAwesomeIcon icon={faTrash} />
                                                     </button>
                                                 </div>
@@ -511,7 +502,7 @@ export default function UserEdit({ usuario, onClose }) {
                                                 id="estadoUsuario"
                                                 name="Estado"
                                                 defaultChecked={userState}
-                                                onChange={() => { setState(!userState) }}
+                                                onChange={() => { setUserState(!userState) }}
                                             />
                                             <span className="toggle-slider-large"></span>
                                         </label>

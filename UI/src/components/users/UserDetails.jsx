@@ -1,24 +1,39 @@
 import {faUsers,faEyeSlash,faEye,faDownload, faInfoCircle, faEdit, faArrowLeft, faIdCard, faPassport, faPlane, faUser, faCircle,faEnvelope,faPhone,faFingerprint,faCalendarAlt,faBirthdayCake,faUserPlus  } from "../../content/icons.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { exportUserQr, exportUserPdf } from "../../api/userService.js";
 import "../../content/users/userDetails.css";
+
+const handleExportUserPdf = async (idUsuario) => {
+    try {
+        const response = await exportUserPdf(idUsuario);
+        const url = URL.createObjectURL(response);
+        window.open(url, "_blank");
+    } catch (error) {
+        console.error("Error al generar el PDF:", error);
+    }
+};
+
+function getTipoIdInfo(tipoIdentificacion) {
+    switch (tipoIdentificacion) {
+        case "Fisica":
+            return { icon: faIdCard, text: "Cédula de Ciudadanía", color: "text-primary" };
+        case "DIMEX":
+            return { icon: faPassport, text: "DIMEX", color: "text-info" };
+        case "Pasaporte":
+            return { icon: faPlane, text: "Pasaporte", color: "text-success" };
+        default:
+            return { icon: faUser, text: "Desconocido", color: "text-secondary" };
+    }
+}
 
 export default function UserDetails({ usuario, onClose }) {
     const [visibles, setVisibles] = useState({});
     const [qr, setQr] = useState();
-    const [tipoIdIcon, tipoIdText, tipoIdColor] = (() => {
-        switch (usuario.tipoIdentificacion) {
-            case "Fisica":
-                return [faIdCard, "Cédula de Ciudadanía", "text-primary"];
-            case "DIMEX":
-                return [faPassport, "DIMEX", "text-info"];
-            case "Pasaporte":
-                return [faPlane, "Pasaporte", "text-success"];
-            default:
-                return [faUser, "Desconocido", "text-secondary"];
-        }
-    })();
+    const { icon: tipoIdIcon, text: tipoIdText, color: tipoIdColor } = useMemo(
+        () => getTipoIdInfo(usuario.tipoIdentificacion),
+        [usuario.tipoIdentificacion]
+    );
 
     useEffect(() => {
         const cargarQr = async () => {
@@ -32,17 +47,6 @@ export default function UserDetails({ usuario, onClose }) {
         };
         cargarQr();
     }, [usuario]);
-
-    const UserPdf = async () => {
-        try {
-            const response = await exportUserPdf(usuario.idUsuario);
-            const url = URL.createObjectURL(response);
-            window.open(url, "_blank");
-        } catch (error) {
-            console.error("Error al generar el PDF:", error);
-        }
-    };
-
 
     const togglePhone = (index) => {
         setVisibles((prev) => ({
@@ -216,8 +220,8 @@ export default function UserDetails({ usuario, onClose }) {
                         </div>
                     </div>
                     <div className="info-section justify-content-center text-center">
-                        <a onClick={UserPdf}
-                            className="qr-link" target="_blank">
+                        <button type="button" onClick={() => handleExportUserPdf(usuario.idUsuario)}
+                            className="qr-link btn" style={{background: 'none', border: 'none', padding: 0}}>
                             <div className="qr-container">
                                 <img src={`${qr}`}
                                     alt="Código QR"
@@ -228,14 +232,14 @@ export default function UserDetails({ usuario, onClose }) {
                                     <span>Descargar Reporte</span>
                                 </div>
                             </div>
-                        </a>
+                        </button>
                         <p className="qr-description">Escanea el código para descargar el reporte completo</p>
 
                     </div>
                 </div>
 
                 <div className="detail-footer">
-                    <button className="btn btn-secondary"
+                    <button type="button" className="btn btn-secondary"
                         data-bs-dismiss="modal"
                         onClick={onClose}>
                         <FontAwesomeIcon icon={faArrowLeft} className=" me-2" />Volver a la lista

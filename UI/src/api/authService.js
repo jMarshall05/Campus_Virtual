@@ -39,6 +39,10 @@ export async function login2FA(IdUsuario,code) {
 }
 
 
-export function logOut() {
-    localStorage.removeItem('token');
-}
+// TODO: Backend endpoint POST /api/auth/change-password pendiente de implementar
+// export async function changePassword(data) {
+//     return apiFetchJson('auth/change-password', {
+//         method: 'POST',
+//         body: JSON.stringify(data),
+//     });
+// }

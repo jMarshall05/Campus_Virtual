@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { deleteDoc, getDoc, getDocs } from "../../api/docsService";
+import { useEffect, useState, useCallback } from "react"
+import { deleteDoc, getDocs } from "../../api/docsService";
 import Loader from "../../components/Loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCalendar, faCirclePlus, faEdit, faEllipsisV, faExternalLinkAlt, faFileAlt, faFileContract, faFolder, faFolderOpen, faStar } from "../../content/icons.js";
@@ -7,7 +7,6 @@ import "../../content/docs/docs.css"
 import AddDoc from "../../components/docs/AddDoc.jsx";
 import EditDoc from "../../components/docs/EditDoc.jsx";
 import Swal from "sweetalert2";
-
 
 export default function Docs() {
 	const [loading, setLoading] = useState(true);
@@ -17,7 +16,7 @@ export default function Docs() {
 	const [modalhidden, setModalHidden] = useState(true);
 	const [modalType, setModalType] = useState('');
 
-	const cargarDatos = async () => {
+	const cargarDatos = useCallback(async () => {
 		try {
 			const documentos = await getDocs();
 			setDocs(documentos);
@@ -27,11 +26,11 @@ export default function Docs() {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	useEffect(() => {
 		cargarDatos();
-	}, []);
+	}, [cargarDatos]);
 
 	//const Download = async (id) => {
 	//	setLoading(true)
@@ -50,7 +49,7 @@ export default function Docs() {
 	//	}
 	//}
 
-	const Delete = async (id) => {
+	const handleDeleteDoc = useCallback(async (id) => {
 		setLoading(true)
 		try {
 			const response = await deleteDoc(id);
@@ -71,7 +70,7 @@ export default function Docs() {
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, [cargarDatos])
 	if (loading) return <Loader />;
 
 	const docsInstitucionales = docs.filter(doc => doc.categoria === 'Institucional');
@@ -91,7 +90,7 @@ export default function Docs() {
 							</div>
 						</div>
 						<div className="header-actions">
-							<button
+							<button type="button"
 								className="btn-add-document"
 								onClick={() => { setModalType("add"); setModalHidden(false); }}
 							>
@@ -129,18 +128,18 @@ export default function Docs() {
 									<div key={doc.id} className="col-12 col-lg-6">
 										<div className="document-card official-doc">
 											<div className="document-menu">
-												<button className="btn-menu">
+												<button type="button" className="btn-menu">
 													<FontAwesomeIcon icon={faEllipsisV} />
 												</button>
 												<div className="menu-dropdown">
-													<a onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
+													<button type="button" className="dropdown-item" onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
 														<FontAwesomeIcon icon={faEdit} />
 														Editar
-													</a>
-													<a onClick={() => Delete(doc.id)}>
+													</button>
+													<button type="button" className="dropdown-item text-danger" onClick={() => handleDeleteDoc(doc.id)}>
 														<FontAwesomeIcon icon={faTrash} />
 														Eliminar
-													</a>
+													</button>
 												</div>
 											</div>
 											<div className="document-header">
@@ -196,7 +195,7 @@ export default function Docs() {
 										</div>
 										<h3>No hay documentos adicionales</h3>
 										<p>Los documentos que se agreguen aparecerán aquí</p>
-										<button
+										<button type="button"
 											className="btn-add-document"
 											style={{ margin: '0 auto' }}
 											onClick={() => { setModalType("add"); setModalHidden(false); }}
@@ -222,18 +221,18 @@ export default function Docs() {
 													</p>
 												</div>
 												<div className="document-menu">
-													<button className="btn-menu">
+													<button type="button" className="btn-menu">
 														<FontAwesomeIcon icon={faEllipsisV} />
 													</button>
 													<div className="menu-dropdown">
-														<a onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
+														<button type="button" className="dropdown-item" onClick={() => { setModalType('edit'); setDoc(doc); setModalHidden(false); }}>
 															<FontAwesomeIcon icon={faEdit} />
 															Editar
-														</a>
-														<a onClick={() => Delete(doc.id)}>
+														</button>
+														<button type="button" className="dropdown-item text-danger" onClick={() => handleDeleteDoc(doc.id)}>
 															<FontAwesomeIcon icon={faTrash} />
 															Eliminar
-														</a>
+														</button>
 													</div>
 												</div>
 											</div>

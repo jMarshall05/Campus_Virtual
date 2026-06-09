@@ -87,7 +87,6 @@ export default function Login2faView() {
                                     pattern="[0-9]{6}"
                                     required
                                     autoComplete="off"
-                                    autoFocus
                                 />
 
                                 <div className="invalid-feedback text-center">

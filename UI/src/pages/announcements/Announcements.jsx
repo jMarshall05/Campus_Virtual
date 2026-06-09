@@ -104,14 +104,14 @@ export default function Announcements() {
                             <FontAwesomeIcon icon={faSearch} className="search-icon" />
                             <input
                                 type="text"
-                                className="search-input"
+                                className="search-input" id="searchInput" aria-label="Buscar"
                                 placeholder="Buscar anuncios..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
                         <div className="filter-actions">
-                            <button className="btn-premium btn-Crear-Anuncio" onClick={() => { setModalType("add"); setModalHidden(false); }}>
+                            <button type="button" className="btn-premium btn-Crear-Anuncio" onClick={() => { setModalType("add"); setModalHidden(false); }}>
                                 <FontAwesomeIcon icon={faPlusCircle} className="me-2" />
                                 Nuevo Anuncio
                             </button></div>
@@ -187,14 +187,14 @@ export default function Announcements() {
                                             </td>
                                             <td className="actions-cell" data-label="Acciones">
                                                 <div className="d-flex justify-content-center gap-2">
-                                                    <button
+                                                    <button type="button"
                                                         className="btn btn-outline-primary btn-sm"
                                                         title="Editar anuncio"
                                                         onClick={() => { setAnnouncementModal(anuncio); setModalType("edit"); setModalHidden(false); }}
                                                     >
                                                         <FontAwesomeIcon icon={faEdit} />
                                                     </button>
-                                                    <button
+                                                    <button type="button"
                                                         className="btn btn-outline-dark btn-sm"
                                                         title="Ver detalles"
                                                         onClick={() => { setAnnouncementModal(anuncio); setModalType("details"); setModalHidden(false); }}
@@ -216,7 +216,7 @@ export default function Announcements() {
                         Mostrando <strong>{paginados.length}</strong> de <strong>{filtrados.length}</strong> anuncio(s)
                     </div>
                     <div className="pagination-controls">
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina === 1 ? "disabled" : ""}`}
                             disabled={pagina === 1}
                             onClick={() => setPagina(p => Math.max(p - 1, 1))}
@@ -224,7 +224,7 @@ export default function Announcements() {
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
                         <span className="pagination-btn active">{pagina}</span>
-                        <button
+                        <button type="button"
                             className={`pagination-btn ${pagina >= totalPaginas ? "disabled" : ""}`}
                             disabled={pagina >= totalPaginas}
                             onClick={() => setPagina(p => Math.min(p + 1, totalPaginas))}

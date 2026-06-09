@@ -6,11 +6,14 @@ export async function getCourses(){
         method : 'GET'
     })
 }
-export async function getCourse(Id){
-    return apiFetchJson(`courses/${Id}`,{
-        method : 'GET'
-    })
-}
+
+// async function getCourse(Id) // UNUSED
+// {
+//     return apiFetchJson(`courses/${Id}`,{
+//         method : 'GET'
+//     })
+// }
+
 export async function addCourse(data){
     return apiFetchJson(`courses`,{
         method : 'POST',
