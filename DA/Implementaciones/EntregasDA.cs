@@ -25,7 +25,7 @@ namespace DA.Implementaciones
             entidad.IdTarea = entrega.IdTarea;
             entidad.IdEstudiante = entrega.IdEstudiante;
             entidad.ArchivoEntregado = entrega.ArchivoEntregado;
-            entidad.FechaEntrega = DateTime.Now;
+            entidad.FechaEntrega = DateTime.UtcNow;
             entidad.Estado = entrega.Estado;
             await _elContexto.SaveChangesAsync();
         }

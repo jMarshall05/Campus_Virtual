@@ -24,7 +24,7 @@ namespace Abstracciones.Modelos.ModelosDto
         public string Categoria { get; set; }
 
         [DataType(DataType.DateTime)]
-        public DateTime FechaRegistro { get; set; } = DateTime.Now;
+        public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 
         public virtual IFormFile? Doc { get; set; }
     }

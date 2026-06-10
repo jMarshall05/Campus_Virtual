@@ -28,7 +28,7 @@ namespace DA.Entidades
 
         [Column("FechaRegistro")]
         [DataType(DataType.DateTime)]
-        public DateTime FechaRegistro { get; set; } = DateTime.Now;
+        public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 
 
     }

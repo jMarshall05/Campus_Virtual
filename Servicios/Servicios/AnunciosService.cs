@@ -23,7 +23,7 @@ namespace Servicios.Servicios
             if (anuncio.Imagen != null)
                 anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios",false);
 
-            anuncio.FechaPublicacion = DateTime.Now;
+            anuncio.FechaPublicacion = DateTime.UtcNow;
             return await _anuncios.AgregarAnuncio(anuncio.Adapt<AnunciosAD>());
         }
 

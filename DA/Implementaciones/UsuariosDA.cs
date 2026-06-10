@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
-using Abstracciones.Excepciones;
+﻿using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Modelos.Requests;
 using DA.Entidades;
@@ -18,12 +16,10 @@ namespace DA.Implementaciones
         private readonly ApplicationDbContext _elContexto;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole<string>> _roleManager;
-        private readonly IMapper _mapper;
-        public UsuariosDA(RoleManager<IdentityRole<string>> roleManager, IMapper mapper, ApplicationDbContext Contexto, UserManager<ApplicationUser> userManager)
+        public UsuariosDA(RoleManager<IdentityRole<string>> roleManager, ApplicationDbContext Contexto, UserManager<ApplicationUser> userManager)
         {
             _elContexto = Contexto;
             _userManager = userManager;
-            _mapper = mapper;
             _roleManager = roleManager;
         }
 
@@ -59,7 +55,7 @@ namespace DA.Implementaciones
             var usuarioExistente = await _elContexto.Usuarios.FindAsync(id);
             usuarioExistente.Nombre = usuario.Nombre;
             usuarioExistente.Apellido = usuario.Apellido;
-            usuarioExistente.FechaDeModificacion = DateTime.Now;
+            usuarioExistente.FechaDeModificacion = DateTime.UtcNow;
             await _elContexto.SaveChangesAsync();
 
         }
@@ -112,37 +108,9 @@ namespace DA.Implementaciones
             var usuariosDto = await _elContexto.Usuarios
                 .Include(u => u.EstudianteGrupo)
                 .ThenInclude(eg => eg.Grupo)
-                .Select(u => new UsuariosDto
-                {
-                    IdUsuario = u.IdUsuario,
-                    Nombre = u.Nombre,
-                    Apellido = u.Apellido,
-                    Email = u.Email,
-                    Telefonos = u.Telefonos.Select(t => new TelefonoDto
-                    {
-                        Id = t.Id,
-                        IdUsuario = t.IdUsuario,
-                        Codigo = t.Codigo,
-                        Telefono = t.Telefono,
-                        Tipo = t.Tipo,
-                        Estado = t.Estado
-                    }).ToList(),
-                    Grupo = u.EstudianteGrupo == null
-                    ? null : new GruposDto
-                    {
-                        idGrupo = u.EstudianteGrupo.Grupo.idGrupo,
-                        Nombre = u.EstudianteGrupo.Grupo.Nombre
-                    },
-                    FechaDeNacimiento = u.FechaDeNacimiento,
-                    TipoIdentificacion = u.TipoIdentificacion,
-                    Identificacion = u.Identificacion,
-                    FechaDeRegistro = u.FechaDeRegistro,
-                    FechaDeModificacion = u.FechaDeModificacion,
-                    Rol = u.Rol,
-                    Estado = u.Estado
-                })
                 .ToListAsync();
-            return usuariosDto;
+
+            return usuariosDto.Select(u => u.Adapt<UsuariosDto>()).ToList();
         }
 
         public async Task<UsuariosDto> ObtenerUsuarioPorId(string idUsuario)
@@ -152,42 +120,14 @@ namespace DA.Implementaciones
                 .Include(u => u.EstudianteGrupo)
                 .ThenInclude(eg => eg.Grupo)
                 .FirstOrDefaultAsync(u => u.IdUsuario == idUsuario);
+
             if (usuario == null)
                 return null;
-            var usuarioDto = new UsuariosDto
-            {
-                IdUsuario = usuario.IdUsuario,
-                Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido,
-                Email = usuario.Email,
-                Telefonos = usuario.Telefonos.Select(t => new TelefonoDto
-                {
-                    Id = t.Id,
-                    IdUsuario = t.IdUsuario,
-                    Codigo = t.Codigo,
-                    Telefono = t.Telefono,
-                    Tipo = t.Tipo,
-                    Estado = t.Estado
-                }).ToList(),
-                Grupo = usuario.EstudianteGrupo == null
-                    ? null : new GruposDto
-                    {
-                        idGrupo = usuario.EstudianteGrupo.Grupo.idGrupo,
-                        Nombre = usuario.EstudianteGrupo.Grupo.Nombre
-                    },
-                FechaDeNacimiento = usuario.FechaDeNacimiento,
-                TipoIdentificacion = usuario.TipoIdentificacion,
-                Identificacion = usuario.Identificacion,
-                FechaDeRegistro = usuario.FechaDeRegistro,
-                FechaDeModificacion = usuario.FechaDeModificacion,
-                Rol = usuario.Rol,
-                Estado = usuario.Estado
-            };
-            return usuarioDto;
+
+            return usuario.Adapt<UsuariosDto>();
         }
         private static ApplicationUser CrearUsuario(UsuariosAD usuario)
         {
-
             return new ApplicationUser
             {
                 UserName = $"{usuario.Nombre} {usuario.Apellido}",

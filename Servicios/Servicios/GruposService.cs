@@ -29,7 +29,7 @@ namespace Servicios.Servicios
             UsuarioReglas.ValidarUsuario(usuario != null);
             var grupo = request.Adapt<GruposDto>();
             grupo.creado_por = $"{usuario.Nombre} {usuario.Apellido}";
-            grupo.FechaDeCreacion = DateTime.Now;
+            grupo.FechaDeCreacion = DateTime.UtcNow;
             var resultado = await _grupos.AgregarGrupo(grupo.Adapt<GruposAD>());
             return resultado;
 

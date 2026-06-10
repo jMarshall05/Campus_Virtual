@@ -1,6 +1,4 @@
 ﻿using Abstracciones.Api;
-using Abstracciones.Excepciones;
-using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.CursosRequest;
@@ -12,84 +10,37 @@ namespace Api.Controllers
     public class CursosController : ControllerBase, ICursosController
     {
         private readonly ICursosService _cursos;
-        private readonly ILogger<ICursosController> _logger;
-        public CursosController(ICursosService cursos, ILogger<ICursosController> logger)
+        public CursosController(ICursosService cursos)
         {
             _cursos = cursos;
-            _logger = logger;
-
         }
-
 
         [HttpPost]
         public async Task<IActionResult> AgregarCurso(AgregarCursoRequest request)
         {
-            try
-            {
-                var response = await _cursos.AgregarCurso(request);
-                return Ok($"Se a agrgado correctamente el curso , id: {response}");
-            }
-            catch (BusinessException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al Agregar Documento");
-                return StatusCode(500, "Ocurrió un error inesperado");
-            }
+            var response = await _cursos.AgregarCurso(request);
+            return Ok($"Se agregó correctamente el curso, id: {response}");
         }
+
         [HttpGet]
         public async Task<IActionResult> ListarCursos()
         {
-            try
-            {
-                var cursos = await _cursos.ListarCursos();
-                return Ok(cursos);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al Agregar Documento");
-                return StatusCode(500, "Ocurrió un error inesperado");
-
-            }
+            var cursos = await _cursos.ListarCursos();
+            return Ok(cursos);
         }
+
         [HttpPatch("{idCurso}")]
         public async Task<IActionResult> ModificarEstadoCurso(int idCurso)
         {
-            try
-            {
-                await _cursos.ModificarEstadoCurso(idCurso);
-                return Ok();
-            }
-            catch (BusinessException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al Agregar Documento");
-                return StatusCode(500, "Ocurrió un error inesperado");
-            }
+            await _cursos.ModificarEstadoCurso(idCurso);
+            return Ok();
         }
+
         [HttpGet("{idCurso}")]
         public async Task<IActionResult> ObtenerPorId(int idCurso)
         {
-            try
-            {
-                var curso = await _cursos.ObtenerPorId(idCurso);
-                return Ok(curso);
-            }
-            catch (BusinessException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al Agregar Documento");
-                return StatusCode(500, "Ocurrió un error inesperado");
-
-            }
+            var curso = await _cursos.ObtenerPorId(idCurso);
+            return Ok(curso);
         }
 
         [HttpGet("exportarPdf")]

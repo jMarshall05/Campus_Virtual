@@ -28,7 +28,7 @@ namespace DA.Implementaciones
             tareaExistente.Descripcion = tarea.Descripcion;
             tareaExistente.FechaEntrega = tarea.FechaEntrega;
             tareaExistente.ArchivoAdjunto = tarea.ArchivoAdjunto;
-            tareaExistente.FechaModificacion = DateTime.Now;
+            tareaExistente.FechaModificacion = DateTime.UtcNow;
             tareaExistente.IdGrupo = tarea.IdGrupo;
             await _elContexto.SaveChangesAsync();
 

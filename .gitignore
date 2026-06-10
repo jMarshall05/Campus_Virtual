@@ -404,3 +404,7 @@ UI/.env.*
 *.doc
 *.pptx
 
+.claude/worktrees
+smoke-test.sh
+ChangeLog.md
+Mejoras.md

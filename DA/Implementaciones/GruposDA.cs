@@ -55,7 +55,7 @@ namespace DA.Implementaciones
             grupoExistente.Nombre = grupo.Nombre;
             grupoExistente.Descripcion = grupo.Descripcion;
             grupoExistente.modificado_por = grupo.modificado_por;
-            grupoExistente.FechaDeModificacion = DateTime.Now;
+            grupoExistente.FechaDeModificacion = DateTime.UtcNow;
             grupoExistente.Estado = grupo.Estado;
             await _elContexto.SaveChangesAsync();
         }

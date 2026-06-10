@@ -25,7 +25,7 @@ namespace Servicios.Servicios
         public async Task<int> AgregarTarea(AgregarTareaRequest tarea)
         {
             var existeMateria = await _materias.ObtenerMateriaPorId(tarea.IdMateria) != null;
-            MateriaReglas.SiExiste(existeMateria);
+            MateriaReglas.NoExiste(existeMateria);
             var existeGrupo = await _grupo.BuscarGruposPorId(tarea.IdGrupo) != null;
             GruposReglas.ExisteGrupo(existeGrupo);
             var resultado = await _tareas.AgregarTarea(_mapper.Map<TareasAD>(tarea));

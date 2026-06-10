@@ -153,6 +153,7 @@ app.UseExceptionHandler(appError =>
 {
     appError.Run(async context =>
     {
+        context.Response.ContentType = "application/json";
         var error = context.Features.Get<IExceptionHandlerFeature>()?.Error;
         if (error is BusinessException)
         {
@@ -160,6 +161,14 @@ app.UseExceptionHandler(appError =>
             await context.Response.WriteAsJsonAsync(new
             {
                 mensaje = error.Message
+            });
+        }
+        else
+        {
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                mensaje = "Ocurrió un error inesperado."
             });
         }
     });
