@@ -5,8 +5,8 @@ namespace Servicios.Helpers
 {
     public class Bitacora
     {
-        private readonly IBItacoraAD _bitacoraDA;
-        public Bitacora(IBItacoraAD bitacoraDA)
+        private readonly IBitacoraAD _bitacoraDA;
+        public Bitacora(IBitacoraAD bitacoraDA)
         {
             _bitacoraDA = bitacoraDA;
         }

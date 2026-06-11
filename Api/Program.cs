@@ -109,10 +109,9 @@ builder.Services.AddScoped<ICalificacionesAD, CalificacionesDA>();
 builder.Services.AddScoped<IDocumentosAD, DocumentosDA>();
 builder.Services.AddScoped<IAnunciosAD, AnunciosDA>();
 builder.Services.AddScoped<ICursosAD, CursosDA>();
-builder.Services.AddScoped<IBItacoraAD, BitacoraDA>();
+builder.Services.AddScoped<IBitacoraAD, BitacoraDA>();
 builder.Services.AddScoped<IMateriasDA, MateriasDA>();
 builder.Services.AddScoped<IEventosDA, EventosDA>();
-builder.Services.AddScoped<IEstudianteGrupoDA, EstudianteGrupoDA>();
 builder.Services.AddScoped<ITareasAD, TareasDA>();
 
 //Servicios

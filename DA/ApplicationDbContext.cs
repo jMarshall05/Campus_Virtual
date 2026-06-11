@@ -18,7 +18,6 @@ namespace DA
         public DbSet<GruposAD> Grupos { get; set; }
         public DbSet<MateriasAD> Materias { get; set; }
         public DbSet<EventoAD> Eventos { get; set; }
-        public DbSet<EstudianteGrupoAD> EstudianteGrupo { get; set; }
         public DbSet<EntregasAD> Entregas { get; set; }
         public DbSet<TareasAD> Tareas { get; set; }
         public DbSet<CalificacionesAD> Calificaciones { get; set; }

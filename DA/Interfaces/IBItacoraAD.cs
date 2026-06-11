@@ -1,8 +1,8 @@
-﻿using DA.Entidades;
+using DA.Entidades;
 
 namespace DA.Interfaces
 {
-    public interface IBItacoraAD
+    public interface IBitacoraAD
     {
         Task RegistrarBitacora(BitacoraAD Bitacora);
 

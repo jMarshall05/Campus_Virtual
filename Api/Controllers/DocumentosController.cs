@@ -1,6 +1,7 @@
 ﻿using Abstracciones.Api;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
+using Abstracciones.Validaciones;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using static Abstracciones.Modelos.Requests.DocumentosRequest;
@@ -9,7 +10,7 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/docs")]
-    public class DocumentosController : ControllerBase, IDocumetosController
+    public class DocumentosController : ControllerBase, IDocumentosController
     {
         private readonly IDocumentoService _documentos;
         private readonly IFileStorageService _fileStorage;
@@ -19,6 +20,8 @@ namespace Api.Controllers
             _fileStorage = filestorage;
         }
 
+
+
         [HttpPost]
         [Consumes("multipart/form-data")]
         [Produces("application/json")]
@@ -26,6 +29,12 @@ namespace Api.Controllers
         {
             if (data == null || data.Doc.Length == 0)
                 return BadRequest("Faltan Datos o el archivo");
+
+            if (!FileUploadConstants.IsWithinSizeLimit(data.Doc.Length))
+                return BadRequest("El archivo supera el límite de 10 MB.");
+
+            if (!FileUploadConstants.IsValidFileType(data.Doc.ContentType, FileUploadConstants.AllowedDocumentTypes))
+                return BadRequest($"Tipo de archivo no permitido: {data.Doc.ContentType}");
 
             var url = await _fileStorage.SaveAsync(data.Doc, "Docs", true);
             var dto = data.Adapt<DocumentosDto>();

@@ -422,7 +422,10 @@ namespace Servicios.Servicios
                 logo.ScaleToFit(100, 100).SetHorizontalAlignment(HorizontalAlignment.CENTER);
                 doc.Add(logo);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"Error cargando logo en PDF: {ex.Message}");
+            }
         }
 
         private static void AgregarBannerTitulo(Document doc, string titulo, PdfFont bold)

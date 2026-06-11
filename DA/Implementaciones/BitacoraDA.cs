@@ -3,7 +3,7 @@ using DA.Interfaces;
 
 namespace DA.Implementaciones
 {
-    public class BitacoraDA : IBItacoraAD
+    public class BitacoraDA : IBitacoraAD
     {
         private readonly ApplicationDbContext _elContexto;
         public BitacoraDA(ApplicationDbContext elContexto)

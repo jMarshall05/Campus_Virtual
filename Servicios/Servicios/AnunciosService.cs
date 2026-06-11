@@ -1,5 +1,7 @@
+using Abstracciones.Excepciones;
 using Abstracciones.Modelos.ModelosDto;
 using Abstracciones.Servicios;
+using Abstracciones.Validaciones;
 using DA.Entidades;
 using DA.Interfaces;
 using Mapster;
@@ -18,10 +20,20 @@ namespace Servicios.Servicios
             _fileStorage = fileStorage;
         }
 
+
+
         public async Task<int> AgregarAnuncio(AnuncioDto anuncio)
         {
             if (anuncio.Imagen != null)
+            {
+                if (!FileUploadConstants.IsWithinSizeLimit(anuncio.Imagen.Length))
+                    throw new BusinessException("La imagen supera el límite de 10 MB.");
+
+                if (!FileUploadConstants.IsValidFileType(anuncio.Imagen.ContentType, FileUploadConstants.AllowedImageTypes))
+                    throw new BusinessException($"Tipo de imagen no permitido: {anuncio.Imagen.ContentType}");
+
                 anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios",false);
+            }
 
             anuncio.FechaPublicacion = DateTime.UtcNow;
             return await _anuncios.AgregarAnuncio(anuncio.Adapt<AnunciosAD>());
@@ -35,7 +47,15 @@ namespace Servicios.Servicios
             if (anuncio.QuitarImagen)
                 anuncio.ImagenRuta = null;
             else if (anuncio.Imagen != null)
+            {
+                if (!FileUploadConstants.IsWithinSizeLimit(anuncio.Imagen.Length))
+                    throw new BusinessException("La imagen supera el límite de 10 MB.");
+
+                if (!FileUploadConstants.IsValidFileType(anuncio.Imagen.ContentType, FileUploadConstants.AllowedImageTypes))
+                    throw new BusinessException($"Tipo de imagen no permitido: {anuncio.Imagen.ContentType}");
+
                 anuncio.ImagenRuta = await _fileStorage.SaveAsync(anuncio.Imagen, "Anuncios",false);
+            }
             else
                 anuncio.ImagenRuta = existente.ImagenRuta;
 
